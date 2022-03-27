@@ -1,0 +1,29 @@
+.exams {
+    /* background-color: blue; */
+    /* width: 10vh; */
+    /* height: 10vh; */
+    /* position: absolute; */
+    margin: auto;
+    /* background-color: blue; */
+    /* display: flex; */
+    /* margin-left: 1rem;
+    display: inline-block; */
+    max-height: 84vh;
+    overflow-y: auto;
+}
+
+.addques {
+    width: auto !important;
+}
+
+
+/* .heading {
+    display: inline-block;
+} */
+
+.exams .question {
+    background-color: rgba(0, 0, 255, 0.308);
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+}

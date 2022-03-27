@@ -1,0 +1,33 @@
+.center {
+    /* background-color: blue; */
+    /* width: 10vh; */
+    /* height: 10vh; */
+    /* position: absolute; */
+    margin: auto;
+    /* margin-left: 18rem; */
+    /* max-height: 84vh; */
+    /* overflow-y: scroll; */
+}
+
+.inputText {
+    width: 100%;
+    font-size: 25px;
+    margin: 8px;
+    padding: 4px;
+    border-radius: 8px;
+    outline: none;
+    /* border: none; */
+    /* background-color: rgba(165, 42, 42, 0.295); */
+}
+
+.btn {
+    width: 100%;
+    font-size: 25px;
+    margin: 8px;
+    padding: 4px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background-color: rgba(165, 42, 42, 0.295);
+}

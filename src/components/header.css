@@ -1,0 +1,81 @@
+.header {
+    background-color: #2D2F3A;
+    height: 16vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.header .left h1 {
+    color: white;
+    font-size: 80px;
+}
+
+.header .left h1 span {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.header .left {
+    display: flex;
+    align-items: center;
+    /* background-color: blue; */
+}
+
+.header .right span {
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.header .right img:focus~.logout {
+    display: flex;
+}
+
+.header .right {
+    min-width: 8rem;
+    display: flex;
+    /* background-color: blue; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.header .right img {
+    cursor: pointer;
+    border-radius: 50%;
+    width: 5rem;
+    height: 5rem;
+    /* background-color: red; */
+}
+
+.logout:hover {
+    display: flex;
+}
+
+.logout img:focus~.logout {
+    display: flex;
+}
+
+.logout {
+    cursor: pointer;
+    position: absolute;
+    bottom: -50px;
+    display: none;
+    flex-direction: column;
+    background-color: #2d2f3a;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.header .right .logout>img {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.header .right .logout span {
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    font-weight: 500;
+}

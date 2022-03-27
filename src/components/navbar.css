@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #2D2F3A;
+    height: 84vh;
+    width: 20%;
+}
+
+.menus a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.menus {
+    color: white;
+    margin-left: 25px;
+}
+
+.sub-menu {
+    margin-left: 15px;
+}

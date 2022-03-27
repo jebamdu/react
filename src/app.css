@@ -1,0 +1,16 @@
+.app {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    /* background-color: red; */
+}
+
+.sub-container {
+    background-color: rgba(0, 0, 255, 0.212);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
