@@ -6,6 +6,9 @@ import Header from "../components/Header";
 import "./admin.css";
 import NavBar from "../components/NavBar";
 import Question from "../components/exams/Question";
+import Trainer from "../components/exams/Trainer";
+import Student, { Studentupdate } from "./Student";
+import Import from "./Import";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -22,9 +25,12 @@ const Admin = () => {
         <div className="sub-container">
           <Routes>
             <Route path="exams" element={<Exams />} /> {/*list of exams */}
-            <Route path="exams/:levelID" element={<Exams />} /> {/*list of catagories */}
-            <Route path="exams/:levelID/:catID" element={<Exams />} /> {/*list of questions */}
-            <Route path="createExam" element={<Create_Exam />} /> {/*to create new exams(level) */}
+            <Route path="exams/:levelID" element={<Exams />} />{" "}
+            {/*list of catagories */}
+            <Route path="exams/:levelID/:catID" element={<Exams />} />{" "}
+            {/*list of questions */}
+            <Route path="createExam" element={<Create_Exam />} />{" "}
+            {/*to create new exams(level) */}
             <Route
               path="createExam/:levelID"
               element={
@@ -32,7 +38,8 @@ const Admin = () => {
                   <CreateExam context="catagory" />
                 </div>
               }
-            /> {/* to create catagory */}
+            />{" "}
+            {/* to create catagory */}
             <Route
               path="createExam/:levelID/:catID"
               element={
@@ -40,19 +47,13 @@ const Admin = () => {
                   <Question />
                 </div>
               }
-            /> {/* to create questions*/}
-            <Route
-              path="trainerCreation"
-              element={<h1>Create Trainer (in progress)</h1>}
-            />
-            <Route
-              path="students"
-              element={<h1>students list (in progress)</h1>}
-            />
-            <Route
-              path="importStudent"
-              element={<h1>Import students (in progress)</h1>}
-            />
+            />{" "}
+            {/* to create questions*/}
+            <Route path="trainerCreation/*" element={<Trainer />} />
+            {/* <Route path="trainerCreation/:Updateshow" element={<Trainer />} /> */}
+            <Route path="students" element={<Student />} />
+            <Route path="students/:ID" element={<Studentupdate />}></Route>{" "}
+            <Route path="importStudent" element={<Import />} />
             <Route
               path="report"
               index
