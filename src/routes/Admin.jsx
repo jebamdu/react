@@ -9,6 +9,8 @@ import Question from "../components/exams/Question";
 import Trainer from "../components/exams/Trainer";
 import Student, { Studentupdate } from "./Student";
 import Import from "./Import";
+import ShowLevels from "../components/exams/ShowLevels";
+import Report from "./Report";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -24,7 +26,8 @@ const Admin = () => {
         <NavBar />
         <div className="sub-container">
           <Routes>
-            <Route path="exams" element={<Exams />} /> {/*list of exams */}
+            {/* <Route path="exams" element={<Exams />} /> list of exams */}
+            <Route path="exams" element={<ShowLevels />} /> {/*list of exams*/}
             <Route path="exams/:levelID" element={<Exams />} />{" "}
             {/*list of catagories */}
             <Route path="exams/:levelID/:catID" element={<Exams />} />{" "}
@@ -56,8 +59,8 @@ const Admin = () => {
             <Route path="importStudent" element={<Import />} />
             <Route
               path="report"
-              index
-              element={<h1>Report (in progress)</h1>}
+              
+              element={<Report/>}
             />
           </Routes>
         </div>

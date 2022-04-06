@@ -4,6 +4,7 @@ import Question from "./exams/Question";
 import axios from "../instance/axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import addBtn from "../assets/addBtn.svg";
 
 const Exams = () => {
   const [exams, setExams] = useState([]);
@@ -18,13 +19,38 @@ const Exams = () => {
       },
     });
     setExams(data);
+    console.log(data);
   };
   useEffect(() => {
+    if (catID) addQus();
     fetch();
   }, [levelID, catID]);
   const addQus = () => {
-    navigate(`/admin/createExam/${levelID}/${(catID)}`);
+    navigate(`/admin/createExam/${levelID}/${catID}`);
   };
+  const [showpopup, setshowpopup] = useState(false);
+  const [popData, setpopData] = useState("");
+
+  const inserting = async () => {
+    const val = await axios.post("/insert", {
+      name: popData,
+      id: levelID,
+      time: null,
+    });
+    console.log(val);
+  };
+
+  const popupSubmit = (e) => {
+    e.preventDefault();
+    show();
+    console.log(popData);
+    inserting();
+  };
+
+  const show = () => {
+    setshowpopup((p) => !p);
+  };
+
   return (
     <>
       <h1 className="heading">
@@ -43,16 +69,53 @@ const Exams = () => {
             <Link to={`/admin/exams/${levelID}/${catID}`}>Type</Link>
           </>
         )}
-        {catID && (
-          <button className="addques btn" onClick={addQus}>
-            Add question
-          </button>
-        )}
       </h1>
-      <div className="exams">
-        <Table data={exams} />
+      <div className="maincontainer">
+        {showpopup && (
+          <Popup
+            data={popData}
+            setdata={setpopData}
+            submit={popupSubmit}
+            hide={show}
+          />
+        )}
+
+        <img className="addBtn" onClick={show} src={addBtn} alt="add button" />
+        <div className="exams">
+          {exams.map((l, i) => (
+            <Link key={i} to={String(l.id)}>
+              <button className="btn primary">{l.name}</button>
+            </Link>
+          ))}
+        </div>
       </div>
     </>
+  );
+};
+
+const Popup = ({ hide: hidecall, submit, setdata, data }) => {
+  const hide = (e) => {
+    if (e.currentTarget === e.target) hidecall(e);
+  };
+
+  return (
+    <div className="popContainer" onClick={hide}>
+      <div className="popup center column">
+        <form onSubmit={submit}>
+          <div className="inputContainer">
+            <label>Name : </label>
+            <input
+              value={data}
+              onChange={(e) => setdata(e.target.value)}
+              type="text"
+            />
+          </div>
+          <button type="submit" className="btn primary popupbtn">
+            OK
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
