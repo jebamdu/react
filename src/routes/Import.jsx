@@ -13,31 +13,31 @@ const Import = () => {
   const [value, setvalue] = useState([]);
   const [drop, setdrop] = useState([]);
 
-const batch=async()=>{
-  const val=await axios.get("/showbatches")
-  setdrop(val.data)
+  const batch = async () => {
+    const val = await axios.get("/showbatches")
+    setdrop(val.data)
 
-}
+  }
 
 
 
-useEffect(() => {
-  batch()
-}, []);
+  useEffect(() => {
+    batch()
+  }, []);
 
-const inputele=async(e)=>{
-  e.preventDefault()
-  console.log(data);
- 
-  const sucess=await axios.post("/inputele",{
-    
-      batch_id:value.batch_id,
-      data:data
-    
-  })
-  
-  console.log("the sucess",sucess);
-}
+  const inputele = async (e) => {
+    e.preventDefault()
+    console.log(data);
+
+    const sucess = await axios.post("/inputele", {
+
+      batch_id: value.batch_id,
+      data: data
+
+    })
+
+    console.log("the sucess", sucess);
+  }
 
 
 
@@ -45,34 +45,48 @@ const inputele=async(e)=>{
   //   return <button onClick={add}>ADD</button>;
   return (
     <>
-    <form onSubmit={inputele} >
-    <label>Select the Batch:</label>
+      <div className="containerBody">
+        <div className="navHead">
+          <h3>Import Students</h3>
+        </div>
+        <div className="wrapper">
+          <div className="mainContainer">
+            <form onSubmit={inputele} >
+              <label
+                className="inputText w-90"
+              >Select the Batch:</label>
 
-        <select
-          value={value.batch_id}
-          required
-          onChange={(e) =>
-            setvalue((p) => ({ ...p, batch_id: e.target.value }))
-          }
-        >
-          <option hidden value={""}>
-            Please select
-          </option>
-          {drop.map((e) => (
-            <option key={e.id} value={e.id}>
-              {e.name}
-            </option>
-          ))}
-        </select>
-    
-   
-    <br />
+              <select
+                value={value.batch_id}
+                required
+                className="inputText w-90"
+                onChange={(e) =>
+                  setvalue((p) => ({ ...p, batch_id: e.target.value }))
+                }
+              >
+                <option hidden value={""}>
+                  Please select
+                </option>
+                {drop.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.name}
+                  </option>
+                ))}
+              </select>
 
-    <input type="file" accept="text/csv" onChange={add} />
 
-    <button type="submit">Submit</button>
+              <br />
 
-    </form>
+              <input type="file"
+                className="inputText w-90"
+                accept="text/csv" onChange={add} />
+
+              <button type="submit" className="btn primary">Submit</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
     </>
   )
 };
@@ -88,7 +102,7 @@ function importCSV(e) {
       let headContainer = [];
       fr.result.split("\n").forEach((l, i) => {
         if (i == 0) {
-          headContainer = l.split(",").map(h=>h.trim());
+          headContainer = l.split(",").map(h => h.trim());
           return;
         }
         let obj = {};

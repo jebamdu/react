@@ -18,17 +18,17 @@ const Exams = () => {
         type: catID,
       },
     });
-    setExams(data);
     console.log(data);
+    setExams(data);
   };
   useEffect(() => {
-     if (catID) addQus();
+    if (catID) addQus();
     fetch();
   }, [levelID, catID]);
-  const addQus = async() => {
+  const addQus = async () => {
 
     //navigate(`/admin/createExam/${levelID}/${catID}`);
-    
+
   };
   const [showpopup, setshowpopup] = useState(false);
   const [popData, setpopData] = useState("");
@@ -52,8 +52,8 @@ const Exams = () => {
   const show = () => {
     setshowpopup((p) => !p);
   };
-  const addelement=()=>{
-    navigate(`/admin/createExam/${levelID}/${catID}`);  
+  const addelement = () => {
+    navigate(`/admin/createExam/${levelID}/${catID}`);
   }
 
   return (
@@ -84,11 +84,33 @@ const Exams = () => {
             hide={show}
           />
         )}
-        {catID ? (<button onClick={addelement}>Add more</button>):
-        (<img className="addBtn" onClick={show} src={addBtn} alt="add button" />)}
+        {catID ? (<button className="btn primary btn-text" onClick={addelement}>Add more</button>) :
+          (<img className="addBtn" onClick={show} src={addBtn} alt="add button" />)}
         <div className="exams">
           {catID ? (
-            <Table data={exams} />
+            // <Table data={exams} />
+            <div className="content">
+              {exams.map((d, i) =>
+                // <Link to={String(d.id)}>
+                <div key={i} className="btn primary flex-row jc-sb">
+                  <div className="flex-column">
+                    <div className=" fs-20 card-title">Question</div>
+                    <div className="fs-20">{d.ques}</div>
+                  </div>
+                  {eval(d.ans)?.map((option, i) =>
+                    <div className="flex-column" key={i}>
+                      <div className=" fs-20 card-title">Option {i + 1}</div>
+                      <div className="fs-20" style={i === 1 ? { backgroundColor: "green" } : {}}>{option}</div>
+                    </div>
+                  )}
+                  <div className="flex-column">
+                    <div className=" fs-20 card-title">Time</div>
+                    <div className="fs-20">{d.time}</div>
+                  </div>
+                </div>
+                // </Link>
+              )}
+            </div>
           ) : (
             exams.map((l, i) => (
               <Link key={i} to={String(l.id)}>

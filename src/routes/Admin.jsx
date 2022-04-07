@@ -46,9 +46,9 @@ const Admin = () => {
             <Route
               path="createExam/:levelID/:catID"
               element={
-                <div className="center">
+                // <div className="center">
                   <Question />
-                </div>
+                // </div>
               }
             />{" "}
             {/* to create questions*/}

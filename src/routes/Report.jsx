@@ -14,7 +14,7 @@ const Report = () => {
 
     return setBatch(val.data);
   };
-  console.log("now", val.id);
+  // console.log("now", val.id);
   useEffect(() => {
     batch();
   }, []);
@@ -23,11 +23,11 @@ const Report = () => {
     setpop((p) => !p);
   };
 
-  const fetchitem = async (e) => {
-    e.preventDefault();
+  const fetchitem = async (val) => {
+    // e.preventDefault();
     const value = await axios.get("/stdtable", {
       params: {
-        id: val.id,
+        id: val,
       },
     });
     console.log("length", value.length);
@@ -42,12 +42,17 @@ const Report = () => {
   };
 
   return (
-    <div className="container">
-      {
-        <form onSubmit={fetchitem}>
+    // <div className="container">
+    <div className="containerBody">
+      <div className="navHead">
+        <h3>Reports</h3>
+        {
+          // <form onSubmit={fetchitem}>
           <select
-            value={val.id}
-            onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
+            // value={val.id}
+            className="inputText w-90"
+            onChange={e => fetchitem(e.target.value)}
+          // onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
           >
             <option hidden value={""}>
               Please select
@@ -58,13 +63,38 @@ const Report = () => {
                 {e.name}
               </option>
             ))}
-            <div className="tablecontainer"></div>
+            {/* <div className="tablecontainer"></div> */}
           </select>
-          <br />
-          <button type="submit">Submit</button>
-        </form>
-      }
-      <Table data={showbatch} />
+          // <br />
+          // <button type="submit">Submit</button> 
+          // </form>
+        }
+      </div>
+      <div className="wrapper">
+        <div className="mainContainer">
+          <div className="content">
+            {showbatch.map(d =>
+              // <Link to={String(d.id)}>
+              <div className="btn primary flex-row jc-sb">
+                <div className="flex-column">
+                  <div className=" fs-20 card-title">Name</div>
+                  <div className="fs-20">{d.name}</div>
+                </div>
+                <div className="flex-column">
+                  <div className=" fs-20 card-title">Mark</div>
+                  <div className="fs-20">{d.c_mark}</div>
+                </div>
+                <div className="flex-column">
+                  <div className=" fs-20 card-title">Level</div>
+                  <div className="fs-20">{d.c_level}</div>
+                </div>
+              </div>
+              // </Link>
+            )}
+          </div>
+          {/* <Table data={showbatch} /> */}
+        </div>
+      </div>
     </div>
   );
 };
