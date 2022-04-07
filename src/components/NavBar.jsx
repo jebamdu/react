@@ -6,14 +6,15 @@ const NavBar = () => {
             <ul className="menus">
                 <li><Link to='exams'>Exams</Link>
                     <ul className="sub-menu">
-                        <li><Link to='createExam'>CreateExam</Link></li>
+                        {/* <li><Link to='createExam'>CreateExam</Link></li> */}
                     </ul>
                 </li>
-                <li><Link to=''>Trainers</Link>
-                    <ul className="sub-menu">
-                    <li><Link to='trainerCreation'>Add Trainers</Link></li>
-                    <li><Link to='trainerCreation/batch'>Add batches</Link></li>
-                    </ul>
+                <li>
+                    {/* <Link to=''>Trainers</Link> */}
+                    {/* <ul className="sub-menu"> */}
+                    <li><Link to='trainerCreation'>Trainers</Link></li>
+                    <li><Link to='trainerCreation/batch'>Batches</Link></li>
+                    {/* </ul> */}
                 </li>
                 <li><Link to='students'>Students</Link>
                     <ul className="sub-menu">

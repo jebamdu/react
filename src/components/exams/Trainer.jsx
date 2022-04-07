@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, useParams } from "react-router-dom";
+import { Routes, Route, useNavigate, useParams, Link } from "react-router-dom";
 import axios from "../../instance/axios";
 import Trainspop from "../popups/trainer";
 import Table from "../Table";
@@ -54,10 +54,29 @@ const Showtrainer = () => {
 
   return (
     <>
-      <button className="" onClick={() => navigate("create")}>
-        Add trainer
-      </button>
-      <Table data={show} />
+      <div className="containerBody">
+        <div className="navHead">
+          <h3>
+            Trainers
+          </h3>
+        </div>
+        <div className="wrapper">
+          <div className="mainContainer">
+            {/* Addbtn */}
+            <button className="addBtn btn btn-text" onClick={() => navigate("create")}>
+              Add trainer
+            </button>
+            <div className="content">
+              {show.map(l => <Link to={String(l.id)}>
+                <div className="btn primary">{l.name}</div>
+              </Link>)}
+              {/* <Link >
+            </Link> */}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <Table data={show} /> */}
     </>
   );
 };
@@ -104,19 +123,33 @@ const CreateTrainer = ({ dValue }) => {
     }
   };
   return (
-    <form onSubmit={submit}>
-      <input
-        type="text"
-        value={data.name}
-        onChange={(e) => setData((p) => ({ ...p, name: e.target.value }))}
-        placeholder="Trainer name"
-      />
-      {dValue ? (
-        <button type="submit">update trainer</button>
-      ) : (
-        <button type="submit">Add trainer</button>
-      )}
-    </form>
+    <div className="containerBody">
+      <div className="navHead">
+        <h3>{dValue ? "Update" : "Add"} Trainer</h3>
+      </div>
+      <div className="wrapper">
+        <div className="mainContainer">
+          {/* Addbtn */}
+          {/* <div className="content"> */}
+          <form className="form" onSubmit={submit}>
+            <input
+              className="inputText w-90"
+              type="text"
+              value={data.name}
+              onChange={(e) => setData((p) => ({ ...p, name: e.target.value }))}
+              placeholder="Trainer name"
+            />
+
+            <button type="submit" className="btn">{dValue ? ("Update trainer") : ("Add trainer")}</button>
+
+          </form>
+          {/* <Link >
+              <div className="btn primary"></div>
+            </Link> */}
+          {/* </div> */}
+        </div>
+      </div>
+    </div>
   );
 };
 
