@@ -1,15 +1,19 @@
 import "./user.css";
 import { useEffect, useState } from "react";
-import { Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import QuestionTemplate  from "../components/exams/Question";
 import axios from "../instance/axios";
+import Instruction from "./Instruction";
+
 
 const User = () => {
   const navigate = useNavigate();
+  
   useEffect(() => {
     //to check the user is loged in as admin
     const d = localStorage.getItem("logedin");
+    
     if (d !== "user") navigate("/");
   }, []);
 
@@ -17,7 +21,9 @@ const User = () => {
     <div className="app">
       <Header user />
       <Routes>
+      
         <Route index element={<ExamList />} /> {/*list of exams */}
+        <Route path="instruction" element={<Instruction />} /> {/*list of exams */}
         <Route path=":levelID" element={<WriteExam />} />{" "}
         {/*list of catagory */}
         <Route path=":levelID/:catID" element={<WriteExam />} />{" "}
@@ -28,28 +34,80 @@ const User = () => {
 };
 
 const ExamList = ({}) => {
-  const [examList, setExamList] = useState([]);
+  const navigate=useNavigate()
+  const email=localStorage.getItem("email")
+  const [scorecard, setscorecard] = useState([]);
   const fetch = async () => {
-    const res = await axios.get("/shown");
-    const { data } = res;
-    console.log(data);
-    setExamList(data);
+    const res = await axios.get("/showscore",{
+      params:{
+        email:email
+      }
+    });
+    
+
+    let val=1
+    if(res.data){
+     val=res.data+val 
+    
+     fechscore(val)
+     
+    }
+    else{
+      highscore()
+    }
   };
   useEffect(() => {
     fetch();
   }, []);
+
+  const fechscore=async(val)=>{
+    const scorecard=await axios.get("/levscore",{
+      params:{
+        level:val
+      }
+    })
+    
+    if(scorecard.data){
+      setscorecard(scorecard.data)
+      
+
+    }
+    else{
+      alert("Something wrong")
+    }
+  }
+
+  const highscore=async()=>{
+
+    const score=await axios.get("/highscore")
+    console.log(score);
+    if(score){
+      
+      setscorecard(score.data)
+
+    }
+    else{
+      alert("Something wrong")
+    }
+
+  }
+  console.log("This",scorecard);
+  const level=['1st score','2nd score','3rd score']
   return (
     <>
-      <h1>Exams</h1>
+      <h1>Scorecard</h1>
       <div className="exam-list">
-        {examList.map((e, i) => (
-          <div key={i}>
-            {" "}
-            <Link to={`${e.id}`}>
-              level {e.id} duration - {e.time}{" "}
-            </Link>
-          </div>
-        ))}
+        
+        <div className="scoreboard">{
+        scorecard.map((e)=>(
+        <>
+        
+        <h3>{e.name}</h3>
+        <h3>{e.c_mark}</h3>
+        </>))
+        }</div>
+        <button onClick={() => {navigate("instruction")} }>proceed</button>
+          
       </div>
     </>
   );
