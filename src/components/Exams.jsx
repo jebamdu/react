@@ -22,11 +22,13 @@ const Exams = () => {
     console.log(data);
   };
   useEffect(() => {
-    if (catID) addQus();
+     if (catID) addQus();
     fetch();
   }, [levelID, catID]);
-  const addQus = () => {
-    navigate(`/admin/createExam/${levelID}/${catID}`);
+  const addQus = async() => {
+
+    //navigate(`/admin/createExam/${levelID}/${catID}`);
+    
   };
   const [showpopup, setshowpopup] = useState(false);
   const [popData, setpopData] = useState("");
@@ -50,6 +52,9 @@ const Exams = () => {
   const show = () => {
     setshowpopup((p) => !p);
   };
+  const addelement=()=>{
+    navigate(`/admin/createExam/${levelID}/${catID}`);  
+  }
 
   return (
     <>
@@ -79,14 +84,18 @@ const Exams = () => {
             hide={show}
           />
         )}
-
-        <img className="addBtn" onClick={show} src={addBtn} alt="add button" />
+        {catID ? (<button onClick={addelement}>Add more</button>):
+        (<img className="addBtn" onClick={show} src={addBtn} alt="add button" />)}
         <div className="exams">
-          {exams.map((l, i) => (
-            <Link key={i} to={String(l.id)}>
-              <button className="btn primary">{l.name}</button>
-            </Link>
-          ))}
+          {catID ? (
+            <Table data={exams} />
+          ) : (
+            exams.map((l, i) => (
+              <Link key={i} to={String(l.id)}>
+                <button className="btn primary">{l.name}</button>
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </>

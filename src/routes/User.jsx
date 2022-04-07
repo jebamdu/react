@@ -2,7 +2,7 @@ import "./user.css";
 import { useEffect, useState } from "react";
 import { Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
-import { QuestionTemplate } from "../components/exams/Question";
+import QuestionTemplate  from "../components/exams/Question";
 import axios from "../instance/axios";
 
 const User = () => {
