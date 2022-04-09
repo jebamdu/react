@@ -1,31 +1,58 @@
 .exam-list {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .answer_form .controls {
-    display: flex;
-    flex-direction: row;
-    max-width: 30rem;
-    margin: auto;
-    /* background-color: blue; */
+  display: flex;
+  flex-direction: row;
+  max-width: 30rem;
+  margin: auto;
+  /* background-color: blue; */
 }
 
 .answer_form .controls button {
-    width: 100%;
-    font-size: 25px;
-    margin: 8px;
-    padding: 4px;
-    border-radius: 8px;
-    outline: none;
-    border: none;
-    background-color: rgba(165, 42, 42, 0.295);
+  width: 100%;
+  font-size: 25px;
+  margin: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  background-color: rgba(165, 42, 42, 0.295);
 }
 
-@media screen and (min-width:700px) {
-    .answer_form {
-        /* margin: auto;
+@media screen and (min-width: 700px) {
+  .answer_form {
+    /* margin: auto;
         max */
-        margin-left: 2rem;
-        max-width: 80vw;
-    }
+    margin-left: 2rem;
+    max-width: 80vw;
+  }
+}
+.hcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* position: fixed; */
+  width: 100%;
+  /* bottom: 0; */
+  /* height: 70%; */
+  margin: auto;
+  /* background-color: blue; */
+}
+.btn {
+  width: 95%;
+  font-size: 25px;
+  margin: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  background-color: rgba(165, 42, 42, 0.295);
+}
+.instruction{
+    margin: 8px;
+    padding: 5px;
+
 }

@@ -33,7 +33,12 @@ const Instruction = () => {
       </ul>
       <br />
       <br />
-      <button onClick={() => navigate(`/User/instruction/showlevel/${level}`)}>proceed</button>
+      <button
+        className="btn"
+        onClick={() => navigate(`/User/instruction/showlevel/${level}`)}
+      >
+        proceed
+      </button>
     </div>
   );
 };

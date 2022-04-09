@@ -37,9 +37,34 @@ const User = () => {
         />{" "}
         {/*list of catagory */}
         <Route path=":levelID" element={<WriteExam />} />
+        <Route
+          path="yourScore/:mark/:totalMark/:levelID"
+          element={<YourScore />}
+        />
         {/*answer page */}
         <Route path=":levelID/:catID" element={<WriteExam />} />{" "}
       </Routes>
+    </div>
+  );
+};
+
+const YourScore = () => {
+  const { mark, totalMark, levelID } = useParams();
+  const navigate = useNavigate();
+  return (
+    <div className="yourScore">
+      <h1>
+        You got {mark} out of {totalMark}
+      </h1>
+      <button
+        type="button"
+        className="btn"
+        onClick={() => {
+          navigate(`/User/${levelID}`);
+        }}
+      >
+        Proceed
+      </button>
     </div>
   );
 };
@@ -74,6 +99,7 @@ const ExamList = ({}) => {
 
   const fechscore = async (val) => {
     const scorecard = await axios.get("/levscore", {
+      // show use'r colleque level
       params: {
         level: val,
       },
@@ -110,6 +136,7 @@ const ExamList = ({}) => {
           ))}
         </div>
         <button
+          className="btn"
           onClick={() => {
             if (clevel != null) navigate(`instruction/${clevel}`);
             else alert("something went wrong");
@@ -124,12 +151,20 @@ const ExamList = ({}) => {
 export default User;
 
 const WriteExam = () => {
+  const navigate = useNavigate();
   const { levelID, catID } = useParams();
-  const [level, setLevel] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  const [level, setLevel] = useState([]); // user_level
+  const [questions, setQuestions] = useState([]); // using map questions ans ans
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentCatagory, setCurrentCatagory] = useState(0); //c_cat of user
   const fetch = async () => {
     const res = await axios.get("/shown", { params: { level: levelID } });
     const { data } = res;
+    const cCat = await axios.get("/ccat", {
+      params: { email: localStorage.getItem("email") },
+    });
+    console.log(cCat.data.c_cat);
+    setCurrentCatagory(cCat.data.c_cat);
     console.log(data);
     setLevel(data);
     // fetchQuestion()
@@ -141,7 +176,12 @@ const WriteExam = () => {
     // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
     console.log(data);
     setQuestions(
-      data.map((q) => ({ id: q.id, qus: q.ques, options: eval(q.ans) }))
+      data.map((q) => ({
+        id: q.id,
+        qus: q.ques,
+        user_ans: -1,
+        options: eval(q.ans),
+      }))
     );
   };
   useEffect(() => {
@@ -153,42 +193,69 @@ const WriteExam = () => {
     console.log(questions);
     const { data } = await axios.post("/studreport", {
       type_id: catID,
+      email: localStorage.getItem("email"),
       ans: questions.map((a) => eval(a.options)[a.user_ans]),
     });
-    alert(`You got ${data}/${questions.length}`);
+    // alert(`You got ${data}/${questions.length}`);
+    navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
   };
+  const nextQuestion = () => {
+    console.log(questions);
+    if (questions[currentQuestion].user_ans < 0)
+      return alert("Please select the answer");
+    if (questions.length > currentQuestion) setCurrentQuestion((p) => p + 1);
+    else alert("You have done all the answers");
+  };
+  console.log("question", questions);
+  console.log("currentQuestion", currentQuestion);
   return (
     <>
       {catID ? (
         <>
           <h1>Questions</h1>
           <form onSubmit={submit} className="answer_form">
+            <h3>
+              {currentQuestion + 1}/{questions.length}
+            </h3>
             {questions.length ? (
-              questions.map((q, i) => (
+              <div className="individualQuestion">
                 <QuestionTemplate
                   user
                   setQuestions={setQuestions}
-                  num={i + 1}
-                  key={q.id}
-                  qus={q}
+                  num={currentQuestion + 1}
+                  qus={questions[currentQuestion]}
                 />
-              ))
+                {questions.length - 1 !== currentQuestion && (
+                  <button className="btn"
+                  
+                  disabled={false}
+                  type="button"  onClick={nextQuestion}>
+                    Next
+                  </button>
+                )}
+              </div>
             ) : (
               <h3>No questions found</h3>
             )}
-            <div className="controls">
-              <button type="reset">Reset</button>
-              <button type="submit">submit</button>
-            </div>
+            {questions.length - 1 === currentQuestion && (
+              <div className="controls">
+                {/* <button type="reset">Reset</button> */}
+                <button type="submit">submit</button>
+              </div>
+            )}
           </form>
         </>
       ) : (
         <>
-          <h1>Types</h1>
+          <h1>Category</h1>
           <ul>
             {level.map((l, i) => (
               <li key={i}>
-                <button><Link to={`${l.id}`}>{l.name}</Link></button>
+                <Link to={`${l.id}`}>
+                  <button disabled={currentCatagory != i} className="btn">
+                    {l.name}
+                  </button>
+                </Link>
               </li>
             ))}
           </ul>

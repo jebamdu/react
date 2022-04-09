@@ -118,6 +118,7 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
             q.user_ans = val;
             return q;
           }
+          //only for admin
           if (typeof field === "number") {
             q.options[field] = val;
             return q;

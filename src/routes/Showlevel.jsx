@@ -15,7 +15,7 @@ const Showlevel = () => {
     alert("You have Completed all the levels");
     navigate("/User");
   }
-  const show_levels = async () => {
+  const show_levels = async () => {   // show the level
     const show = await axios.post("/show", {
       lev_id: lev_id,
     });
@@ -27,9 +27,9 @@ const Showlevel = () => {
   }, []);
 
   return (
-    <div className="show">
+    <div className="show ">
       <Link to={`/User/${Show_level.id}`}>
-        <button>{Show_level.name}</button>
+        <button type="button" className="btn">{Show_level.name}</button>
       </Link>
     </div>
   );
