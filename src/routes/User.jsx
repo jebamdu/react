@@ -1,5 +1,5 @@
 import "./user.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Link,
   Navigate,
@@ -13,6 +13,7 @@ import { QuestionTemplate } from "../components/exams/Question";
 import axios from "../instance/axios";
 import Instruction from "./Instruction";
 import Showlevel from "./Showlevel";
+import ChangePassword from "./ChangePassword";
 
 const User = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const User = () => {
       <Header user />
       <Routes>
         <Route index element={<ExamList />} /> {/*list of exams */}
+        <Route path="changePassword" element={<ChangePassword />} />
         <Route path="instruction/:level" element={<Instruction />} />{" "}
         {/*list of exams */}
         <Route
@@ -152,11 +154,16 @@ export default User;
 
 const WriteExam = () => {
   const navigate = useNavigate();
+  const QTime = useRef();
+  const timeOUTset = useRef(0);
+  const timeIntervalset = useRef(0);
+  const currentQuestionRef = useRef(0);
   const { levelID, catID } = useParams();
   const [level, setLevel] = useState([]); // user_level
   const [questions, setQuestions] = useState([]); // using map questions ans ans
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentCatagory, setCurrentCatagory] = useState(0); //c_cat of user
+  const [questionTime, setQuestionTime] = useState(0);
   const fetch = async () => {
     const res = await axios.get("/shown", { params: { level: levelID } });
     const { data } = res;
@@ -169,6 +176,35 @@ const WriteExam = () => {
     setLevel(data);
     // fetchQuestion()
   };
+  console.log("current Question", currentQuestion);
+
+  const mytime = () => {
+    // passing to next question when times up
+    if (QTime.current.length > currentQuestionRef.current + 1) {
+      currentQuestionRef.current += 1;
+      setCurrentQuestion((p) => p + 1);
+    } else {
+      //  alert("Here have to do submit the form or do further action");
+      return submit();
+    }
+
+    //assign the time for the current question
+    setQuestionTime(QTime.current[currentQuestionRef.current].time);
+
+    //to set the timeout of the current question
+    timeOUTset.current = setTimeout(
+      mytime,
+      QTime.current[currentQuestionRef.current].time * 1000
+    );
+
+    //clean up the previous question time
+    clearInterval(timeIntervalset.current);
+
+    //to set current question time for timer in user screen
+    timeIntervalset.current = setInterval(() => {
+      setQuestionTime((p) => p - 1);
+    }, 1000);
+  };
 
   const fetchQuestion = async () => {
     const res = await axios.get(`/shown`, { params: { type: catID } });
@@ -176,25 +212,53 @@ const WriteExam = () => {
     // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
     console.log(data);
     setQuestions(
-      data.map((q) => ({
+      data.map((q, i) => ({
         id: q.id,
         qus: q.ques,
         user_ans: -1,
+        time: q.time,
         options: eval(q.ans),
       }))
     );
+    //settimeout //use data q.time
+
+    //for timer module
+    //getting the time from the source
+    QTime.current = data.map((q, i) => ({
+      time: q.time, //1, //i === 1 || i === 0 ? 10 :
+    }));
+
+    // set the time out for the first question
+    timeOUTset.current = setTimeout(
+      mytime,
+      QTime.current[currentQuestion].time * 1000
+    );
+
+    // set first questions total time
+    setQuestionTime(QTime.current[currentQuestion].time);
+
+    // clean up the timer interval for user display for first question
+    clearInterval(timeIntervalset.current);
+
+    // first question timer setting
+    timeIntervalset.current = setInterval(() => {
+      setQuestionTime((p) => p - 1);
+    }, 1000);
+    console.log(timeIntervalset);
+
+    //
   };
   useEffect(() => {
     if (!catID) fetch();
     else fetchQuestion();
   }, [levelID, catID]);
   const submit = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     console.log(questions);
     const { data } = await axios.post("/studreport", {
       type_id: catID,
       email: localStorage.getItem("email"),
-      ans: questions.map((a) => eval(a.options)[a.user_ans]),
+      ans: questions.map((a) => eval(a.options)[a.user_ans]), //[{}]
     });
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
@@ -203,11 +267,17 @@ const WriteExam = () => {
     console.log(questions);
     if (questions[currentQuestion].user_ans < 0)
       return alert("Please select the answer");
-    if (questions.length > currentQuestion) setCurrentQuestion((p) => p + 1);
-    else alert("You have done all the answers");
+    if (questions.length > currentQuestion) {
+      // setCurrentQuestion((p) => p + 1);
+      clearTimeout(timeOUTset.current);
+      mytime();
+      // // stoptime();
+      // clearInterval(timeIntervalset.current);
+    } else alert("You have done all the answers");
   };
-  console.log("question", questions);
-  console.log("currentQuestion", currentQuestion);
+  // console.log("question", questions);
+  // console.log("currentQuestion", currentQuestion);
+
   return (
     <>
       {catID ? (
@@ -217,19 +287,27 @@ const WriteExam = () => {
             <h3>
               {currentQuestion + 1}/{questions.length}
             </h3>
+            <h3>
+              Time:{Math.floor(questionTime / 60)}:{questionTime % 60}
+            </h3>
             {questions.length ? (
               <div className="individualQuestion">
                 <QuestionTemplate
                   user
                   setQuestions={setQuestions}
                   num={currentQuestion + 1}
-                  qus={questions[currentQuestion]}
+                  qus={questions[currentQuestion]} //user_ans=-1
                 />
+
                 {questions.length - 1 !== currentQuestion && (
-                  <button className="btn"
-                  
-                  disabled={false}
-                  type="button"  onClick={nextQuestion}>
+                  <button
+                    className="btn"
+                    //
+                    disabled={questions[currentQuestion].user_ans < 0}
+                    // {/* do the  i know bro  then call me okey bro
+                    type="button"
+                    onClick={nextQuestion}
+                  >
                     Next
                   </button>
                 )}
@@ -240,7 +318,12 @@ const WriteExam = () => {
             {questions.length - 1 === currentQuestion && (
               <div className="controls">
                 {/* <button type="reset">Reset</button> */}
-                <button type="submit">submit</button>
+                <button
+                  type="submit"
+                  disabled={questions[questions.length - 1].user_ans < 0}
+                >
+                  submit
+                </button>
               </div>
             )}
           </form>

@@ -49,7 +49,7 @@ const Login = () => {
       navigate("/User");
       //   window.location.href = "/shown";
     } else {
-      alert("Username or Password is incorrect from vmm");
+      alert("Username or Password is incorrect ");
       setCredential({ userName: "", password: "" });
     }
     console.log(data);

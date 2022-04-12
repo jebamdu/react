@@ -19,8 +19,6 @@ const Import = () => {
 
   }
 
-
-
   useEffect(() => {
     batch()
   }, []);
@@ -38,9 +36,6 @@ const Import = () => {
 
     console.log("the sucess", sucess);
   }
-
-
-
 
   //   return <button onClick={add}>ADD</button>;
   return (

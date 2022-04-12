@@ -108,12 +108,14 @@ function importCSV(e) {
 }
 
 const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
-  console.log(qus);
+  // console.log(qus);
+
+
   const updateValue = (val, field) => {
     console.log(val, field);
-    return setQuestions((p) =>
+    return setQuestions((p) =>       //[{},{}]
       p.map((q) => {
-        if (q.id === qus.id) {
+        if (q.id === qus.id) {     
           if (user) {
             q.user_ans = val;
             return q;
