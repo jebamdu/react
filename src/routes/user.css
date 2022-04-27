@@ -1,7 +1,114 @@
+.scoreboard img {
+  width: 80px;
+}
+.scoreboard .innerwraper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  /* justify-content: space-around; */
+}
+.scoreboard .innerwraper div {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+}
+.scoreboard .innerwraper h5 {
+  font-size: 15px;
+}
+
+.levelNum {
+  font-size: 45px;
+  margin-bottom: 30px;
+  /* color: rgb(255, 0, 187); */
+}
+.rankName {
+  color: rgb(0, 187, 255);
+  /* text-shadow: 0 0 5px black; */
+}
+.scoreboard .arrowRight {
+  width: 40px;
+  float: right;
+  margin-right: 10%;
+}
+.scoreboard .arrowRight:hover {
+  box-shadow: 0 0 5px rgb(213, 22, 22);
+  border-radius: 50%;
+}
+.levels {
+  margin-top: 36%;
+}
+.topContent {
+  margin-left: 15px;
+  /* text-align: center; */
+}
+.testContainer .btn {
+  margin: 10px 0 0 4px;
+}
+
 .exam-list {
   font-size: 2rem;
 }
+.user-app {
+  height: 100vh;
+}
 
+.user-app .show a {
+  width: 95%;
+}
+.catagory-list li,
+a {
+  width: 100%;
+}
+.catagory-list {
+  display: flex;
+  height: 43%;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  flex-direction: column;
+}
+.user-app .show {
+  display: flex;
+  height: 57%;
+  justify-content: center;
+  align-items: center;
+}
+.exam-list {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+}
+
+.user-header .left h1 {
+  font-size: 37px;
+  white-space: nowrap;
+}
+.user-header .right span {
+  font-size: 16px;
+}
+
+.user-header .right img {
+  width: 2rem;
+  height: 2rem;
+}
+.user-header .right {
+  min-width: 5rem;
+}
+.user-header .left {
+  justify-content: center;
+  /* align-items: center; */
+  width: 100%;
+}
+.user-header {
+  justify-content: space-between;
+  height: 19vh;
+}
+/* .app::has(.scoreboard) {
+  height: 100vh;
+  background-color: red;
+} */
 .answer_form .controls {
   display: flex;
   flex-direction: row;
@@ -51,8 +158,26 @@
   border: none;
   background-color: rgba(165, 42, 42, 0.295);
 }
-.instruction{
-    margin: 8px;
-    padding: 5px;
+.instruction ul {
+  margin-left: 10px;
+}
+.instruction {
+  margin: 8px;
+  padding: 5px;
+}
+.Timemodule {
+  /* display: flex;
+  color: rgb(255, 0, 0);
+  justify-content: right;
+  right: 50px; */
+  position: absolute;
+  color: rgb(255, 0, 0);
+  width: 377.54px;
+  /* height: 30px; */
+  left: 270px;
+  top: 158px;
+}
 
+.question.Questionno {
+  color: aqua;
 }

@@ -1,162 +1,161 @@
 .containerBody {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
 .containerBody .wrapper {
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .containerBody .mainContainer .content a {
-    text-decoration: none;
-    color: initial;
+  text-decoration: none;
+  color: initial;
 }
-
 
 /* .containerBody .mainContainer .form {
   background-color: blue;
 } */
-.w-90{
-width: 90% !important;
-/* margin: auto; */
+.w-90 {
+  width: 90% !important;
+  /* margin: auto; */
 }
 .containerBody .mainContainer .content {
-    height: 50vh;
-    overflow-y: auto;
-    width: 40vw;
-    /* width: ; */
-    /* overflow-x: hidden; */
-    /* width:; */
-    /* background-color: burlywood; */
+  height: 50vh;
+  overflow-y: auto;
+  width: 40vw;
+  margin-top: 50px;
+  /* width: ; */
+  /* overflow-x: hidden; */
+  /* width:; */
+  /* background-color: burlywood; */
 }
-.jc-sb{
+.jc-sb {
   justify-content: space-between;
 }
-.flex-row{
-display: flex;
-flex-direction: row;
+.flex-row {
+  display: flex;
+  flex-direction: row;
 }
-.flex-column{
-display: flex;
-flex-direction: column;
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
-.fs-20{
+.fs-20 {
   font-size: 20px;
 }
 .containerBody .mainContainer .addBtn:hover {
-    box-shadow: 0 0 8px 0px black;
+  box-shadow: 0 0 8px 0px black;
 }
 
 .containerBody .mainContainer .addBtn {
-    position: absolute;
-    top: 20px;
-    cursor: pointer;
-    right: 20px;
+  position: absolute;
+  top: 20px;
+  cursor: pointer;
+  right: 20px;
 }
 
 .popContainer .popup {
-    background-color: white;
-    width: 65%;
-    height: 50%;
+  background-color: white;
+  width: 65%;
+  height: 50%;
 }
 
 .containerBody .mainContainer .popContainer {
-    position: absolute;
-    display: flex;
-    z-index: 5;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(196, 196, 196, 0.53);
-    ;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  display: flex;
+  z-index: 5;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(196, 196, 196, 0.53);
+  width: 100%;
+  height: 100%;
 }
 
 .containerBody .mainContainer {
-    background-color: rgba(0, 0, 255, 0.212);
-    height: 90%;
-    width: 80%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: rgba(0, 0, 255, 0.212);
+  height: 90%;
+  width: 80%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .navHead {
-    display: flex;
-    padding: 10px;
-    background-color: rgba(0, 0, 255, 0.212);
+  display: flex;
+  padding: 10px;
+  background-color: rgba(0, 0, 255, 0.212);
 }
 
-.navHead>h3 {
-    font-size: 32px;
+.navHead > h3 {
+  font-size: 32px;
 }
 
 .center {
-    /* background-color: blue; */
-    /* width: 10vh; */
-    /* height: 10vh; */
-    /* position: absolute; */
-    margin: auto;
-    /* margin-left: 18rem; */
-    /* max-height: 84vh; */
-    /* overflow-y: scroll; */
+  /* background-color: blue; */
+  /* width: 10vh; */
+  /* height: 10vh; */
+  /* position: absolute; */
+  margin: auto;
+  /* margin-left: 18rem; */
+  /* max-height: 84vh; */
+  /* overflow-y: scroll; */
 }
 
 .inputText {
-    width: 100%;
-    font-size: 25px;
-    margin: 8px;
-    padding: 4px;
-    border-radius: 8px;
-    outline: none;
-    /* border: none; */
-    /* background-color: rgba(165, 42, 42, 0.295); */
+  width: 100%;
+  font-size: 25px;
+  margin: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  outline: none;
+  /* border: none; */
+  /* background-color: rgba(165, 42, 42, 0.295); */
 }
 
 .btn {
-    width: 95%;
-    font-size: 25px;
-    margin: 8px;
-    padding: 4px;
-    border-radius: 8px;
-    outline: none;
-    cursor: pointer;
-    border: none;
-    background-color: rgba(165, 42, 42, 0.295);
+  width: 95%;
+  font-size: 25px;
+  margin: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  background-color: rgba(165, 42, 42, 0.295);
 }
 
 .column {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn.primary.popupbtn {
-    width: 40%;
+  width: 40%;
 }
 
 .inputContainer * {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .inputContainer {
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 .btn-text {
-    width: max-content;
+  width: max-content;
 }
 
 .btn.primary:hover {
-    box-shadow: 0 0 8px 0px black;
+  box-shadow: 0 0 8px 0px black;
 }

@@ -9,10 +9,11 @@ const Header = ({ user, login }) => {
     navigate("/");
   };
   return (
-    <div className="header">
+    <div className={user?"header user-header":"user-header  header admin-header"}>
       <div className="left">
         <h1>
-          YEP<span>program</span>
+          YEP Mock Tests
+          {/* <span>program</span> */}
         </h1>
       </div>
       {!login && (

@@ -38,6 +38,10 @@ const Question = () => {
       correctans: correctans,
     });
     console.log(values);
+    if (values.data) {
+      alert("Questions are uploaded successfully");
+      navigate("/admin/exams");
+    } else alert("something went wrong");
   };
 
   const add = async (e) => {
@@ -110,31 +114,33 @@ function importCSV(e) {
 const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
   // console.log(qus);
 
-
   const updateValue = (val, field) => {
     console.log(val, field);
-    return setQuestions((p) =>       //[{},{}]
-      p.map((q) => {
-        if (q.id === qus.id) {     
-          if (user) {
-            q.user_ans = val;
+    return setQuestions(
+      (
+        p //[{},{}]
+      ) =>
+        p.map((q) => {
+          if (q.id === qus.id) {
+            if (user) {
+              q.user_ans = val;
+              return q;
+            }
+            //only for admin
+            if (typeof field === "number") {
+              q.options[field] = val;
+              return q;
+            }
+            q[field] = val;
             return q;
           }
-          //only for admin
-          if (typeof field === "number") {
-            q.options[field] = val;
-            return q;
-          }
-          q[field] = val;
           return q;
-        }
-        return q;
-      })
+        })
     );
   };
   return (
     <div className="question">
-      <label>Question {num}</label>
+      <label className="Questionno">Question {num}</label>
       <textarea
         className="qus_text"
         type="text"

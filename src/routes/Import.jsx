@@ -34,7 +34,7 @@ const Import = () => {
 
     })
 
-    console.log("the sucess", sucess);
+    if (sucess == 200) alert("Imported sucessfully")
   }
 
   //   return <button onClick={add}>ADD</button>;

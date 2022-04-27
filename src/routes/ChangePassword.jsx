@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../instance/axios";
 
 
 const ChangePassword = () => {
 
+const navigate=useNavigate()
+
 const email=localStorage.getItem("email")
 
-const [credentials, setcredentials] = useState({email:"",phno:""});
+const [credentials, setcredentials] = useState({phno:"",password:"",C_password:""});
 
 const update=(e,field)=>{
     e.preventDefault()
@@ -14,18 +17,31 @@ const update=(e,field)=>{
 
 }
 const login = async(e) => {
+
+    if(credentials.password===credentials.C_password){
+
     e.preventDefault()
     const solution=await axios.get("/isthere",{
         params:
         {
-            email:email,
-            phno:credentials.phno
+            phno:credentials.phno,
+            password:credentials.password,
+            
 
         }
     })
-    if(solution){console.log(solution.data)}
+    console.log(solution.data);
+    if(solution.data === 1){
+        alert("Password is changed sucessfully")
+    navigate('/user')
+    }
+    else{
+        alert("Please Enter your valid phone number that you have enroll with YEP") 
+       
+    }
 
-
+    }
+    else alert(" you password is mismatched")
 }
     return (  
 

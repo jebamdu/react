@@ -65,7 +65,7 @@ const ShowLevels = ({}) => {
             />
           )}
           {/* <button onClick={() => alert("hi")}>img</button> */}
-          <img className="addBtn" onClick={show} src={addBtn} alt="Add level" />
+          
           <div className="content">
             {levelList.map((l, i) => (
               <Link key={i} to={String(l.id)}>

@@ -40,7 +40,7 @@ const Report = () => {
       alert("No persons added in the batch");
     }
   };
-
+  console.log("showbatch", showbatch);
   return (
     // <div className="container">
     <div className="containerBody">
@@ -51,8 +51,8 @@ const Report = () => {
           <select
             // value={val.id}
             className="inputText w-90"
-            onChange={e => fetchitem(e.target.value)}
-          // onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
+            onChange={(e) => fetchitem(e.target.value)}
+            // onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
           >
             <option hidden value={""}>
               Please select
@@ -66,31 +66,34 @@ const Report = () => {
             {/* <div className="tablecontainer"></div> */}
           </select>
           // <br />
-          // <button type="submit">Submit</button> 
+          // <button type="submit">Submit</button>
           // </form>
         }
       </div>
       <div className="wrapper">
         <div className="mainContainer">
           <div className="content">
-            {showbatch.map(d =>
-              // <Link to={String(d.id)}>
-              <div className="btn primary flex-row jc-sb">
-                <div className="flex-column">
-                  <div className=" fs-20 card-title">Name</div>
-                  <div className="fs-20">{d.name}</div>
+            <Table data={showbatch} />
+            {/* {showbatch.map(
+              (d, i) => (
+                // <Link to={String(d.id)}>
+                <div key={i} className="btn primary flex-row jc-sb">
+                  <div className="flex-column">
+                    <div className=" fs-20 card-title">Name</div>
+                    <div className="fs-20">{d.Name}</div>
+                  </div>
+                  <div className="flex-column">
+                    <div className=" fs-20 card-title">Mark</div>
+                    <div className="fs-20">{d.c_mark}</div>
+                  </div>
+                  <div className="flex-column">
+                    <div className=" fs-20 card-title">Level</div>
+                    <div className="fs-20">{d.c_level}</div>
+                  </div>
                 </div>
-                <div className="flex-column">
-                  <div className=" fs-20 card-title">Mark</div>
-                  <div className="fs-20">{d.c_mark}</div>
-                </div>
-                <div className="flex-column">
-                  <div className=" fs-20 card-title">Level</div>
-                  <div className="fs-20">{d.c_level}</div>
-                </div>
-              </div>
+              )
               // </Link>
-            )}
+            )} */}
           </div>
           {/* <Table data={showbatch} /> */}
         </div>

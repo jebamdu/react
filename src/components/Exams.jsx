@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import addBtn from "../assets/addBtn.svg";
 
-const Exams = () => {
+const 
+ Exams = () => {
   const [exams, setExams] = useState([]);
   const navigate = useNavigate();
   const { levelID, catID } = useParams();
@@ -26,10 +27,9 @@ const Exams = () => {
     fetch();
   }, [levelID, catID]);
   const addQus = async () => {
-
     //navigate(`/admin/createExam/${levelID}/${catID}`);
-
   };
+  console.log("exams", exams);
   const [showpopup, setshowpopup] = useState(false);
   const [popData, setpopData] = useState("");
 
@@ -54,7 +54,7 @@ const Exams = () => {
   };
   const addelement = () => {
     navigate(`/admin/createExam/${levelID}/${catID}`);
-  }
+  };
 
   return (
     <>
@@ -74,7 +74,9 @@ const Exams = () => {
             <Link to={`/admin/exams/${levelID}/${catID}`}>Type</Link>
           </>
         )}
+      
       </h1>
+      <div className="wrapper">
       <div className="maincontainer">
         {showpopup && (
           <Popup
@@ -84,30 +86,51 @@ const Exams = () => {
             hide={show}
           />
         )}
-        {catID ? (<button className="btn primary btn-text" onClick={addelement}>Add more</button>) :
-          (<img className="addBtn" onClick={show} src={addBtn} alt="add button" />)}
+        {catID ? (
+          <button className="btn primary btn-text" onClick={addelement}>
+            Add more
+          </button>
+        ) : (
+          <img
+            className="addBtn"
+            onClick={show}
+            src={addBtn}
+            alt="add button"
+          />
+        )}
         <div className="exams">
           {catID ? (
             // <Table data={exams} />
             <div className="content">
-              {exams.map((d, i) =>
-                // <Link to={String(d.id)}>
-                <div key={i} className="btn primary flex-row jc-sb">
-                  <div className="flex-column">
-                    <div className=" fs-20 card-title">Question</div>
-                    <div className="fs-20">{d.ques}</div>
-                  </div>
-                  {eval(d.ans)?.map((option, i) =>
-                    <div className="flex-column" key={i}>
-                      <div className=" fs-20 card-title">Option {i + 1}</div>
-                      <div className="fs-20" style={i === 1 ? { backgroundColor: "green" } : {}}>{option}</div>
+              {exams.map(
+                (d, i) => (
+                  // <Link to={String(d.id)}>
+                  <div key={i} className="btn primary flex-row jc-sb">
+                    <div className="flex-column">
+                      <div className=" fs-20 card-title">Question</div>
+                      <div className="fs-20">{d.ques}</div>
                     </div>
-                  )}
-                  <div className="flex-column">
-                    <div className=" fs-20 card-title">Time</div>
-                    <div className="fs-20">{d.time}</div>
+                    {eval(d.ans)?.map((option, i) => (
+                      <div className="flex-column" key={i}>
+                        <div className=" fs-20 card-title">Option {i + 1}</div>
+                        <div
+                          className="fs-20"
+                          style={
+                            i === d.c_ans - 1
+                              ? { backgroundColor: "#e342428c" }
+                              : {}
+                          }
+                        >
+                          {option}
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex-column">
+                      <div className=" fs-20 card-title">Time</div>
+                      <div className="fs-20">{d.time}</div>
+                    </div>
                   </div>
-                </div>
+                )
                 // </Link>
               )}
             </div>
@@ -118,6 +141,7 @@ const Exams = () => {
               </Link>
             ))
           )}
+        </div>
         </div>
       </div>
     </>

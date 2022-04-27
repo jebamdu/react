@@ -14,6 +14,11 @@ import axios from "../instance/axios";
 import Instruction from "./Instruction";
 import Showlevel from "./Showlevel";
 import ChangePassword from "./ChangePassword";
+import Showinnerlevel from "./Showinnerlevel";
+import rank1 from "../assets/1.jpg";
+import rank2 from "../assets/2.jpg";
+import rank3 from "../assets/3.jpg";
+import arrowRight from "../assets/arrow.svg";
 
 const User = () => {
   const navigate = useNavigate();
@@ -26,12 +31,13 @@ const User = () => {
   }, []);
 
   return (
-    <div className="app">
+    <div className="app user-app">
       <Header user />
       <Routes>
         <Route index element={<ExamList />} /> {/*list of exams */}
         <Route path="changePassword" element={<ChangePassword />} />
-        <Route path="instruction/:level" element={<Instruction />} />{" "}
+        <Route path="innerLevel/:Name" element={<Showinnerlevel />} />{" "}
+        <Route path="instruction/:level/:type" element={<Instruction />} />{" "}
         {/*list of exams */}
         <Route
           path="instruction/showlevel/:lev_id"
@@ -51,8 +57,25 @@ const User = () => {
 };
 
 const YourScore = () => {
+  const email = localStorage.getItem("email");
   const { mark, totalMark, levelID } = useParams();
+  const [Name, setName] = useState({ name: "" });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchname();
+  }, []);
+
+  const fetchname = async () => {
+    const name = await axios.get("/showscore", {
+      params: {
+        email: email,
+      },
+    });
+    console.log(name);
+    setName(name.data);
+  };
+
   return (
     <div className="yourScore">
       <h1>
@@ -62,7 +85,7 @@ const YourScore = () => {
         type="button"
         className="btn"
         onClick={() => {
-          navigate(`/User/${levelID}`);
+          navigate(`/User/innerLevel/${Name}`);
         }}
       >
         Proceed
@@ -74,49 +97,36 @@ const YourScore = () => {
 const ExamList = ({}) => {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
-  const [clevel, setClevel] = useState(null);
+  const [clevel, setClevel] = useState(null); // send the name
   console.log("clevel", clevel);
+
+  const [Name, setName] = useState({ name: "" });
+  console.log("Name is", Name);
   const [scorecard, setscorecard] = useState([]);
+  const [next, setnext] = useState(1);
+
   const fetch = async () => {
-    const res = await axios.get("/showscore", {
-      params: {
-        email: email,
-      },
-    });
+    const res = await axios.get("/showscore");
     console.log(res);
-    let val = 1;
+
     if (res.status == 200) {
-      if (res.data) val = res.data + val;
-      else val = 0;
-      setClevel(val);
-      fechscore(val);
+      if (res.data) {
+        setName(res.data);
+      }
     } else {
       alert("something went wrong");
       // highscore();
     }
+    highscore();
   };
   useEffect(() => {
     fetch();
   }, []);
 
-  const fechscore = async (val) => {
-    const scorecard = await axios.get("/levscore", {
-      // show use'r colleque level
-      params: {
-        level: val,
-      },
-    });
-
-    if (scorecard.data) {
-      setscorecard(scorecard.data);
-    } else {
-      alert("Something wrong");
-    }
-  };
-
   const highscore = async () => {
     const score = await axios.get("/highscore");
     console.log(score);
+    console.log(scorecard);
     if (score) {
       setscorecard(score.data);
     } else {
@@ -124,23 +134,71 @@ const ExamList = ({}) => {
     }
   };
   console.log("This", scorecard);
-  const level = ["1st score", "2nd score", "3rd score"];
+
+  const nextlevel = () => {
+    setnext(next + 1);
+  };
+  console.log("scorecard", scorecard);
+  const formapping = scorecard.filter((v) => v.level == next);
   return (
     <>
-      <h1>Scorecard</h1>
+      <h1 style={{ color: "rgb(255, 0, 187) " }}>LeaderBoard</h1>
       <div className="exam-list">
         <div className="scoreboard">
-          {scorecard.map((e) => (
-            <>
-              <h3>{e.name}</h3>
-              <h3>{e.c_mark}</h3>
-            </>
-          ))}
+          <h1 className="levelNum" style={{ textAlign: "center" }}>
+            Level{next}
+          </h1>
+          <div style={{ textAlign: "center" }} className="rankwraper">
+            <div className="rank1">
+              <img src={rank1} alt="" />
+              <h5 className="rankName">{formapping[0]?.name}</h5>
+              <h5>
+                {formapping[0]?.mark}/30 - {formapping[0]?.batch_name}
+              </h5>
+            </div>
+            <div className="innerwraper">
+              <div className="rank2">
+                <img src={rank2} alt="" />
+                {formapping[1] && (
+                  <span>
+                    <h5 className="rankName">{formapping[1]?.name}</h5>
+                    <h5>
+                      {formapping[1]?.mark}/30 - {formapping[1]?.batch_name}
+                    </h5>
+                  </span>
+                )}
+              </div>
+              <div className="rank3">
+                <img src={rank3} alt="" />
+                {formapping[2] && (
+                  <span>
+                    <h5 className="rankName">{formapping[2]?.name}</h5>
+                    <h5>
+                      {formapping[2]?.mark}/30 - {formapping[2]?.batch_name}
+                    </h5>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* <div className={`rank${i + 1}`}>
+            {/* <img src={rank1} alt={`Rank${i + 1}`} /> 
+          </div> */}
+
+          <img
+            src={arrowRight}
+            className="arrowRight"
+            onClick={next < 3 && nextlevel}
+            alt=""
+          />
+          {/* <button onClick={nextlevel} >
+            next
+          </button> */}
         </div>
         <button
           className="btn"
           onClick={() => {
-            if (clevel != null) navigate(`instruction/${clevel}`);
+            if (Name != "") navigate(`innerLevel/${Name}`);
             else alert("something went wrong");
           }}
         >
@@ -164,6 +222,10 @@ const WriteExam = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentCatagory, setCurrentCatagory] = useState(0); //c_cat of user
   const [questionTime, setQuestionTime] = useState(0);
+
+  console.log("levelId isss", levelID);
+  console.log("catId isss", catID);
+
   const fetch = async () => {
     const res = await axios.get("/shown", { params: { level: levelID } });
     const { data } = res;
@@ -252,17 +314,20 @@ const WriteExam = () => {
     if (!catID) fetch();
     else fetchQuestion();
   }, [levelID, catID]);
+
   const submit = async (e) => {
     e?.preventDefault();
     console.log(questions);
     const { data } = await axios.post("/studreport", {
       type_id: catID,
       email: localStorage.getItem("email"),
-      ans: questions.map((a) => eval(a.options)[a.user_ans]), //[{}]
+      ans: questions.map((a) => eval(a.user_ans)),
+      id: questions.map((a) => eval(a.id)), //[{}]
     });
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
   };
+
   const nextQuestion = () => {
     console.log(questions);
     if (questions[currentQuestion].user_ans < 0)
@@ -287,7 +352,7 @@ const WriteExam = () => {
             <h3>
               {currentQuestion + 1}/{questions.length}
             </h3>
-            <h3>
+            <h3 className="Timemodule">
               Time:{Math.floor(questionTime / 60)}:{questionTime % 60}
             </h3>
             {questions.length ? (
@@ -331,7 +396,7 @@ const WriteExam = () => {
       ) : (
         <>
           <h1>Category</h1>
-          <ul>
+          <ul className="catagory-list">
             {level.map((l, i) => (
               <li key={i}>
                 <Link to={`${l.id}`}>
