@@ -76,7 +76,7 @@ const
         )}
       
       </h1>
-      <div className="wrapper">
+      
       <div className="maincontainer">
         {showpopup && (
           <Popup
@@ -142,7 +142,7 @@ const
             ))
           )}
         </div>
-        </div>
+        
       </div>
     </>
   );
