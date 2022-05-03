@@ -37,6 +37,7 @@ const User = () => {
         <Route index element={<ExamList />} /> {/*list of exams */}
         <Route path="changePassword" element={<ChangePassword />} />
         <Route path="innerLevel/:Name" element={<Showinnerlevel />} />{" "}
+        <Route path="innerLevel/:Name/:levels" element={<Showinnerlevel />} />{" "}
         <Route path="instruction/:level/:type" element={<Instruction />} />{" "}
         {/*list of exams */}
         <Route
@@ -98,13 +99,17 @@ const ExamList = ({}) => {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const [clevel, setClevel] = useState(null); // send the name
+  const [showName, setshowName] = useState([]);
+
   console.log("clevel", clevel);
 
   const [Name, setName] = useState({ name: "" });
   console.log("Name is", Name);
   const [scorecard, setscorecard] = useState([]);
+  const [projname, setprojname] = useState("");
+  const [category, setcategory] = useState([]);
   const [next, setnext] = useState(1);
-
+  console.log("catagory", category);
   const fetch = async () => {
     const res = await axios.get("/showscore");
     console.log(res);
@@ -118,42 +123,83 @@ const ExamList = ({}) => {
       // highscore();
     }
     highscore();
+    fetchname();
+  };
+  const fetchname = async () => {
+    const name = await axios.get("/shown", {
+      params: {
+        level: null,
+        type: null,
+      },
+    });
+    console.log(name, "the catagory is visible");
+    setshowName(name.data);
+    setprojname(name.data?.[0]?.name);
   };
   useEffect(() => {
     fetch();
   }, []);
 
-  const highscore = async () => {
-    const score = await axios.get("/highscore");
+  const highscore = async (val) => {
+    console.log(val, "name is");
+    const score = await axios.get("/highscore", { params: { value: val } });
     console.log(score);
     console.log(scorecard);
     if (score) {
-      setscorecard(score.data);
+      setscorecard(score.data.val);
+      setcategory(score.data.id);
     } else {
       alert("Something wrong");
     }
+    setprojname(showName.find((d) => d.id == val).name);
   };
-  console.log("This", scorecard);
 
+  console.log("This", scorecard);
+  // const [formapping, setFormapping] = useState([]);
   const nextlevel = () => {
-    setnext(next + 1);
+    // newval=[22,41]0
+    // console.log("scorecard", scorecard);
+    // setFormapping(scorecard.filter((v) => v.level == category[next-1]));
+    console.log("next", next);
+    if (
+      next < 3 &&
+      scorecard.filter((v) => v.level == category[next]).length > 0
+    ) {
+      setnext((p) => p + 1);
+    }
   };
-  console.log("scorecard", scorecard);
-  const formapping = scorecard.filter((v) => v.level == next);
+  const formapping = scorecard.filter((v) => v.level == category[next - 1]);
+  console.log("formapping", formapping);
+
   return (
     <>
       <h1 style={{ color: "rgb(255, 0, 187) " }}>LeaderBoard</h1>
       <div className="exam-list">
         <div className="scoreboard">
           <h1 className="levelNum" style={{ textAlign: "center" }}>
-            Level{next}
+            {/* Level{next} */}
+            {/* {showName?.[0]} */}
+            {projname}-{formapping?.[0]?.level_name}
           </h1>
+
+          <select
+            onChange={(e) => {
+              highscore(e.target.value);
+            }}
+          >
+            {showName.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.name}
+              </option>
+            ))}
+          </select>
+
           <div style={{ textAlign: "center" }} className="rankwraper">
             <div className="rank1">
               <img src={rank1} alt="" />
               <h5 className="rankName">{formapping[0]?.name}</h5>
               <h5>
-                {formapping[0]?.mark}/30 - {formapping[0]?.batch_name}
+                {formapping[0]?.mark}/10- {formapping[0]?.batch_name}
               </h5>
             </div>
             <div className="innerwraper">
@@ -188,7 +234,7 @@ const ExamList = ({}) => {
           <img
             src={arrowRight}
             className="arrowRight"
-            onClick={next < 3 && nextlevel}
+            onClick={nextlevel}
             alt=""
           />
           {/* <button onClick={nextlevel} >

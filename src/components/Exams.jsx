@@ -11,7 +11,7 @@ const
   const [exams, setExams] = useState([]);
   const navigate = useNavigate();
   const { levelID, catID } = useParams();
-  console.log(levelID, catID);
+  console.log(levelID, catID,"values");
   const fetch = async () => {
     const { data } = await axios.get("/shown", {
       params: {
@@ -40,6 +40,15 @@ const
       time: null,
     });
     console.log(val);
+    if(val){
+      
+      const createidname=await axios.get("/createidname",{params:{
+        id:val.data.status
+      }
+      })
+
+      console.log(createidname);
+    }
   };
 
   const popupSubmit = (e) => {
@@ -71,7 +80,7 @@ const
         {catID && (
           <>
             {" > "}
-            <Link to={`/admin/exams/${levelID}/${catID}`}>Type</Link>
+            <Link to={`/admin/exams/${levelID}/${catID}`}>Category</Link>
           </>
         )}
       

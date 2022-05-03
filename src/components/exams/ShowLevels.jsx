@@ -6,51 +6,44 @@ import axios from "../../instance/axios";
 
 const ShowLevels = ({}) => {
   const [levelList, setLevelList] = useState([]);
-  const takelevel = async() => {
-
-    
-    const val= await axios.get("/shown",{params:{
-      level:null,
-      type:null
-     
-    }})
-    console.log(val); 
-    return setLevelList(val.data)
-  }
+  const takelevel = async () => {
+    const val = await axios.get("/shown", {
+      params: {
+        level: null,
+        type: null,
+      },
+    });
+    console.log(val);
+    return setLevelList(val.data);
+  };
   useEffect(() => {
-    takelevel()
-    
+    takelevel();
   }, []);
-   
-  
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupData, setPopupData] = useState("");
   const show = () => {
     setShowPopup((p) => !p);
   };
- 
-   
 
   const popupSubmit = (e) => {
     e.preventDefault();
     show();
-    insert()
-
+    insert();
   };
 
-  const insert = async() => {
-    console.log();
-    const val= await axios.post("/insert",{
-      time:popupData,//send as name
-      name:null
-    })
-    if (val){
-      console.log("hiii");
-      return ShowLevels()
+  const insert = async () => {
+    const val = await axios.post("/insert", {
+      time: popupData, //send as name
+      name: null,
+    });
+    console.log(val);
+    if (val.status == 200) {
+      console.log(val.data.status, "inserted rowid");
+      return ShowLevels();
     }
+  };
 
-  }
   return (
     <div className="containerBody">
       <NavHead title="Exams" />
@@ -64,14 +57,18 @@ const ShowLevels = ({}) => {
               hide={show}
             />
           )}
-          {/* <button onClick={() => alert("hi")}>img</button> */}
-          
+
           <div className="content">
             {levelList.map((l, i) => (
               <Link key={i} to={String(l.id)}>
                 <button className="btn primary">{l.name}</button>
               </Link>
             ))}
+            {
+              <button className="btn primary popupbtn" onClick={show}>
+                Add
+              </button>
+            }
           </div>
         </div>
       </div>

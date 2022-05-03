@@ -4,48 +4,54 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "../instance/axios";
 const Showinnerlevel = () => {
-  const { Name } = useParams();
-  const [Level, setLevel] = useState(0);
+  const pram = useParams();
+  console.log(pram);
+  const { Name, levels } = pram;
+
+  const [Level, setLevel] = useState([]);
   const [Slevel, setSlevel] = useState([]);
+
   const navigate = useNavigate();
   console.log("level is now", Level);
   console.log("level is", Slevel);
   useEffect(() => {
     show();
-  }, []);
+  }, [levels]);
 
   const show = async () => {
-    const level = await axios.get("/shown", {
-      params: {
-        level: null,
-        type: null,
-      },
-    });
-
-    setSlevel(level.data);
-  };
-
-  const takelevel = (id) => {
-    const type = async () => {
-      const val = await axios.get("/shown", {
+    if (levels) {
+      console.log(levels, "this is");
+      const level = await axios.get("/shown", {
         params: {
-          level: id,
+          level: levels,
           type: null,
         },
       });
+      console.log("lelvvel", level);
+      setSlevel(level.data);
+    } else {
+      const level = await axios.get("/shown", {
+        params: {
+          level: null,
+          type: null,
+        },
+      });
+      setLevel(level.data);
+    }
+  };
 
+  const takelevel = (id) => {
+   
       navigate(
-        `/user/instruction/${val.data[Level - 1].lev_id}/${
-          val.data[Level - 1].id
-        }`
-      );
-    };
-    type();
+        `/user/instruction/${levels}/${id}`
+      )}
+  const passingid = (id) => {
+    navigate(`/user/innerLevel/${Name}/${id}`);
   };
 
   return (
     <div className="container">
-      {Level === 0 ? (
+      {Level && !levels ? (
         <>
           <div className="column" style={{ width: "100%" }}>
             <br />
@@ -56,32 +62,17 @@ const Showinnerlevel = () => {
             <br />
             <br />
             <div className="innercontainer testContainer">
-              <button
-                className="btn"
-                onClick={() => {
-                  setLevel(1);
-                }}
-              >
-                Verbal
-              </button>
-
-              <button
-                className="btn"
-                onClick={() => {
-                  setLevel(2);
-                }}
-              >
-                Numerical
-              </button>
-
-              <button
-                className="btn"
-                onClick={() => {
-                  setLevel(3);
-                }}
-              >
-                Logical
-              </button>
+              {Level.map((i) => (
+                <button
+                  className="btn"
+                  onClick={() => {
+                    passingid(i.id);
+                  }}
+                  key={i.id}
+                >
+                  {i.name}{" "}
+                </button>
+              ))}
             </div>
           </div>
         </>
