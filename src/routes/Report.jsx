@@ -5,14 +5,23 @@ import axios from "../instance/axios";
 const Report = () => {
   const [Batch, setBatch] = useState([]);
   const [showbatch, setshowbatch] = useState([]);
-  const [val, setval] = useState({ val: "" });
+  const [level, setlevel] = useState([]);
+  const [batch_id, setbatch_id] = useState();
+  
   const [pop, setpop] = useState();
+
+  const callcatagory=async()=>{
+
+    const values=await axios.get("/shown",{params:{level:null,type:null}})
+    setlevel(values.data)
+  }
 
   const batch = async () => {
     const val = await axios.get("/batches");
     console.log(val.data);
-
+    callcatagory()
     return setBatch(val.data);
+    
   };
   // console.log("now", val.id);
   useEffect(() => {
@@ -24,23 +33,23 @@ const Report = () => {
   };
 
   const fetchitem = async (val) => {
-    // e.preventDefault();
-    const value = await axios.get("/stdtable", {
-      params: {
-        id: val,
-      },
-    });
-    console.log("length", value.length);
-    console.log("value", value.data);
-    if (value.data.length > 0) {
-      setshowbatch(value.data);
-      show();
-    } else {
-      setshowbatch([]);
-      alert("No persons added in the batch");
-    }
+   
+    setbatch_id(val)
+
   };
   console.log("showbatch", showbatch);
+  const getlevel=async(id)=>{
+    if(batch_id){
+      const values=await axios.get("/stdtable",{params:{levelid:id,batchid:batch_id}})
+    console.log(values);
+    setshowbatch(values.data)
+
+    }
+    else{
+      alert("Please select the batch")
+    }
+
+  }
   return (
     // <div className="container">
     <div className="containerBody">
@@ -73,6 +82,15 @@ const Report = () => {
       <div className="wrapper">
         <div className="mainContainer">
           <div className="content">
+            <select onChange={(e)=>getlevel(e.target.value)}>
+            {
+              level.map((e)=>(
+                <option value={e.id} key={e.id}>{e.name}</option>
+              ))
+
+
+            }
+            </select>
             <Table data={showbatch} />
             {/* {showbatch.map(
               (d, i) => (

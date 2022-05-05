@@ -176,11 +176,7 @@ const ExamList = ({}) => {
       <h1 style={{ color: "rgb(255, 0, 187) " }}>LeaderBoard</h1>
       <div className="exam-list">
         <div className="scoreboard">
-          <h1 className="levelNum" style={{ textAlign: "center" }}>
-            {/* Level{next} */}
-            {/* {showName?.[0]} */}
-            {projname}-{formapping?.[0]?.level_name}
-          </h1>
+          
 
           <select
             onChange={(e) => {
@@ -193,6 +189,12 @@ const ExamList = ({}) => {
               </option>
             ))}
           </select>
+
+          <h1 className="levelNum" style={{ textAlign: "center" }}>
+            {/* Level{next} */}
+            {/* {showName?.[0]} */}
+            {projname}-{formapping?.[0]?.level_name}
+          </h1>
 
           <div style={{ textAlign: "center" }} className="rankwraper">
             <div className="rank1">
@@ -209,7 +211,7 @@ const ExamList = ({}) => {
                   <span>
                     <h5 className="rankName">{formapping[1]?.name}</h5>
                     <h5>
-                      {formapping[1]?.mark}/30 - {formapping[1]?.batch_name}
+                      {formapping[1]?.mark}/10 - {formapping[1]?.batch_name}
                     </h5>
                   </span>
                 )}
@@ -220,7 +222,7 @@ const ExamList = ({}) => {
                   <span>
                     <h5 className="rankName">{formapping[2]?.name}</h5>
                     <h5>
-                      {formapping[2]?.mark}/30 - {formapping[2]?.batch_name}
+                      {formapping[2]?.mark}/10 - {formapping[2]?.batch_name}
                     </h5>
                   </span>
                 )}
