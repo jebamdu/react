@@ -3,9 +3,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0.5rem;
+    margin: 3rem;
+    margin-left: 22rem;
     border-radius: 10px;
-    margin-top: 2rem;
+    height: 300px;
+    width: 500px;
+    justify-items: center;
     padding: 1rem;
     font-size: 1rem;
     /* max-width: 1em; */
@@ -17,7 +20,7 @@
 }
 
 .login .btn {
-    width: 100%;
+    width: 90%;
     font-size: 25px;
     margin: 8px;
     padding: 4px;

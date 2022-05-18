@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "../instance/axios";
 
 const Import = () => {
 
   const [data, setdata] = useState([]);
+  const navigate=useNavigate()
   const add = async (e) => {
     const val = await importCSV(e);
     // alert("import sucessfully", val.toString());
@@ -33,8 +35,15 @@ const Import = () => {
       data: data
 
     })
+    console.log(sucess);
 
-    if (sucess == 200) alert("Imported sucessfully")
+    if (sucess.data){
+       alert("Imported sucessfully")
+       navigate("/students")
+  }
+  else{
+    alert("The Email id must be unique. So please Check again")
+  }
   }
 
   //   return <button onClick={add}>ADD</button>;

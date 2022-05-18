@@ -9,11 +9,12 @@ import Import from "./Import";
 
 const Student = () => {
   const [show, setShow] = useState([]);
-  const navigate = useNavigate()
+  const [stud, setstud] = useState([]);
+  const navigate = useNavigate();
   console.log("This is", show);
 
   const showstds = async () => {
-    const res = await axios.get("/showstds");
+    const res = await axios.get("/batches");
     console.log(res.data);
     return setShow(res.data);
   };
@@ -22,21 +23,37 @@ const Student = () => {
     showstds();
   }, []);
 
+  const showstud = async (id) => {
+    const val = await axios.get("/showstds", { params: { id: id } });
+    console.log(val);
+    setstud(val.data);
+  };
+
   return (
     <div className="containerBody">
-      <div className="navHead"><h3>Students</h3></div>
+      <div className="navHead">
+        <h3>Students</h3>
+        <select className="box" onChange={(e) => showstud(e.target.value)}>
+            <option hiddenvalue="">Please Select</option>
+            {show.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.name}
+              </option>
+            ))}
+          </select>
+      </div>
       <div className="wrapper">
         <div className="mainContainer">
+           
+          
+
           {/* Addbtn */}
           {/* <button className="addBtn btn btn-text" onClick={() => navigate("../Addbatch")}> Add batches</button> */}
           <div className="content">
-            {show.map(d =>
+            {stud.map((d) => (
               <Link to={String(d.id)}>
                 <div className="btn primary flex-row jc-sb">
-                  <div className="flex-column">
-                    <div className=" fs-20 card-title">Phone no</div>
-                    <div className="fs-20">{d.ph_no}</div>
-                  </div>
+                  
                   <div className="flex-column">
                     <div className=" fs-20 card-title">Name</div>
                     <div className="fs-20">{d.name}</div>
@@ -46,7 +63,8 @@ const Student = () => {
                     <div className="fs-20">{d.email_id}</div>
                   </div>
                 </div>
-              </Link>)}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -61,7 +79,7 @@ const Student = () => {
 export default Student;
 
 const Studentupdate = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const val = useParams();
   const ID = val["ID"];
   //val=val['ID']
@@ -78,12 +96,12 @@ const Studentupdate = () => {
         name: value.name,
         ph_no: value.ph_no,
         email_id: value.email_id,
-        batch_id: value.batch_id
-      }
-    })
+        batch_id: value.batch_id,
+      },
+    });
 
-    if (val) navigate("/admin/students")
-    else alert("You have not able to update")
+    if (val) navigate("/admin/students");
+    else alert("You have not able to update");
 
     //const up=await axios.get("/updateval",{params:{
 
@@ -96,7 +114,7 @@ const Studentupdate = () => {
       setValue(res.data[0]);
       const droplist = await axios.get("/showbatches");
       setdrop(droplist.data);
-    }
+    };
     fetch();
   }, [ID]);
   // useEffect(() => {
@@ -108,8 +126,6 @@ const Studentupdate = () => {
   //   fetch();
   // }, []);
   //const train_id= await Axios.get("/trainid",{ params: { id: value.batch_id }})
-
-
 
   // const droplist = async () => {
   //   const droplist = await axios.get("/showbatches");
@@ -148,11 +164,13 @@ const Studentupdate = () => {
             {/* <label className="all">Name:</label> */}
             <input
               type="text"
-              required 
+              required
               className="inputText w-90"
               value={value.name}
               placeholder="Name"
-              onChange={(e) => setValue((p) => ({ ...p, name: e.target.value }))}
+              onChange={(e) =>
+                setValue((p) => ({ ...p, name: e.target.value }))
+              }
             />
             <br />
             {/* <label className="all">email_id:</label> */}
@@ -174,16 +192,19 @@ const Studentupdate = () => {
               className="inputText w-90"
               value={value.ph_no}
               placeholder="Email_id"
-              onChange={(e) => setValue((p) => ({ ...p, ph_no: e.target.value }))}
+              onChange={(e) =>
+                setValue((p) => ({ ...p, ph_no: e.target.value }))
+              }
             />
 
             <br />
-            <button type="submit" className="btn primary">Update</button>
+            <button type="submit" className="btn primary">
+              Update
+            </button>
           </form>
         </div>
       </div>
     </div>
-
   );
 };
 export { Studentupdate };

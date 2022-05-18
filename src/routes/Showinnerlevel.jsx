@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "../instance/axios";
+import Viewscore from "./Viewscore";
 const Showinnerlevel = () => {
   const pram = useParams();
   console.log(pram);
@@ -10,6 +11,8 @@ const Showinnerlevel = () => {
 
   const [Level, setLevel] = useState([]);
   const [Slevel, setSlevel] = useState([]);
+  const [opentab, setopentab] = useState(false);
+  console.log(opentab);
 
   const navigate = useNavigate();
   console.log("level is now", Level);
@@ -50,14 +53,21 @@ const Showinnerlevel = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container levelContainer">
+      {opentab&& <Viewscore tab={setopentab} data={Level}/>}
+      
+
+      
       {Level && !levels ? (
         <>
           <div className="column" style={{ width: "100%" }}>
             <br />
-            <div className="topContent">
+            <div className="topContent"> 
+               
+              <button className="Opentab" onClick={()=>{setopentab(true) }}>View score</button>
+              
               <h2 style={{ marginBottom: "5px" }}>Hi {Name}!!</h2>
-              <h3>Would you like to take test in</h3>
+              <h3>Which test would you like to take today?</h3>
             </div>
             <br />
             <br />

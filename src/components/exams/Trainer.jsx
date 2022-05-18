@@ -5,6 +5,7 @@ import Trainspop from "../popups/trainer";
 import Table from "../Table";
 import Batch, { Addbatch, Batchupdate } from "./Batches";
 
+
 const Trainer = () => {
   return (
     <Routes>
@@ -81,10 +82,12 @@ const Showtrainer = () => {
   );
 };
 
-const CreateTrainer = ({ dValue }) => {
+const 
+CreateTrainer = ({ dValue }) => {
   // dValue={name:"some vale"}
+  
   const navigate = useNavigate();
-  const [data, setData] = useState(dValue ? dValue : { name: "" });
+  const [data, setData] = useState(dValue ? dValue : {});
   console.log(data);
   const submit = (e) => {
     e.preventDefault();
@@ -100,8 +103,9 @@ const CreateTrainer = ({ dValue }) => {
 
     //if the dValue is available then call the update route otherwise call the create trainer route
   };
-  const addTname = async (data) => {
-    const val = await axios.get("/addTname", { params: { name: data.name } });
+  const addTname = async () => {
+    console.log(data);
+    const val = await axios.post("/addTname",{ name: data } );
     console.log(val);
     if (val["data"]) {
       navigate("/admin/trainerCreation");
@@ -122,6 +126,12 @@ const CreateTrainer = ({ dValue }) => {
       alert("Something went wrong");
     }
   };
+   const add=async(e)=>{
+   
+      const val = await importCSV(e);
+      // alert("import sucessfully", val.toString());
+      setData(val)
+   }
   return (
     <div className="containerBody">
       <div className="navHead">
@@ -132,13 +142,9 @@ const CreateTrainer = ({ dValue }) => {
           {/* Addbtn */}
           {/* <div className="content"> */}
           <form className="form" onSubmit={submit}>
-            <input
-              className="inputText w-90"
-              type="text"
-              value={data.name}
-              onChange={(e) => setData((p) => ({ ...p, name: e.target.value }))}
-              placeholder="Trainer name"
-            />
+          <input type="file"
+                className="inputText w-90"
+                accept="text/csv" onChange={add} />
 
             <button type="submit" className="btn">{dValue ? ("Update trainer") : ("Add trainer")}</button>
 
@@ -152,6 +158,42 @@ const CreateTrainer = ({ dValue }) => {
     </div>
   );
 };
+function importCSV(e) {
+  return new Promise((resolve, reject) => {
+    let list = [];
+    var fr = new FileReader();
+    fr.onload = function () {
+      // console.log(fr.result);
+      let headContainer = [];
+      fr.result.split("\n").forEach((l, i) => {
+        if (i == 0) {
+          headContainer = l.split(",").map(h => h.trim());
+          return;
+        }
+        let obj = {};
+        let row = l.split(",");
+        if (row.length === 1 && headContainer.length > 1) return;
+        row.forEach((w, i) => {
+          obj[headContainer[i]] = w.trim();
+        });
+        list.push(obj);
+      });
+      // console.log(list);
+      // return list;
+      resolve(list);
+      // importPage(list)
+    };
+    try {
+      fr.readAsText(e.target.files[0]);
+    } catch (e) {
+      console.error(e);
+      reject("Can't read data from the file");
+    }
+    //   importFile.value = "";
+  });
+  // return promData
+}
+
 
 const UpdateTrainer = () => {
   const val = useParams();

@@ -28,6 +28,12 @@
 }
 .scoreboard .arrowRight {
   width: 40px;
+  /* z-index: 500;
+  background-color: white;
+  float: right;
+  position: absolute;
+  bottom: 4rem;
+  right: 5px; */
   float: right;
   margin-right: 10%;
 }
@@ -35,9 +41,13 @@
   box-shadow: 0 0 5px rgb(213, 22, 22);
   border-radius: 50%;
 }
-.levels {
-  margin-top: 36%;
+.levelContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
+
 .topContent {
   margin-left: 15px;
   /* text-align: center; */
@@ -159,11 +169,11 @@ a {
   background-color: rgba(165, 42, 42, 0.295);
 }
 .instruction ul {
-  margin-left: 10px;
+  margin-left: 01px;
 }
 .instruction {
-  margin: 8px;
-  padding: 5px;
+  margin: 1px;
+  padding: 1px;
 }
 .Timemodule {
   /* display: flex;
@@ -180,4 +190,128 @@ a {
 
 .question.Questionno {
   color: aqua;
+}
+.listbox_leaderboard {
+  position: absolute;
+  /* left: 65%; */
+  right: 20px;
+  border: none;
+  padding: 0px;
+  font-size: 20px;
+}
+
+.topContent .Opentab {
+ 
+  padding: 9px 90px 9px 9px;
+  
+  
+  font-size: 1.5rem;
+  border-bottom: 5px solid red;
+  box-sizing: border-box;
+  background-color: lightgrey;
+
+  text-decoration: none;
+  position: absolute;
+  float: right;
+  right: 5%;
+  top: 20%;
+  opacity: 0;
+  z-index: 1;
+
+  
+}
+.Opentab:hover {
+  opacity: 1;
+}
+
+
+
+.fullpage {
+  position: absolute;
+  height: 85%;
+  width: 100%;
+  background-color: white;
+}
+.sidecontainer_Viewscore {
+  background-color: aqua;
+  height: 100%;
+  width: 20%;
+}
+
+.sidecontainer_Viewscore :hover .inner_Viewscore li {
+  display: block;
+}
+
+.inner_Viewscore ul {
+  position: absolute;
+  margin-left: 0%;
+  margin-top: 5%;
+  width: 20%;
+  text-decoration: none;
+  list-style-type: none;
+}
+.inner_Viewscore li {
+  margin-top: 10px;
+  list-style-type: none;
+
+  width: 100%;
+}
+
+.inner_Viewscore li button {
+  font-size: 1.5em;
+  border-style: none;
+  width: 100%;
+  padding: 5px 10px;
+
+  background-color: aqua;
+}
+
+.inner_Viewscore li button :visited {
+  background-color: #555;
+  color: white;
+}
+.inner_Viewscore li :hover:not(.active) {
+  background-color: #555;
+  color: white;
+  width: 100%;
+}
+.View_history {
+  border-style: none;
+  background-color: green;
+  color: aliceblue;
+  font-size: 1.5em;
+  padding: 8px 20px;
+  position: absolute;
+  float: right;
+  right: 80px;
+  margin-top: 100px;
+  z-index: 2;
+}
+.View_history:hover {
+  font-size: 1.7em;
+  color: white;
+  text-shadow: rgb(255, 0, 0);
+}
+.View_container {
+  width: 70%;
+  position: absolute;
+  margin-top: 15%;
+  margin-left: 24%;
+  height: 50%;
+  overflow: auto;
+  align-items: center;
+
+  background-color: rgb(247, 190, 119);
+}
+.showtable_Viewscore {
+  margin: 50px 20px;
+  align-items: center;
+}
+
+.showtable_Viewscore table {
+  margin-top: 50px;
+}
+.popclass{
+  z-index: 5;
+  background-color: blueviolet;
 }

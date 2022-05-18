@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CSVReader from "react-csv-reader";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../instance/axios";
 import "./questions.css";
@@ -44,9 +45,9 @@ const Question = () => {
     } else alert("something went wrong");
   };
 
-  const add = async (e) => {
-    const val = await importCSV(e);
-
+  const add = async (val) => {
+    // const val = await importCSV(e);
+    // console.log(e);
     setQuestions(val);
   };
   return (
@@ -58,12 +59,17 @@ const Question = () => {
       <div className="wrapper">
         <div className="mainContainer">
           <form onSubmit={addele}>
-            <input
+            {/* <input
               type="file"
               className="inputText w-90"
               accept="text/csv"
               onChange={add}
-            ></input>
+            ></input> */}
+            <CSVReader
+              cssInputClass="inputText w-90"
+              parserOptions={{ skipEmptyLines: true, header: true }}
+              onFileLoaded={add}
+            />
             <button type="submit" className="btn primary btn-text">
               Add
             </button>

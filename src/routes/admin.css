@@ -27,7 +27,7 @@
 .containerBody .mainContainer .content {
   height: 50vh;
   overflow-y: auto;
-  width: 40vw;
+  width: 60vw;
   margin-top: 50px;
   /* width: ; */
   /* overflow-x: hidden; */
@@ -78,8 +78,8 @@
 
 .containerBody .mainContainer {
   background-color: rgba(0, 0, 255, 0.212);
-  height: 90%;
-  width: 80%;
+  height: 89%;
+  width: 90%;
   position: relative;
   display: flex;
   justify-content: center;
@@ -158,4 +158,35 @@
 
 .btn.primary:hover {
   box-shadow: 0 0 8px 0px black;
+}
+.listbox_stdrep{
+  position: absolute;
+    right: 10px;
+    top: 14px;
+    
+}
+.listbox_stdrep.listbox_stdrep{
+  font-size: 20px;
+    padding: 3px;
+}
+.table{
+  position: sticky;
+  width: 100%;
+  
+  left: 100px;
+}
+.notification{
+  margin: auto;
+  height: 50%;
+  width: 80%;
+  background-color: white;
+}
+.navHead .box{
+
+  float: right;
+  margin-left: 60%;
+  width: 85%;
+  font-size: 1em;
+  border: 2px solid red;
+  border-radius: 15px 15px;
 }

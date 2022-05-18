@@ -4,6 +4,7 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import User from "./routes/User";
 import { useState } from "react";
+import { Line } from "react-chartjs-2";
 
 function App() {
   // const [aval, setAval] = useState({""});

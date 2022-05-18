@@ -1,0 +1,20 @@
+.notification .container{
+    /* background-color: black; */
+    justify-content: center;
+    text-align: center;
+    margin: 2rem 0;
+    color: red;
+    font-size: 22px;
+    font-weight: 600;
+    overflow: "auto";
+    z-index: 1;
+   
+}
+.notification.exports table{
+    position: relative;
+    background-color: black;
+}
+.navHead{
+    height: 10%;
+}
+

@@ -155,6 +155,15 @@ const ExamList = ({}) => {
   };
 
   console.log("This", scorecard);
+
+  const back=()=>{
+    if (
+      next >=0 &&
+      scorecard.filter((v) => v.level == category[next]).length > 0
+    ) {
+      setnext((p) => p - 1);
+    }  
+  }
   // const [formapping, setFormapping] = useState([]);
   const nextlevel = () => {
     // newval=[22,41]0
@@ -179,6 +188,7 @@ const ExamList = ({}) => {
           
 
           <select
+          className="listbox_leaderboard"
             onChange={(e) => {
               highscore(e.target.value);
             }}
@@ -189,7 +199,7 @@ const ExamList = ({}) => {
               </option>
             ))}
           </select>
-
+              <br/>
           <h1 className="levelNum" style={{ textAlign: "center" }}>
             {/* Level{next} */}
             {/* {showName?.[0]} */}
@@ -232,7 +242,7 @@ const ExamList = ({}) => {
           {/* <div className={`rank${i + 1}`}>
             {/* <img src={rank1} alt={`Rank${i + 1}`} /> 
           </div> */}
-
+          
           <img
             src={arrowRight}
             className="arrowRight"

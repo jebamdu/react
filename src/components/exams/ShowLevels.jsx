@@ -46,7 +46,7 @@ const ShowLevels = ({}) => {
 
   return (
     <div className="containerBody">
-      <NavHead title="Exams" />
+      <NavHead title="Question Bank" />
       <div className="wrapper">
         <div className="mainContainer">
           {showPopup && (
@@ -65,7 +65,7 @@ const ShowLevels = ({}) => {
               </Link>
             ))}
             {
-              <button className="btn primary popupbtn" onClick={show}>
+              <button className="btn primary popupbtn"style={{position:"absolute",width:"200px",right:"40%",top:"80%"} }onClick={show}>
                 Add
               </button>
             }

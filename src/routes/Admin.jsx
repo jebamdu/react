@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Exams from "../components/Exams";
 import CreateExam from "../components/exams/CreateExam_and_type";
@@ -11,19 +11,40 @@ import Student, { Studentupdate } from "./Student";
 import Import from "./Import";
 import ShowLevels from "../components/exams/ShowLevels";
 import Report from "./Report";
+import axios from "../instance/axios";
+import Notification from "./Notification";
 
 const Admin = () => {
   const navigate = useNavigate();
+  const [notify, setnotify] = useState(null);
+
+  const notification_fun = async () => {
+    const notification = await axios.get("/ended_batch");
+    console.log(notification, "notification");
+    if (notification.data != "none") {
+      setnotify(notification.data);
+    }
+  };
+  
   useEffect(() => {
     //to check the user is loged in as admin
     const d = localStorage.getItem("logedin");
     if (d !== "admin") navigate("/");
+    notification_fun();
   }, []);
+
   return (
     <div className="app">
       <Header />
       <div className="container">
-        <NavBar />
+        <>
+          {notify !== null ? (
+            <NavBar notification={notify} />
+          ) : (
+            <NavBar notification={0} />
+          )}
+        </>
+
         <div className="sub-container">
           <Routes>
             {/* <Route path="exams" element={<Exams />} /> list of exams */}
@@ -34,6 +55,8 @@ const Admin = () => {
             {/*list of questions */}
             <Route path="createExam" element={<Create_Exam />} />{" "}
             {/*to create new exams(level) */}
+            <Route path="notification" element={<Notification values={notify}/>} />
+            <Route path="notification/:id" element={<Notification />} />
             <Route
               path="createExam/:levelID"
               element={
@@ -47,7 +70,7 @@ const Admin = () => {
               path="createExam/:levelID/:catID"
               element={
                 // <div className="center">
-                  <Question />
+                <Question />
                 // </div>
               }
             />{" "}
@@ -57,11 +80,7 @@ const Admin = () => {
             <Route path="students" element={<Student />} />
             <Route path="students/:ID" element={<Studentupdate />}></Route>{" "}
             <Route path="importStudent" element={<Import />} />
-            <Route
-              path="report"
-              
-              element={<Report/>}
-            />
+            <Route path="report" element={<Report />} />
           </Routes>
         </div>
       </div>
