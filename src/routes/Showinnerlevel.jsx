@@ -64,14 +64,14 @@ const Showinnerlevel = () => {
             <br />
             <div className="topContent"> 
                
-              <button className="Opentab" onClick={()=>{setopentab(true) }}>View score</button>
+              <p className="Opentab" onClick={()=>{setopentab(true) }}>View score</p>
               
               <h2 style={{ marginBottom: "5px" }}>Hi {Name}!!</h2>
               <h3>Which test would you like to take today?</h3>
             </div>
             <br />
             <br />
-            <div className="innercontainer testContainer">
+            <div className="testContainer">
               {Level.map((i) => (
                 <button
                   className="btn"

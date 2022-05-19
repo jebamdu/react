@@ -20,8 +20,12 @@ const PopChart = ({
   const workflow = (name, data) => {
     console.log(name, "nameis");
     console.log(data, "data");
+    console.log(chartlist.name.length);
+    console.log(next.current);
+    
 
     setfinaldata({
+      
       labels: data.map((data) => data.date),
       datasets: [
         {
@@ -83,7 +87,7 @@ const PopChart = ({
             className="btn primary"
             onClick={() => {
               next.current--;
-              if (chartlist.name.length > next.current) setDis(false);
+              if (chartlist.name.length >= next.current) setDis(false);
               if (next.current === 0) setBackDis(true);
               showgraph(chartlist);
             }}
@@ -95,8 +99,8 @@ const PopChart = ({
             className="btn primary"
             onClick={() => {
               next.current++;
-              if (chartlist.name.length >= next.current) setDis(true);
-              if (next.current > 0) setBackDis(false);
+              if (chartlist.name.length-1 <= next.current) setDis(true);
+              if (next.current >= 0) setBackDis(false);
 
               showgraph(chartlist);
             }}

@@ -15,10 +15,14 @@ import Instruction from "./Instruction";
 import Showlevel from "./Showlevel";
 import ChangePassword from "./ChangePassword";
 import Showinnerlevel from "./Showinnerlevel";
-import rank1 from "../assets/1.jpg";
-import rank2 from "../assets/2.jpg";
-import rank3 from "../assets/3.jpg";
+import rank1 from "../assets/1.png";
+import rank2 from "../assets/2.png";
+import rank3 from "../assets/3.png";
+import L_pop from "../assets/4.jpg"
+import R_pop from "../assets/5.jpg"
+
 import arrowRight from "../assets/arrow.svg";
+
 
 const User = () => {
   const navigate = useNavigate();
@@ -61,11 +65,21 @@ const YourScore = () => {
   const email = localStorage.getItem("email");
   const { mark, totalMark, levelID } = useParams();
   const [Name, setName] = useState({ name: "" });
+  const [percent, setpercent] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchname();
+    Marksstatement()
   }, []);
+
+  const Marksstatement=()=>{
+    
+   const value=mark/totalMark*100
+   setpercent(value)
+   
+
+  }
 
   const fetchname = async () => {
     const name = await axios.get("/showscore", {
@@ -78,20 +92,10 @@ const YourScore = () => {
   };
 
   return (
-    <div className="yourScore">
-      <h1>
-        You got {mark} out of {totalMark}
-      </h1>
-      <button
-        type="button"
-        className="btn"
-        onClick={() => {
-          navigate(`/User/innerLevel/${Name}`);
-        }}
-      >
-        Proceed
-      </button>
-    </div>
+    <div className="yourScore" style={{display:"flex" }}>
+
+      {percent && <Innercontainer  mark={mark} total={totalMark} percent={percent} name={Name}/>}
+      </div>
   );
 };
 
@@ -110,6 +114,7 @@ const ExamList = ({}) => {
   const [category, setcategory] = useState([]);
   const [next, setnext] = useState(1);
   console.log("catagory", category);
+  console.log(scorecard,"scorecard is");
   const fetch = async () => {
     const res = await axios.get("/showscore");
     console.log(res);
@@ -157,9 +162,10 @@ const ExamList = ({}) => {
   console.log("This", scorecard);
 
   const back=()=>{
+    console.log(next);
     if (
-      next >=0 &&
-      scorecard.filter((v) => v.level == category[next]).length > 0
+      next >=2 &&
+      scorecard.filter((v) => v.level == category[next-1]).length > 0
     ) {
       setnext((p) => p - 1);
     }  
@@ -177,12 +183,13 @@ const ExamList = ({}) => {
       setnext((p) => p + 1);
     }
   };
+  
   const formapping = scorecard.filter((v) => v.level == category[next - 1]);
   console.log("formapping", formapping);
 
   return (
     <>
-      <h1 style={{ color: "rgb(255, 0, 187) " }}>LeaderBoard</h1>
+      <h1 style={{ color: "rgb(255, 0, 187) ",fontSize:"8vh",fontFamily:"inherit" }}>LeaderBoard</h1>
       <div className="exam-list">
         <div className="scoreboard">
           
@@ -200,7 +207,7 @@ const ExamList = ({}) => {
             ))}
           </select>
               <br/>
-          <h1 className="levelNum" style={{ textAlign: "center" }}>
+          <h1 className="levelNum" style={{ textAlign: "center",fontFamily:"monospace",fontSize:"6vh"}}>
             {/* Level{next} */}
             {/* {showName?.[0]} */}
             {projname}-{formapping?.[0]?.level_name}
@@ -210,7 +217,7 @@ const ExamList = ({}) => {
             <div className="rank1">
               <img src={rank1} alt="" />
               <h5 className="rankName">{formapping[0]?.name}</h5>
-              <h5>
+              <h5 style={{fontFamily:"cursive"}}>
                 {formapping[0]?.mark}/10- {formapping[0]?.batch_name}
               </h5>
             </div>
@@ -220,7 +227,7 @@ const ExamList = ({}) => {
                 {formapping[1] && (
                   <span>
                     <h5 className="rankName">{formapping[1]?.name}</h5>
-                    <h5>
+                    <h5 style={{fontFamily:"cursive"}}>
                       {formapping[1]?.mark}/10 - {formapping[1]?.batch_name}
                     </h5>
                   </span>
@@ -231,7 +238,7 @@ const ExamList = ({}) => {
                 {formapping[2] && (
                   <span>
                     <h5 className="rankName">{formapping[2]?.name}</h5>
-                    <h5>
+                    <h5 style={{fontFamily:"cursive"}}>
                       {formapping[2]?.mark}/10 - {formapping[2]?.batch_name}
                     </h5>
                   </span>
@@ -249,12 +256,21 @@ const ExamList = ({}) => {
             onClick={nextlevel}
             alt=""
           />
+
+            <img
+            
+            src={arrowRight}
+            className="arrowLeft"
+            onClick={back}
+            alt=""
+          />
           {/* <button onClick={nextlevel} >
             next
           </button> */}
         </div>
         <button
           className="btn"
+          style={{alignItems:"center",marginLeft:"8vh",maxWidth:"200vh"}}
           onClick={() => {
             if (Name != "") navigate(`innerLevel/${Name}`);
             else alert("something went wrong");
@@ -470,3 +486,52 @@ const WriteExam = () => {
     </>
   );
 };
+
+
+const Innercontainer=(mark)=>{
+  const navigate=useNavigate()
+
+
+return(
+ 
+
+  <div className="innercontainer_mark" style={{height:"300px",margin:"",width:"700px",backgroundColor:"rosybrown"}} >
+{
+  mark.percent>70 ?(
+    <><img src={L_pop} className="L_img" style={{height:"150px",width:"150px"}} alt="" />
+    <img src={L_pop} className="LB_img" style={{height:"120px",width:"150px"}} alt="" />
+    <img src={R_pop} className="R_img" style={{height:"150px",width:"150px"}} alt="" />
+    <img src={R_pop} className="RB_img" style={{height:"120px",width:"150px"}} alt="" />
+       <h1>Congradulations !!!</h1>
+       
+       <h2> You got {mark.mark} out of {mark.total} </h2>
+      <button 
+        type="button"
+        className="btn"
+        onClick={() => {
+          navigate(`/User/innerLevel/${mark.name}`);
+        }}
+      >
+        Proceed
+      </button>
+      
+      </>
+      
+):(<> <h1>Oops !!!</h1>
+        <h1> You got only {mark.mark} out of {mark.total}
+      </h1>
+      <button 
+        type="button"
+        className="btn"
+        onClick={() => {
+          navigate(`/User/innerLevel/${mark.name}`);
+        }}
+      >
+        Proceed
+      </button>
+      )
+      </> 
+
+
+)}
+</div>)}

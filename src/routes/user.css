@@ -37,6 +37,18 @@
   float: right;
   margin-right: 10%;
 }
+.scoreboard .arrowLeft{
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  width: 40px;
+  float: left;
+  margin-left: 10%;
+
+}
+.scoreboard .arrowLeft:hover {
+  box-shadow: 0 0 5px rgb(213, 22, 22);
+  border-radius: 50%;
+}
 .scoreboard .arrowRight:hover {
   box-shadow: 0 0 5px rgb(213, 22, 22);
   border-radius: 50%;
@@ -53,7 +65,8 @@
   /* text-align: center; */
 }
 .testContainer .btn {
-  margin: 10px 0 0 4px;
+  margin: 10px 0px 0px 20px;
+
 }
 
 .exam-list {
@@ -198,22 +211,28 @@ a {
   border: none;
   padding: 0px;
   font-size: 20px;
+  color:rgb(4, 148, 88) ;
+
+}
+.listbox_leaderboard:hover{
+
+  color:rgb(102, 0, 255) ;
 }
 
 .topContent .Opentab {
  
-  padding: 9px 90px 9px 9px;
+  padding: 9px 90px 5px 9px;
   
   
   font-size: 1.5rem;
   border-bottom: 5px solid red;
-  box-sizing: border-box;
-  background-color: lightgrey;
+  
+  
 
   text-decoration: none;
   position: absolute;
   float: right;
-  right: 5%;
+  right: 1%;
   top: 20%;
   opacity: 0;
   z-index: 1;
@@ -315,3 +334,58 @@ a {
   z-index: 5;
   background-color: blueviolet;
 }
+.innercontainer_mark{
+
+  -ms-flex-item-align: auto;
+  margin-left: 55vh;
+  margin-top: 20vh;
+  text-align: center;
+  align-content: space-around;
+  justify-content: center;
+  color: aliceblue;
+  padding:10px;
+  
+}
+
+.innercontainer_mark:hover{
+  box-shadow:0px 0px 15px 12px rgba(70, 209, 172, 0.458);
+}
+.yourScore{
+  height: 100%;
+  background-color: rgba(54, 54, 54, 0.173);
+}
+.L_img{
+
+  float: left;
+  margin-left: 10px;
+}
+
+.R_img{
+
+  float: right;
+  margin-right: 10px;
+}
+.LB_img{
+
+  float: left;
+  margin-left:0px;
+  opacity: 0;
+}
+.RB_img{
+
+  float: right;
+  margin-Right:0px;
+  opacity: 0;
+}
+.innercontainer_mark:hover .RB_img{
+  opacity: 1;
+}
+.innercontainer_mark:hover .LB_img{
+  opacity: 1;
+}
+.innercontainer_mark > .btn :hover{
+
+  background-color: rgba(240, 248, 255, 0.33);
+}
+
+
