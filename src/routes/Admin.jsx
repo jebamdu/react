@@ -13,6 +13,7 @@ import ShowLevels from "../components/exams/ShowLevels";
 import Report from "./Report";
 import axios from "../instance/axios";
 import Notification from "./Notification";
+import Validate from "./Validate";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const Admin = () => {
           <Routes>
             {/* <Route path="exams" element={<Exams />} /> list of exams */}
             <Route path="exams" element={<ShowLevels />} /> {/*list of exams*/}
+            <Route path="Validate" element={<Validate />} />
             <Route path="exams/:levelID" element={<Exams />} />{" "}
             {/*list of catagories */}
             <Route path="exams/:levelID/:catID" element={<Exams />} />{" "}

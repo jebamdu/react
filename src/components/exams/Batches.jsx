@@ -95,8 +95,10 @@ const Addbatch = ({ dValue }) => {
     })
     console.log(res);
 
-    if (res) return navigate("/admin/trainerCreation/batch")
-    else return (alert("Value has not updated"))
+    if (res) { 
+      alert("Updated sucessfully")
+      navigate("/admin/trainerCreation/batch")}
+    else  (alert("Value has not updated"))
 
 
 

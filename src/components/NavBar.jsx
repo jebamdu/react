@@ -10,6 +10,7 @@ const NavBar = ({notification}) => {
                         {/* <li><Link to='createExam'>CreateExam</Link></li> */}
                     </ul>
                 </li>
+                <li><Link to='Validate'>Validate</Link></li>
                 {/* <li> */}
                     {/* <Link to=''>Trainers</Link> */}
                     {/* <ul className="sub-menu"> */}

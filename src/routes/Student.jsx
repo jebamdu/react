@@ -94,29 +94,36 @@ const Studentupdate = () => {
       params: {
         id: value.id,
         name: value.name,
-        ph_no: value.ph_no,
         email_id: value.email_id,
         batch_id: value.batch_id,
       },
     });
 
-    if (val) navigate("/admin/students");
+    if (val){
+      alert("updated Sucessfully")
+      navigate("/admin/students");}
     else alert("You have not able to update");
 
     //const up=await axios.get("/updateval",{params:{
 
     //}})
   };
+  const showbatch=async()=>{
+    const droplist = await axios.get("/showbatches");
+    console.log(droplist);
+    setdrop(droplist.data);
+  }
+  const fetch = async () => {
+    const res = await axios.get("/updatestdudent", { params: { id: ID } });
+    console.log(res);
+    showbatch()
+    setValue(res.data[0]);
+    
+  };
   useEffect(() => {
-    const fetch = async () => {
-      const res = await axios.get("/updatestdudent", { params: { id: ID } });
-      console.log(res);
-      setValue(res.data[0]);
-      const droplist = await axios.get("/showbatches");
-      setdrop(droplist.data);
-    };
+ 
     fetch();
-  }, [ID]);
+  },[ID]);
   // useEffect(() => {
   //   const fetch = async () => {
   //     const res = await axios.get("/updatestdudent", { params: { id: ID } });
@@ -152,7 +159,7 @@ const Studentupdate = () => {
               }
             >
               <option hidden value={""}>
-                Please select
+               {value.batch_name}
               </option>
               {drop.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -186,18 +193,7 @@ const Studentupdate = () => {
             />
             <br />
             {/* <label className="all">Phone No:</label> */}
-            <input
-              type="text"
-              required
-              className="inputText w-90"
-              value={value.ph_no}
-              placeholder="Email_id"
-              onChange={(e) =>
-                setValue((p) => ({ ...p, ph_no: e.target.value }))
-              }
-            />
-
-            <br />
+           
             <button type="submit" className="btn primary">
               Update
             </button>

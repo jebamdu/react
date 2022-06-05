@@ -201,15 +201,35 @@ const UpdateTrainer = () => {
   //val=val['ID']
   console.log("ID is", ID);
   // const value=fetch(ID)
-  const [value, setValue] = useState(null);
-  console.log(value);
+  const [Value, setValue] = useState([]);
+  const [name, setname] = useState({name:"",id:""});
+  console.log(Value);
   const fetch = async () => {
     const res = await axios.get("/fetch_U_name", { params: { id: ID } });
     console.log(res);
     setValue(res.data);
+    
   };
   useEffect(() => {
     fetch();
-  }, [ID]);
-  return <CreateTrainer key={value} dValue={value} />;
+  },[ID]);
+  const update_trainer=()=>{
+    console.log("jhbjhb");
+  
+  }
+
+
+  return (
+  <div className="container" style={{height:"100%",width:"100%"}}>
+    <div className="innercontainer" style={{height:"250px",width:"120vh" , backgroundColor:"white",textAlign:"center",marginTop:"150px",marginLeft:"150px"}}>
+      <form onSubmit={update_trainer} style={{margin:"10vh"}}>
+        <label style={{fontSize:"20px"}}>Name: </label>
+      <input style={{fontSize:"20px"}}type="text" value={Value.name} onChange={(e)=>(setValue((p)=>({...p,name: e.target.value} )))}/>
+      <br /><br />
+      <button type="submit" className="btn" style={{width:"50vh"}}>submit</button>
+      </form>
+    </div>
+    </div>
+  )
+  
 };

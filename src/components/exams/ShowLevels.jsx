@@ -65,7 +65,7 @@ const ShowLevels = ({}) => {
               </Link>
             ))}
             {
-              <button className="btn primary popupbtn"style={{position:"absolute",width:"200px",right:"40%",top:"80%"} }onClick={show}>
+              <button className="btn primary popupbtn"style={{position:"absolute",width:"200px",right:"40%",top:"65%"} }onClick={show}>
                 Add
               </button>
             }
