@@ -9,7 +9,7 @@ const navigate=useNavigate()
 
 const email=localStorage.getItem("email")
 
-const [credentials, setcredentials] = useState({phno:"",password:"",C_password:""});
+const [credentials, setcredentials] = useState({password:"",C_password:"",current_pwd:""});
 
 const update=(e,field)=>{
     e.preventDefault()
@@ -17,14 +17,25 @@ const update=(e,field)=>{
 
 }
 const login = async(e) => {
-
+    e.preventDefault()
+    const c_pwd_sus=await axios.get("/c_pwd_sus",{
+        params:{
+            email_id:email,
+            c_pwd:credentials.current_pwd
+        }
+    })
+    console.log(c_pwd_sus)
+    if(c_pwd_sus.data)
+    {
+        
     if(credentials.password===credentials.C_password){
+        console.log(email);
 
     e.preventDefault()
     const solution=await axios.get("/isthere",{
         params:
         {
-            phno:credentials.phno,
+            email_id:email,
             password:credentials.password,
             
 
@@ -35,13 +46,15 @@ const login = async(e) => {
         alert("Password is changed sucessfully")
     navigate('/user')
     }
-    else{
-        alert("Please Enter your valid phone number that you have enroll with YEP") 
-       
-    }
+    
 
     }
-    else alert(" you password is mismatched")
+    else alert(" your password is mismatched")
+    }
+    else{
+        return alert("Your Current Password is Mismatched. Please check")
+    }
+
 }
     return (  
 
@@ -50,8 +63,9 @@ const login = async(e) => {
             login.data
         }
             <form onSubmit={login}>
-            <label >Phone Number:</label>
-            <input type="text" onChange={(e)=>(update(e,"phno"))} value={credentials['phon']} placeholder="Please enter" />
+            <label >Current Password</label>
+            <input type="text" onChange={(e)=>(update(e,"current_pwd"))} value={credentials['current_pwd']} placeholder="Please enter"/>
+            
             <br /><br /><label >New password</label>
             <input type="text" onChange={(e)=>(update(e,"password"))} value={credentials['password']} placeholder="Please enter" />
             <br /><br /><label >Conform password</label>

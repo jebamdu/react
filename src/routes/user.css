@@ -126,7 +126,7 @@ a {
 }
 .user-header {
   justify-content: space-between;
-  height: 19vh;
+  height: 19%;
 }
 /* .app::has(.scoreboard) {
   height: 100vh;

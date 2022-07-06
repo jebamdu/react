@@ -67,7 +67,9 @@ const Question = () => {
             ></input> */}
             <CSVReader
               cssInputClass="inputText w-90"
-              parserOptions={{ skipEmptyLines: true, header: true }}
+              fileEncoding="ASCII"
+              parserOptions={{ skipEmptyLines: true,
+                header: true }}
               onFileLoaded={add}
             />
             <button type="submit" className="btn primary btn-text">
@@ -88,6 +90,8 @@ function importCSV(e) {
     fr.onload = function () {
       // console.log(fr.result);
       let headContainer = [];
+      
+      
       fr.result.split("\n").forEach((l, i) => {
         if (i == 0) {
           headContainer = l.split(",").map((h) => h.trim());
@@ -147,13 +151,25 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
   return (
     <div className="question">
       <label className="Questionno">Question {num}</label>
-      <textarea
-        className="qus_text"
-        type="text"
-        value={qus.qus}
-        disabled={user}
-        onChange={(e) => updateValue(e.target.value, "qus")}
-      ></textarea>
+      {user ? (
+        <div
+          className="qus_text"
+          // type="text"
+          // value={qus.qus}
+          // disabled={user}
+          // onChange={(e) => updateValue(e.target.value, "qus")}
+        >
+          {qus.qus}
+        </div>
+      ) : (
+        <textarea
+          className="qus_text"
+          type="text"
+          value={qus.qus}
+          disabled={user}
+          onChange={(e) => updateValue(e.target.value, "qus")}
+        ></textarea>
+      )}
       {Array.apply(null, Array(4)).map((q, i) => (
         <div key={i} className="qus_option">
           <input

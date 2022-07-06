@@ -1,4 +1,6 @@
 .exams {
+    display: flex;
+    flex-direction: column;
     /* background-color: blue; */
     /* width: 10vh; */
     /* height: 10vh; */
@@ -10,6 +12,7 @@
     display: inline-block; */
     max-height: 84vh;
     overflow-y: auto;
+    margin-left: 30%;
 }
 
 .addques {

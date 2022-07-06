@@ -29,6 +29,10 @@
   overflow-y: auto;
   width: 60vw;
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+ 
+  
   /* width: ; */
   /* overflow-x: hidden; */
   /* width:; */
@@ -159,34 +163,42 @@
 .btn.primary:hover {
   box-shadow: 0 0 8px 0px black;
 }
-.listbox_stdrep{
+.listbox_stdrep {
   position: absolute;
-    right: 10px;
-    top: 14px;
-    
+  right: 10px;
+  top: 14px;
 }
-.listbox_stdrep.listbox_stdrep{
+.listbox_stdrep.listbox_stdrep {
   font-size: 20px;
-    padding: 3px;
+  padding: 3px;
 }
-.table{
+.table {
   position: sticky;
   width: 100%;
-  
+
   left: 100px;
 }
-.notification{
+.notification {
   margin: auto;
   height: 50%;
   width: 80%;
   background-color: white;
 }
-.navHead .box{
-
+.navHead .box {
   float: right;
   margin-left: 60%;
   width: 85%;
   font-size: 1em;
   border: 2px solid red;
   border-radius: 15px 15px;
+}
+.level {
+  width: 50% !important ;
+
+}
+.levelstart{
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  
 }

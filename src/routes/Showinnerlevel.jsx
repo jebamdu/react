@@ -8,6 +8,8 @@ const Showinnerlevel = () => {
   const pram = useParams();
   console.log(pram);
   const { Name, levels } = pram;
+  const [name, setname] = useState("");
+  const email=localStorage.getItem("email")
 
   const [Level, setLevel] = useState([]);
   const [Slevel, setSlevel] = useState([]);
@@ -20,6 +22,20 @@ const Showinnerlevel = () => {
   useEffect(() => {
     show();
   }, [levels]);
+
+  const callname=async()=>{
+    const res = await axios.get("/showscore",{params:{
+      "email":email
+    }});
+    console.log(res);
+
+    if (res.status == 200) {
+      if (res.data) {
+        console.log(res,"this is result");
+        setname(res.data[0].name);
+      }
+  }
+}
 
   const show = async () => {
     if (levels) {
@@ -40,6 +56,7 @@ const Showinnerlevel = () => {
         },
       });
       setLevel(level.data);
+      callname()
     }
   };
 
@@ -49,7 +66,7 @@ const Showinnerlevel = () => {
         `/user/instruction/${levels}/${id}`
       )}
   const passingid = (id) => {
-    navigate(`/user/innerLevel/${Name}/${id}`);
+    navigate(`/user/innerLevel/${name}/${id}`);
   };
 
   return (
@@ -64,9 +81,9 @@ const Showinnerlevel = () => {
             <br />
             <div className="topContent"> 
                
-              <p className="Opentab" onClick={()=>{setopentab(true) }}>View score</p>
+              {!opentab&&<p className="Opentab" onClick={()=>{setopentab(true) }}>View score</p>}
               
-              <h2 style={{ marginBottom: "5px" }}>Hi {Name}!!</h2>
+              <h2 style={{ marginBottom: "5px" }}>Hi {name}!!</h2>
               <h3>Which test would you like to take today?</h3>
             </div>
             <br />

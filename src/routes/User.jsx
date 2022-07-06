@@ -18,11 +18,10 @@ import Showinnerlevel from "./Showinnerlevel";
 import rank1 from "../assets/1.png";
 import rank2 from "../assets/2.png";
 import rank3 from "../assets/3.png";
-import L_pop from "../assets/4.jpg"
-import R_pop from "../assets/5.jpg"
+import L_pop from "../assets/4.jpg";
+import R_pop from "../assets/5.jpg";
 
 import arrowRight from "../assets/arrow.svg";
-
 
 const User = () => {
   const navigate = useNavigate();
@@ -33,10 +32,10 @@ const User = () => {
 
     if (d !== "user") navigate("/");
   }, []);
-
+  const [headervisibility, setHeadervisibility] = useState(true);
   return (
     <div className="app user-app">
-      <Header user />
+      {headervisibility && <Header user />}
       <Routes>
         <Route index element={<ExamList />} /> {/*list of exams */}
         <Route path="changePassword" element={<ChangePassword />} />
@@ -55,7 +54,10 @@ const User = () => {
           element={<YourScore />}
         />
         {/*answer page */}
-        <Route path=":levelID/:catID" element={<WriteExam />} />{" "}
+        <Route
+          path=":levelID/:catID"
+          element={<WriteExam setHeadervisibility={setHeadervisibility} />}
+        />{" "}
       </Routes>
     </div>
   );
@@ -70,16 +72,17 @@ const YourScore = () => {
 
   useEffect(() => {
     fetchname();
-    Marksstatement()
+    Marksstatement();
   }, []);
 
-  const Marksstatement=()=>{
-    
-   const value=mark/totalMark*100
-   setpercent(value)
-   
-
-  }
+  const Marksstatement = () => {
+    if (mark > 0) {
+      const value = (mark / totalMark) * 100;
+      setpercent(value);
+    } else {
+      setpercent(0);
+    }
+  };
 
   const fetchname = async () => {
     const name = await axios.get("/showscore", {
@@ -92,10 +95,16 @@ const YourScore = () => {
   };
 
   return (
-    <div className="yourScore" style={{display:"flex" }}>
-
-      {percent && <Innercontainer  mark={mark} total={totalMark} percent={percent} name={Name}/>}
-      </div>
+    <div className="yourScore" style={{ display: "flex" }}>
+      {percent >= 0 && (
+        <Innercontainer
+          mark={mark}
+          total={totalMark}
+          percent={percent}
+          name={Name}
+        />
+      )}
+    </div>
   );
 };
 
@@ -114,14 +123,21 @@ const ExamList = ({}) => {
   const [category, setcategory] = useState([]);
   const [next, setnext] = useState(1);
   console.log("catagory", category);
-  console.log(scorecard,"scorecard is");
+  console.log(scorecard, "scorecard is");
+
   const fetch = async () => {
-    const res = await axios.get("/showscore");
+    console.log(email, "email is");
+    const res = await axios.get("/showscore", {
+      params: {
+        email: email,
+      },
+    });
     console.log(res);
 
     if (res.status == 200) {
       if (res.data) {
-        setName(res.data);
+        console.log(res, "this is result");
+        setName(res.data[0].name);
       }
     } else {
       alert("something went wrong");
@@ -161,15 +177,15 @@ const ExamList = ({}) => {
 
   console.log("This", scorecard);
 
-  const back=()=>{
+  const back = () => {
     console.log(next);
     if (
-      next >=2 &&
-      scorecard.filter((v) => v.level == category[next-1]).length > 0
+      next >= 2 &&
+      scorecard.filter((v) => v.level == category[next - 1]).length > 0
     ) {
       setnext((p) => p - 1);
-    }  
-  }
+    }
+  };
   // const [formapping, setFormapping] = useState([]);
   const nextlevel = () => {
     // newval=[22,41]0
@@ -183,19 +199,26 @@ const ExamList = ({}) => {
       setnext((p) => p + 1);
     }
   };
-  
+
   const formapping = scorecard.filter((v) => v.level == category[next - 1]);
   console.log("formapping", formapping);
 
   return (
     <>
-      <h1 style={{ color: "rgb(255, 0, 187) ",fontSize:"8vh",fontFamily:"inherit" }}>LeaderBoard</h1>
+      <h1
+        className="user_heading"
+        style={{
+          color: "rgb(255, 0, 187) ",
+          fontSize: "8vh",
+          fontFamily: "inherit",
+        }}
+      >
+        LeaderBoard
+      </h1>
       <div className="exam-list">
         <div className="scoreboard">
-          
-
           <select
-          className="listbox_leaderboard"
+            className="listbox_leaderboard"
             onChange={(e) => {
               highscore(e.target.value);
             }}
@@ -206,8 +229,15 @@ const ExamList = ({}) => {
               </option>
             ))}
           </select>
-              <br/>
-          <h1 className="levelNum" style={{ textAlign: "center",fontFamily:"monospace",fontSize:"6vh"}}>
+          <br />
+          <h1
+            className="levelNum"
+            style={{
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: "6vh",
+            }}
+          >
             {/* Level{next} */}
             {/* {showName?.[0]} */}
             {projname}-{formapping?.[0]?.level_name}
@@ -217,7 +247,7 @@ const ExamList = ({}) => {
             <div className="rank1">
               <img src={rank1} alt="" />
               <h5 className="rankName">{formapping[0]?.name}</h5>
-              <h5 style={{fontFamily:"cursive"}}>
+              <h5 style={{ fontFamily: "cursive" }}>
                 {formapping[0]?.mark}/10- {formapping[0]?.batch_name}
               </h5>
             </div>
@@ -227,7 +257,7 @@ const ExamList = ({}) => {
                 {formapping[1] && (
                   <span>
                     <h5 className="rankName">{formapping[1]?.name}</h5>
-                    <h5 style={{fontFamily:"cursive"}}>
+                    <h5 style={{ fontFamily: "cursive" }}>
                       {formapping[1]?.mark}/10 - {formapping[1]?.batch_name}
                     </h5>
                   </span>
@@ -238,7 +268,7 @@ const ExamList = ({}) => {
                 {formapping[2] && (
                   <span>
                     <h5 className="rankName">{formapping[2]?.name}</h5>
-                    <h5 style={{fontFamily:"cursive"}}>
+                    <h5 style={{ fontFamily: "cursive" }}>
                       {formapping[2]?.mark}/10 - {formapping[2]?.batch_name}
                     </h5>
                   </span>
@@ -249,7 +279,7 @@ const ExamList = ({}) => {
           {/* <div className={`rank${i + 1}`}>
             {/* <img src={rank1} alt={`Rank${i + 1}`} /> 
           </div> */}
-          
+
           <img
             src={arrowRight}
             className="arrowRight"
@@ -257,20 +287,14 @@ const ExamList = ({}) => {
             alt=""
           />
 
-            <img
-            
-            src={arrowRight}
-            className="arrowLeft"
-            onClick={back}
-            alt=""
-          />
+          <img src={arrowRight} className="arrowLeft" onClick={back} alt="" />
           {/* <button onClick={nextlevel} >
             next
           </button> */}
         </div>
         <button
-          className="btn"
-          style={{alignItems:"center",marginLeft:"8vh",maxWidth:"200vh"}}
+          className="btn user_proceedBTN"
+          style={{ alignItems: "center", marginLeft: "8vh", maxWidth: "200vh" }}
           onClick={() => {
             if (Name != "") navigate(`innerLevel/${Name}`);
             else alert("something went wrong");
@@ -284,7 +308,7 @@ const ExamList = ({}) => {
 };
 export default User;
 
-const WriteExam = () => {
+const WriteExam = ({ setHeadervisibility }) => {
   const navigate = useNavigate();
   const QTime = useRef();
   const timeOUTset = useRef(0);
@@ -296,6 +320,11 @@ const WriteExam = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentCatagory, setCurrentCatagory] = useState(0); //c_cat of user
   const [questionTime, setQuestionTime] = useState(0);
+
+  useEffect(() => {
+    if (window.outerWidth < 600) setHeadervisibility(false);
+    return () => setHeadervisibility(true);
+  }, []);
 
   console.log("levelId isss", levelID);
   console.log("catId isss", catID);
@@ -315,38 +344,39 @@ const WriteExam = () => {
   console.log("current Question", currentQuestion);
 
   const mytime = () => {
+    console.log(currentQuestionRef.current, "log this");
     // passing to next question when times up
     if (QTime.current.length > currentQuestionRef.current + 1) {
       currentQuestionRef.current += 1;
       setCurrentQuestion((p) => p + 1);
+
+      //assign the time for the current question
+      setQuestionTime(QTime.current[currentQuestionRef.current].time);
+
+      //to set the timeout of the current question
+      timeOUTset.current = setTimeout(
+        mytime,
+        QTime.current[currentQuestionRef.current].time * 1000
+      );
+
+      //clean up the previous question time
+      clearInterval(timeIntervalset.current);
+
+      //to set current question time for timer in user screen
+      timeIntervalset.current = setInterval(() => {
+        setQuestionTime((p) => p - 1);
+      }, 1000);
     } else {
       //  alert("Here have to do submit the form or do further action");
       return submit();
     }
-
-    //assign the time for the current question
-    setQuestionTime(QTime.current[currentQuestionRef.current].time);
-
-    //to set the timeout of the current question
-    timeOUTset.current = setTimeout(
-      mytime,
-      QTime.current[currentQuestionRef.current].time * 1000
-    );
-
-    //clean up the previous question time
-    clearInterval(timeIntervalset.current);
-
-    //to set current question time for timer in user screen
-    timeIntervalset.current = setInterval(() => {
-      setQuestionTime((p) => p - 1);
-    }, 1000);
   };
 
   const fetchQuestion = async () => {
     const res = await axios.get(`/shown`, { params: { type: catID } });
     const { data } = res;
     // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
-    console.log(data);
+    //console.log(data);
     setQuestions(
       data.map((q, i) => ({
         id: q.id,
@@ -391,6 +421,8 @@ const WriteExam = () => {
 
   const submit = async (e) => {
     e?.preventDefault();
+    clearTimeout(timeOUTset.current);
+    clearInterval(timeIntervalset.current);
     console.log(questions);
     const { data } = await axios.post("/studreport", {
       type_id: catID,
@@ -421,9 +453,9 @@ const WriteExam = () => {
     <>
       {catID ? (
         <>
-          <h1>Questions</h1>
+          <h1 style={{ marginLeft: "1rem", marginTop: "1rem" }}>Questions</h1>
           <form onSubmit={submit} className="answer_form">
-            <h3>
+            <h3 className="questionNumber">
               {currentQuestion + 1}/{questions.length}
             </h3>
             <h3 className="Timemodule">
@@ -443,7 +475,6 @@ const WriteExam = () => {
                     className="btn"
                     //
                     disabled={questions[currentQuestion].user_ans < 0}
-                    // {/* do the  i know bro  then call me okey bro
                     type="button"
                     onClick={nextQuestion}
                   >
@@ -487,51 +518,84 @@ const WriteExam = () => {
   );
 };
 
+const Innercontainer = (mark) => {
+  const navigate = useNavigate();
 
-const Innercontainer=(mark)=>{
-  const navigate=useNavigate()
+  return (
+    <div
+      className="innercontainer_mark yourScore_last_page"
+      style={{
+        height: "300px",
+        margin: "",
+        width: "700px",
+        backgroundColor: "rosybrown",
+      }}
+    >
+      {mark.percent > 70 ? (
+        <>
+          <div className="img_container">
+            <img
+              src={L_pop}
+              className="L_img"
+              style={{ height: "150px", width: "150px" }}
+              alt=""
+            />
+            <img
+              src={L_pop}
+              className="LB_img"
+              style={{ height: "120px", width: "150px" }}
+              alt=""
+            />
+            <img
+              src={R_pop}
+              className="R_img"
+              style={{ height: "150px", width: "150px" }}
+              alt=""
+            />
+            <img
+              src={R_pop}
+              className="RB_img"
+              style={{ height: "120px", width: "150px" }}
+              alt=""
+            />
+          </div>
+          <div className="text_container">
+            <h1>Congradulations !!!</h1>
 
-
-return(
- 
-
-  <div className="innercontainer_mark" style={{height:"300px",margin:"",width:"700px",backgroundColor:"rosybrown"}} >
-{
-  mark.percent>70 ?(
-    <><img src={L_pop} className="L_img" style={{height:"150px",width:"150px"}} alt="" />
-    <img src={L_pop} className="LB_img" style={{height:"120px",width:"150px"}} alt="" />
-    <img src={R_pop} className="R_img" style={{height:"150px",width:"150px"}} alt="" />
-    <img src={R_pop} className="RB_img" style={{height:"120px",width:"150px"}} alt="" />
-       <h1>Congradulations !!!</h1>
-       
-       <h2> You got {mark.mark} out of {mark.total} </h2>
-      <button 
-        type="button"
-        className="btn"
-        onClick={() => {
-          navigate(`/User/innerLevel/${mark.name}`);
-        }}
-      >
-        Proceed
-      </button>
-      
-      </>
-      
-):(<> <h1>Oops !!!</h1>
-        <h1> You got only {mark.mark} out of {mark.total}
-      </h1>
-      <button 
-        type="button"
-        className="btn"
-        onClick={() => {
-          navigate(`/User/innerLevel/${mark.name}`);
-        }}
-      >
-        Proceed
-      </button>
-      )
-      </> 
-
-
-)}
-</div>)}
+            <h2>
+              {" "}
+              You got {mark.mark} out of {mark.total}{" "}
+            </h2>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                navigate(`/User/innerLevel/${mark.name}`);
+              }}
+            >
+              Proceed
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          {" "}
+          <h1>Oops !!!</h1>
+          <h1>
+            {" "}
+            You got only {mark.mark} out of {mark.total}
+          </h1>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              navigate(`/User/innerLevel/${mark.name}`);
+            }}
+          >
+            Proceed
+          </button>
+        </>
+      )}
+    </div>
+  );
+};
