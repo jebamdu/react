@@ -55,6 +55,7 @@ const Admin = () => {
             {/*list of catagories */}
             <Route path="exams/:levelID/:catID" element={<Exams />} />{" "}
             {/*list of questions */}
+            <Route path="exams/:levelID/:catID/:inner_catid" element={<Exams />} />{" "}
             <Route path="createExam" element={<Create_Exam />} />{" "}
             {/*to create new exams(level) */}
             <Route path="notification" element={<Notification values={notify}/>} />

@@ -6,17 +6,25 @@ import Header from "./Header";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [Sighup, setSighup] = useState(false);
+ 
   const [values, setvalues] = useState({
     name: "",
-    password: "",
-    Rpassword: "",
+    accesscode: "",
+    enroll_no:"",   
     email: "",
+    dt_no:"",
+    stream:"",
+    college:"",
+    batch_id:""
+
+
   });
+  const stream=["Engineering","Non-Engineering"]
   const [batches, setbatches] = useState([]);
-  const [batch_id, setbatch_id] = useState({});
-  const [terms, setterms] = useState(true);
-  const [validate, setvalidate] = useState(false);
+  const [state, setstate] = useState(true);
+
+ 
+  
   useEffect(() => {
     const d = localStorage.getItem("logedin");
     switch (d) {
@@ -37,29 +45,29 @@ const Login = () => {
     e.preventDefault();
     setvalues((p) => ({ ...p, [field]: e.target.value }));
   };
-  const insertstudent = async () => {
-    console.log("hiii");
-
-    const val = await axios.post("/insertstd", {
-      batch_id: batch_id.batch_id,
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    });
-    console.log(val);
-    if (val.data) {
-      setvalidate(true);
-    }
-  };
-  const action123 = (e) => {
+  
+  const action123 = async(e) => {
     e.preventDefault();
-    console.log(batch_id, "batchid");
-    if (values.password == values.Rpassword) {
-      insertstudent();
-    } else {
-      alert("Your Password is mis match. Please check again.");
-    }
+   const val=await axios.post("/login",{ "name": values.name,
+    "email": values.email,
+    "dt_no": values.dt_no,
+  "college":values.college,
+"enroll_no":values.enroll_no,
+"stream":values.stream,
+"batch_id":values.batch_id,
+"accesscode":values.accesscode})
+
+   console.log(val,"data values");
+   if(val.data.status=='having' || val.data.status=='inserted'){
+    localStorage.setItem("logedin","user");
+    localStorage.setItem("email",values.email);
+    return navigate("/user");
+  }
+  else{
+    alert("wrong access code ")
+  }
   };
+  
   const login = async (e) => {
     e.preventDefault();
     console.log(credential);
@@ -99,188 +107,105 @@ const Login = () => {
   };
   useEffect(() => {
     batchnames();
-  }, [Sighup]);
+  }, []);
 
-  const settofffunction = () => {
-    setvalidate(false);
-    setterms(false);
-    setSighup(false);
-  };
-
+  
+ 
   return (
     <div className="wrap-fullScreen">
       <Header login />
 
-      {validate && (
-        <div
-          className="container login_success_screen"
-          style={{
-            marginLeft: "400px",
-            marginTop: "120px",
-            position: "absolute",
-            backgroundColor: "whitesmoke",
-            zIndex: "1",
-            alignContent: "center",
-          }}
-        >
-          <div
-            className="innercontainer"
-            style={{ height: "300px", padding: "50px", width: "700px" }}
-          >
-            <p style={{ fontSize: "25px" }}>
-              We will validate your inputs and let you know within 3 working
-              days
-            </p>
-            <br />
-            <br />
-            <button className="btn" style={{}} onClick={settofffunction}>
-              Ok
-            </button>
-          </div>
-        </div>
-      )}
-      {Sighup ? (
-        terms ? (
-          <div className="container" style={{ marginLeft: "100px" }}>
-            <div className="subcontainer">
-              <h1
-                className="signup_termsConditions"
-                style={{
-                  fontSize: "50px",
-                  marginLeft: "-80px",
-                  marginTop: "50px",
-                }}
-              >
-                Terms and Condition
-              </h1>
-              <form onSubmit={(e) => setterms(false)}>
-                <ul className="terms_container">
-                  <li className="termcheckbox">
-                    <input type={"checkbox"} required />
-                    xxxx
-                  </li>
-                  <br />
-                  <li className="termcheckbox">
-                    <input type={"checkbox"} required />
-                    yyy
-                  </li>
-                  <br />
-                  <li className="termcheckbox">
-                    <input type={"checkbox"} required />
-                    zzzz
-                  </li>
-                  <br />
-                  <li className="termcheckbox">
-                    <input type={"checkbox"} required />
-                    mmmm
-                  </li>
-                  <br />
-                  <li className="termcheckbox">
-                    <input type={"checkbox"} required />
-                    rrrr
-                  </li>
-                </ul>
-                <br />
-                <br />
-                <button
-                  className="btn"
-                  type="submit"
-                  style={{ marginLeft: "-80px" }}
-                >
-                  proceed
-                </button>
-              </form>
-            </div>
-          </div>
-        ) : (
-          <div
-            className="Container"
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              backgroundColor: "lightskyblue",
-              width: "100%",
-              height: "600px",
-            }}
-          >
-            <div
-              className="subcontainer signup_form"
-              style={{
-                position: "absolute",
-                backgroundColor: "whitesmoke",
-                flexDirection: "column",
-                boxShadow: "10px 10px  10px ",
-                marginTop: "8%",
-                height: "55%",
-                width: "50%",
-                fontSize: "20px",
-              }}
-            >
-              <form
-                className="signup_form"
-                style={{ alignItems: "center", fontSize: "40px" }}
-                onSubmit={action123}
-              >
-                <input
-                  type="text"
-                  className="input_box"
-                  required
-                  placeholder="Name"
-                  value={values["name"]}
-                  onChange={(e) => updatevalue(e, "name")}
-                />
-                <p style={{ display: "none" }}>The Name that given with YEP</p>
-                <br />
-                <input
-                  type="text"
-                  className="input_box"
-                  required
-                  value={values["email"]}
-                  placeholder="E mail"
-                  onChange={(e) => updatevalue(e, "email")}
-                />
-                <p style={{ display: "none" }}>
-                  Email that you have given with YEP
-                </p>
-                <br />
-                <select
-                  value={batches.id}
-                  required
-                  className="drpdown_signup"
-                  placeholder="select batch"
-                  onChange={(e) =>
-                    setbatch_id((p) => ({ ...p, batch_id: e.target.value }))
-                  }
-                >
-                  <option hiddenvalue={"Select Batch"}>{"Select Batch"}</option>
-                  {batches.map((e) => (
-                    <option key={e.id} value={e.id}>
-                      {e.name}
-                    </option>
-                  ))}
-                </select>
-                <br />
-                <br />
-                
-                
+      
 
-                <button
-                  type="submit"
-                  style={{
-                    marginTop: "30px",
-                    maxWidth: "80%",
-                    marginLeft: "75px",
-                  }}
-                  className="btn"
-                >
-                  Sign Up
-                </button>
-              </form>
+       
+        
+        {state ?(
+          <div className="newform">
+            <div className="logindiv">
+        <button onClick={()=>(setstate(true))} >User</button>
+        <button onClick={()=>(setstate(false))}>Admin</button>
             </div>
+            <div className="login">
+
+              <form onSubmit={action123}>
+
+                <input type="text"
+                onChange={(e)=>(updatevalue(e,"name"))}
+                value={values["name"]}
+                required            
+                placeholder="Name"/>
+
+                 <input type="text"
+                onChange={(e)=>(updatevalue(e,"accesscode"))}
+                value={values["accesscode"]}
+                required            
+                placeholder="AccessCode"/>
+
+                <input type="text"
+                onChange={(e)=>(updatevalue(e,"email"))}
+                value={values["email"]}
+                required            
+                placeholder="email"/>
+
+                  <select  onChange={(e)=>(updatevalue(e,"batch_id"))}>
+                    <option hiddenvalue="">Please batch</option>
+                    {
+                      batches.map((e)=>(
+                        <option value={e.id} key={e.id}>{e.name}</option>
+                      ))
+                    }
+                  </select>
+
+                
+                  <input type="text"
+
+                onChange={(e)=>(updatevalue(e,"dt_no"))}
+                value={values["dt_no"]}
+                required            
+                placeholder="DT number"/>
+
+                <select onChange={(e)=>(updatevalue(e,"stream"))}>
+                    <option hiddenvalue="">Stream</option>
+                      {
+                        stream.map((e,l)=>(
+                          <option value={e} key={l}>{e}</option>
+                        ))
+                      }
+                    
+                </select>
+
+                <input type="text"
+                onChange={(e)=>(updatevalue(e,"enroll_no"))}
+                value={values["enroll_no"]}
+                required            
+                placeholder="Enrollment number"/>
+
+                <input type="text"
+                onChange={(e)=>(updatevalue(e,"college"))}
+                value={values["college"]}
+                required            
+                placeholder="College Name"/>
+
+
+                
+                      <button className="btn" type="submit">Submit</button>
+
+
+
+
+              </form>
+
+
+            </div>
+             
           </div>
-        )
-      ) : (
+        ):(
         <>
+
+        <div className="logindiv">
+        <button onClick={()=>(setstate(true))} >User</button>
+        <button onClick={()=>(setstate(false))}>Admin</button>
+        </div>
           <form className="login" onSubmit={login}>
             <input
               type="text"
@@ -305,18 +230,12 @@ const Login = () => {
             >
               Sign in
             </button>
-            <h2 style={{ fontSize: "clamp(1rem,5vw,1.5rem)" }}>
-              Don't have an account{" "}
-              <a
-                style={{ color: "green", textAlign: "center" }}
-                onClick={() => setSighup(true)}
-              >
-                sign up
-              </a>{" "}
-            </h2>
+            
           </form>
-        </>
-      )}
+          </>
+        )}
+       
+      
     </div>
   );
 };

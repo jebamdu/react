@@ -68,6 +68,21 @@
   width: 65%;
   height: 50%;
 }
+.littlecontainer{
+  width: 50vw;
+  height: 30vh;
+  background-color: antiquewhite;
+  /* margin-left: 25vh; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.innerlilcontainer{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
 .containerBody .mainContainer .popContainer {
   position: absolute;

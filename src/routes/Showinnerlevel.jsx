@@ -16,28 +16,9 @@ const Showinnerlevel = () => {
   const [opentab, setopentab] = useState(false);
   console.log(opentab);
 
-  const navigate = useNavigate();
-  console.log("level is now", Level);
-  console.log("level is", Slevel);
-  useEffect(() => {
-    show();
-  }, [levels]);
-
-  const callname=async()=>{
-    const res = await axios.get("/showscore",{params:{
-      "email":email
-    }});
-    console.log(res);
-
-    if (res.status == 200) {
-      if (res.data) {
-        console.log(res,"this is result");
-        setname(res.data[0].name);
-      }
-  }
-}
-
+  
   const show = async () => {
+    setname(email)
     if (levels) {
       console.log(levels, "this is");
       const level = await axios.get("/shown", {
@@ -56,9 +37,19 @@ const Showinnerlevel = () => {
         },
       });
       setLevel(level.data);
-      callname()
+      
     }
   };
+
+
+  const navigate = useNavigate();
+  console.log("level is now", Level);
+  console.log("level is", Slevel);
+  useEffect(() => {
+    show();
+    console.log("it is calling");
+  }, [levels]);
+
 
   const takelevel = (id) => {
    

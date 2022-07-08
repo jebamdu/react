@@ -110,7 +110,7 @@ const YourScore = () => {
 
 const ExamList = ({}) => {
   const navigate = useNavigate();
-  const email = localStorage.getItem("email");
+
   const [clevel, setClevel] = useState(null); // send the name
   const [showName, setshowName] = useState([]);
 
@@ -126,23 +126,8 @@ const ExamList = ({}) => {
   console.log(scorecard, "scorecard is");
 
   const fetch = async () => {
-    console.log(email, "email is");
-    const res = await axios.get("/showscore", {
-      params: {
-        email: email,
-      },
-    });
-    console.log(res);
-
-    if (res.status == 200) {
-      if (res.data) {
-        console.log(res, "this is result");
-        setName(res.data[0].name);
-      }
-    } else {
-      alert("something went wrong");
-      // highscore();
-    }
+   const email=localStorage.getItem("email")
+   setName(email)
     highscore();
     fetchname();
   };
@@ -373,7 +358,7 @@ const WriteExam = ({ setHeadervisibility }) => {
   };
 
   const fetchQuestion = async () => {
-    const res = await axios.get(`/shown`, { params: { type: catID } });
+    const res = await axios.get(`/shownnew`, { params: { type: catID } });
     const { data } = res;
     // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
     //console.log(data);

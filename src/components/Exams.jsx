@@ -11,7 +11,7 @@ import addBtn from "../assets/addBtn.svg";
 const  Exams = () => {
   const [exams, setExams] = useState([]);
   const navigate = useNavigate();
-  const { levelID, catID } = useParams();
+  const { levelID,catID,inner_catid } = useParams();
   console.log(levelID, catID,"values");
   const [name, setname] = useState([]);
   const functionname1 =localStorage.getItem("functionname")
@@ -26,11 +26,11 @@ const  Exams = () => {
   }
   const fetch = async () => {
 
-    if(catID){
+    if(inner_catid){
       const { data } = await axios.get("/showncall", {
         params: {
-          level: levelID,
-          type: catID,
+          
+          type: inner_catid,
         },
       });
       console.log(data);
@@ -41,6 +41,7 @@ const  Exams = () => {
         params: {
           level: levelID,
           type: catID,
+          innercat:inner_catid
         },
       });
       console.log(data);
@@ -51,10 +52,19 @@ const  Exams = () => {
    
     
   };
+
+
+  
   useEffect(() => {
-    if (catID) addQus();
+    if (inner_catid) addQus();
     fetch();
-  }, [levelID, catID]);
+  }, [levelID, catID,inner_catid]);
+
+ 
+
+
+
+
   const addQus = async () => {
     //navigate(`/admin/createExam/${levelID}/${catID}`);
   };
@@ -67,16 +77,13 @@ const  Exams = () => {
       name: popData,
       id: levelID,
       time: null,
+      catid:catID
     });
-    console.log(val);
+    console.log(val.data);
     if(val){
       
-      const createidname=await axios.get("/createidname",{params:{
-        id:val.data.status
-      }
-      })
-
-      console.log(createidname);
+    alert("inserted sucessfully")
+     
     }
   };
 
@@ -91,7 +98,7 @@ const  Exams = () => {
     setshowpopup((p) => !p);
   };
   const addelement = () => {
-    navigate(`/admin/createExam/${levelID}/${catID}`);
+    navigate(`/admin/createExam/${levelID}/${inner_catid}`);
   };
   const newfunction2=(name)=>{
     console.log(name,"second name");
@@ -147,7 +154,7 @@ const  Exams = () => {
             hide={show}
           />
         )}
-        {catID ? (
+        {inner_catid? (
           <button className="btn primary btn-text" onClick={addelement}>
             Add more
           </button>
@@ -160,7 +167,7 @@ const  Exams = () => {
           />
         )}
         <div className="exams">
-          {catID ? (
+          {inner_catid? (
             // <Table data={exams} />
             <div className="content">
               {exams.map(
@@ -195,19 +202,38 @@ const  Exams = () => {
                 // </Link>
               )}
             </div>
-          ) : (
-            exams.map((l, i) => (
-              <>
-              <div >
-              <Link key={i} to={String(l.id)}>
-                <button className="btn primary" style={{width:"300px"}} onClick={()=>(newfunction2(l.name))}>{l.name}</button>
+          ) : (catID?(
+            <div className="div">{
+              exams.map((l, i) => (
+                <>
+                <div >
+                <Link key={i} to={String(l.id)}>
+                  <button className="btn primary" style={{width:"300px"}} >{l.name}</button>
+                    
+                </Link>
+               
+                </div>
+                </>
+              ))
+
+
+
+            }
                   
-              </Link>
-              <Deletelevel name={l.name} id={l.id} />
-              <Updatelevel name={l.name} id={l.id} />
-              </div>
-              </>
-            ))
+            </div>
+          ):(exams.map((l, i) => (
+            <>
+            <div >
+            <Link key={i} to={String(l.id)}>
+              <button className="btn primary" style={{width:"300px"}} onClick={()=>(newfunction2(l.name))}>{l.name}</button>
+                
+            </Link>
+            <Deletelevel name={l.name} id={l.id} />
+            <Updatelevel name={l.name} id={l.id} />
+            </div>
+            </>
+          )))
+            
           )}
         </div>
         
