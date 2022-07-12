@@ -68,8 +68,7 @@ const Question = () => {
             <CSVReader
               cssInputClass="inputText w-90"
               fileEncoding="ASCII"
-              parserOptions={{ skipEmptyLines: true,
-                header: true }}
+              parserOptions={{ skipEmptyLines: true, header: true }}
               onFileLoaded={add}
             />
             <button type="submit" className="btn primary btn-text">
@@ -90,8 +89,7 @@ function importCSV(e) {
     fr.onload = function () {
       // console.log(fr.result);
       let headContainer = [];
-      
-      
+
       fr.result.split("\n").forEach((l, i) => {
         if (i == 0) {
           headContainer = l.split(",").map((h) => h.trim());
@@ -151,9 +149,13 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
   return (
     <div className="question">
       <label className="Questionno">Question {num}</label>
+      <div style={{position:"relative"}}>
       {user ? (
+        <>
+        <div className="" style={{width:"100%",height:"100%",position:"absolute"}}></div>
         <div
           className="qus_text"
+          // style={{ pointerEvents: "none" }}
           // type="text"
           // value={qus.qus}
           // disabled={user}
@@ -161,15 +163,21 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
         >
           {qus.qus}
         </div>
+        </>
       ) : (
-        <textarea
-          className="qus_text"
-          type="text"
-          value={qus.qus}
-          disabled={user}
-          onChange={(e) => updateValue(e.target.value, "qus")}
-        ></textarea>
+        <>
+          {/* <div className="hide123" style={{opacity: 1,width:"5rem",height:"5rem",background:"black"}}>
+          </div> */}
+          <textarea
+            className="qus_text"
+            type="text"
+            value={qus.qus}
+            disabled={user}
+            onChange={(e) => updateValue(e.target.value, "qus")}
+          ></textarea>
+        </>
       )}
+      </div>
       {Array.apply(null, Array(4)).map((q, i) => (
         <div key={i} className="qus_option">
           <input

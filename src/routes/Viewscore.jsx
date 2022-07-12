@@ -22,7 +22,10 @@ const Viewscore=(props)=>{
         
         const usermark=await axios.get("/usermark",{params:{"id":id,"email":email}})
         setshowtable(usermark.data);
-        setscreening(true)
+        if(usermark.data){
+            setscreening(true)
+        }
+       
     }
     const showchart=async()=>{
         console.log(lev_id,"id is");
@@ -59,7 +62,7 @@ const Viewscore=(props)=>{
         </div>
             
         {screening &&<>
-        <button className="View_history" onClick={()=>(showchart())}>View by history</button>
+        {/* <button className="View_history" onClick={()=>(showchart())}>View by history</button> */}
         <div className="View_container" onClick={()=>(tab(false))}>
         <div className="showtable_Viewscore"  onClick={()=>{setscreening(false)}}>
         <Table data={showtable}/>

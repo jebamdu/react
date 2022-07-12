@@ -3,28 +3,25 @@ import "./login.css";
 import { useNavigate } from "react-router-dom";
 import axios from "../instance/axios";
 import Header from "./Header";
+import { flushSync } from "react-dom";
 
 const Login = () => {
   const navigate = useNavigate();
- 
+
   const [values, setvalues] = useState({
     name: "",
     accesscode: "",
-    enroll_no:"",   
+    enroll_no: "",
     email: "",
-    dt_no:"",
-    stream:"",
-    college:"",
-    batch_id:""
-
-
+    dt_no: "",
+    stream: "",
+    college: "",
+    batch_id: "",
   });
-  const stream=["Engineering","Non-Engineering"]
+  const stream = ["Engineering", "Non-Engineering"];
   const [batches, setbatches] = useState([]);
   const [state, setstate] = useState(true);
 
- 
-  
   useEffect(() => {
     const d = localStorage.getItem("logedin");
     switch (d) {
@@ -45,29 +42,30 @@ const Login = () => {
     e.preventDefault();
     setvalues((p) => ({ ...p, [field]: e.target.value }));
   };
-  
-  const action123 = async(e) => {
-    e.preventDefault();
-   const val=await axios.post("/login",{ "name": values.name,
-    "email": values.email,
-    "dt_no": values.dt_no,
-  "college":values.college,
-"enroll_no":values.enroll_no,
-"stream":values.stream,
-"batch_id":values.batch_id,
-"accesscode":values.accesscode})
 
-   console.log(val,"data values");
-   if(val.data.status=='having' || val.data.status=='inserted'){
-    localStorage.setItem("logedin","user");
-    localStorage.setItem("email",values.email);
-    return navigate("/user");
-  }
-  else{
-    alert("wrong access code ")
-  }
+  const action123 = async (e) => {
+    e.preventDefault();
+    const val = await axios.post("/login", {
+      name: values.name,
+      email: values.email,
+      dt_no: values.dt_no,
+      college: values.college,
+      enroll_no: values.enroll_no,
+      stream: values.stream,
+      batch_id: values.batch_id,
+      accesscode: values.accesscode,
+    });
+
+    console.log(val, "data values");
+    if (val.data.status == "having" || val.data.status == "inserted") {
+      localStorage.setItem("logedin", "user");
+      localStorage.setItem("email", values.email);
+      return navigate("/user");
+    } else {
+      alert("wrong access code ");
+    }
   };
-  
+
   const login = async (e) => {
     e.preventDefault();
     console.log(credential);
@@ -109,103 +107,104 @@ const Login = () => {
     batchnames();
   }, []);
 
-  
- 
   return (
     <div className="wrap-fullScreen">
       <Header login />
 
-      
+      {state ? (
+        <div className="newform" style={{height:"80%"}}>
+          <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}} >
+            <button style={{}} className="btn" onClick={() => setstate(true)}>User</button>
+            <button style={{}} className="btn" onClick={() => setstate(false)}>Admin</button>
+          </div>
+          <div className="login" style={{height:"100%"}}>
+            <form
+              className=""
+              style={{ display: "flex", flexDirection: "column" }}
+              onSubmit={action123}
+            >
+              <div className="" style={{display:"flex", flexDirection:"row"}}>
+                <div className="loginFormcontainer">
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "name")}
+                    value={values["name"]}
+                    required
+                    placeholder="Name"
+                  />
 
-       
-        
-        {state ?(
-          <div className="newform">
-            <div className="logindiv">
-        <button onClick={()=>(setstate(true))} >User</button>
-        <button onClick={()=>(setstate(false))}>Admin</button>
-            </div>
-            <div className="login">
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "accesscode")}
+                    value={values["accesscode"]}
+                    required
+                    placeholder="AccessCode"
+                  />
 
-              <form onSubmit={action123}>
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "email")}
+                    value={values["email"]}
+                    required
+                    placeholder="email"
+                  />
 
-                <input type="text"
-                onChange={(e)=>(updatevalue(e,"name"))}
-                value={values["name"]}
-                required            
-                placeholder="Name"/>
-
-                 <input type="text"
-                onChange={(e)=>(updatevalue(e,"accesscode"))}
-                value={values["accesscode"]}
-                required            
-                placeholder="AccessCode"/>
-
-                <input type="text"
-                onChange={(e)=>(updatevalue(e,"email"))}
-                value={values["email"]}
-                required            
-                placeholder="email"/>
-
-                  <select  onChange={(e)=>(updatevalue(e,"batch_id"))}>
+                  <select onChange={(e) => updatevalue(e, "batch_id")}>
                     <option hiddenvalue="">Please batch</option>
-                    {
-                      batches.map((e)=>(
-                        <option value={e.id} key={e.id}>{e.name}</option>
-                      ))
-                    }
+                    {batches.map((e) => (
+                      <option value={e.id} key={e.id}>
+                        {e.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="loginFormcontainer">
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "dt_no")}
+                    value={values["dt_no"]}
+                    required
+                    placeholder="DT number"
+                  />
+
+                  <select onChange={(e) => updatevalue(e, "stream")}>
+                    <option hiddenvalue="">Stream</option>
+                    {stream.map((e, l) => (
+                      <option value={e} key={l}>
+                        {e}
+                      </option>
+                    ))}
                   </select>
 
-                
-                  <input type="text"
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "enroll_no")}
+                    value={values["enroll_no"]}
+                    required
+                    placeholder="Enrollment number"
+                  />
 
-                onChange={(e)=>(updatevalue(e,"dt_no"))}
-                value={values["dt_no"]}
-                required            
-                placeholder="DT number"/>
-
-                <select onChange={(e)=>(updatevalue(e,"stream"))}>
-                    <option hiddenvalue="">Stream</option>
-                      {
-                        stream.map((e,l)=>(
-                          <option value={e} key={l}>{e}</option>
-                        ))
-                      }
-                    
-                </select>
-
-                <input type="text"
-                onChange={(e)=>(updatevalue(e,"enroll_no"))}
-                value={values["enroll_no"]}
-                required            
-                placeholder="Enrollment number"/>
-
-                <input type="text"
-                onChange={(e)=>(updatevalue(e,"college"))}
-                value={values["college"]}
-                required            
-                placeholder="College Name"/>
-
-
-                
-                      <button className="btn" type="submit">Submit</button>
-
-
-
-
-              </form>
-
-
-            </div>
-             
+                  <input
+                    type="text"
+                    onChange={(e) => updatevalue(e, "college")}
+                    value={values["college"]}
+                    required
+                    placeholder="College Name"
+                  />
+                </div>
+              </div>
+              <button className="btn" style={{width:"100%"}} type="submit">
+                Submit
+              </button>
+            </form>
           </div>
-        ):(
-        <>
-
-        <div className="logindiv">
-        <button onClick={()=>(setstate(true))} >User</button>
-        <button onClick={()=>(setstate(false))}>Admin</button>
         </div>
+      ) : (
+        <>
+          <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}}>
+            <button className="btn" onClick={() => setstate(true)}>User</button>
+            <button className="btn" onClick={() => setstate(false)}>Admin</button>
+          </div>
           <form className="login" onSubmit={login}>
             <input
               type="text"
@@ -230,12 +229,9 @@ const Login = () => {
             >
               Sign in
             </button>
-            
           </form>
-          </>
-        )}
-       
-      
+        </>
+      )}
     </div>
   );
 };

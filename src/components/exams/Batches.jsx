@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import CSVReader from "react-csv-reader";
+
 
 import axios from "../../instance/axios";
 import Table from "../Table";
+
 const Batch = () => {
   const [show, setshow] = useState([]);
   const navigate = useNavigate();
@@ -55,7 +58,9 @@ export default Batch;
 
 const Addbatch = ({ dValue }) => {
   console.log(dValue);
+
   const navigate = useNavigate();
+  
   const [values, setvalues] = useState(
     dValue
       ? dValue
@@ -64,10 +69,22 @@ const Addbatch = ({ dValue }) => {
         trainer: "",
         s_at: "",
         e_at: "",
+        state:""
       }
   );
   console.log("THis is val", values);
   const [drop, setdrop] = useState([]);
+  const [open, setopen] = useState(false);
+  const [statename, setstatename] = useState([]);
+  const [states, setstates] = useState([]);
+
+
+  const callstate=async()=>{
+    const val=await axios.get("/callstate")
+    console.log((val));
+    setstates(val.data)
+
+  }
 
   const droplist = async () => {
     const droplist = await axios.post("/showtrainer", {
@@ -75,6 +92,7 @@ const Addbatch = ({ dValue }) => {
       id: undefined,
     });
     setdrop(droplist.data);
+    callstate()
   };
   useEffect(() => {
     droplist();
@@ -113,9 +131,11 @@ const Addbatch = ({ dValue }) => {
   };
 
   const insert = async () => {
+    
     const { data } = await axios.get("/ins_batch", {
       params: {
         trainer: values.trainer,
+        state:values.state,
         name: values.name,
         s_at: values.s_at,
         e_at: values.e_at,
@@ -132,14 +152,69 @@ const Addbatch = ({ dValue }) => {
     }
   };
 
+  
+  const addele=async (e)=>{
+    e.preventDefault()
+    const val= await axios.post("/addstate",{"state":statename})
+    console.log(val);
+    if(val.data){
+      alert("insert sucessfully")
+      setopen(false)
+
+    }
+  }
+
+  const add=async (val)=>{
+    console.log(val)
+      setstatename(val)
+     
+  }
+
   return (
     // <div className="batchout">
     <div className="containerBody">
       <div className="navHead">
+     
         <h3>{dValue ? "Update" : "Add"} Batch</h3>
+        <button onClick={()=>(setopen(true)) } style={{width:"25%",marginLeft:"60%",background:"Transparent"}} className="btn primary btn-text">Add State</button>
       </div>
       <div className="wrapper">
         <div className="mainContainer">
+         
+          {
+             
+               open&&<div className="containerBody" style={{width:"100%"}}>
+                <div className="navHead">
+        <h3>Upload states</h3>
+      </div>
+      <div className="wrapper">
+        <div className="mainContainer">
+          <form onSubmit={addele}>
+            
+            <CSVReader
+              cssInputClass="inputText w-90"
+              fileEncoding="ASCII"
+              parserOptions={{ skipEmptyLines: true,
+                header: true }}
+              onFileLoaded={add}
+            />
+            <button type="submit" className="btn primary btn-text">
+              Add
+            </button>
+          </form>
+        </div>
+      </div>
+                
+               </div>
+              
+
+          }
+           
+
+          
+        
+
+          
           <form onSubmit={batchworling}>
             {/* <label>Select the trainer:</label> */}
 
@@ -157,6 +232,24 @@ const Addbatch = ({ dValue }) => {
               {drop.map((e) => (
                 <option key={e.id} value={e.id}>
                   {e.name}
+                </option>
+              ))}
+            </select>
+            <br />
+            <select
+              value={values.state}
+              required
+              className="inputText w-90"
+              onChange={(e) =>
+                setvalues((p) => ({ ...p, state: e.target.value }))
+              }
+            >
+              <option hidden value={""}>
+                Please select
+              </option>
+              {states.map((e) => (
+                <option key={e.id} value={e.id}>
+                  {e.state}
                 </option>
               ))}
             </select>
@@ -195,7 +288,12 @@ const Addbatch = ({ dValue }) => {
             <br />
 
             <button type="submit" className="btn">{dValue ? "Update" : "Add"} Batch</button>
-          </form></div>
+          </form>
+          
+          
+          </div>
+
+
       </div>
     </div>
   );

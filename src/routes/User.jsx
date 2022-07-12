@@ -101,7 +101,8 @@ const YourScore = () => {
           mark={mark}
           total={totalMark}
           percent={percent}
-          name={Name}
+          name={Name.name}
+          level={levelID }
         />
       )}
     </div>
@@ -143,7 +144,9 @@ const ExamList = ({}) => {
     setprojname(name.data?.[0]?.name);
   };
   useEffect(() => {
-    fetch();
+    const email=localStorage.getItem("email")
+    navigate(`innerLevel/${email}`)
+    // fetch();
   }, []);
 
   const highscore = async (val) => {
@@ -281,7 +284,7 @@ const ExamList = ({}) => {
           className="btn user_proceedBTN"
           style={{ alignItems: "center", marginLeft: "8vh", maxWidth: "200vh" }}
           onClick={() => {
-            if (Name != "") navigate(`innerLevel/${Name}`);
+            if (Name.name != "") navigate(`innerLevel/${Name.name}`);
             else alert("something went wrong");
           }}
         >
@@ -439,6 +442,8 @@ const WriteExam = ({ setHeadervisibility }) => {
       {catID ? (
         <>
           <h1 style={{ marginLeft: "1rem", marginTop: "1rem" }}>Questions</h1>
+
+          
           <form onSubmit={submit} className="answer_form">
             <h3 className="questionNumber">
               {currentQuestion + 1}/{questions.length}
@@ -446,7 +451,9 @@ const WriteExam = ({ setHeadervisibility }) => {
             <h3 className="Timemodule">
               Time:{Math.floor(questionTime / 60)}:{questionTime % 60}
             </h3>
+          
             {questions.length ? (
+              
               <div className="individualQuestion">
                 <QuestionTemplate
                   user
@@ -454,6 +461,7 @@ const WriteExam = ({ setHeadervisibility }) => {
                   num={currentQuestion + 1}
                   qus={questions[currentQuestion]} //user_ans=-1
                 />
+                
 
                 {questions.length - 1 !== currentQuestion && (
                   <button
@@ -482,6 +490,7 @@ const WriteExam = ({ setHeadervisibility }) => {
               </div>
             )}
           </form>
+          
         </>
       ) : (
         <>
@@ -555,7 +564,7 @@ const Innercontainer = (mark) => {
               type="button"
               className="btn"
               onClick={() => {
-                navigate(`/User/innerLevel/${mark.name}`);
+                navigate(`/User/innerLevel/${"name"}/${mark.level}`);
               }}
             >
               Proceed
@@ -574,7 +583,9 @@ const Innercontainer = (mark) => {
             type="button"
             className="btn"
             onClick={() => {
-              navigate(`/User/innerLevel/${mark.name}`);
+              navigate(`/user/innerLevel/${mark.name||"name"}/${mark.level}`);
+            
+            //user/innerLevel/vmm/23
             }}
           >
             Proceed
