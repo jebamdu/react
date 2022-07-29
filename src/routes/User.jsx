@@ -71,7 +71,7 @@ const YourScore = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchname();
+ 
     Marksstatement();
   }, []);
 
@@ -84,15 +84,7 @@ const YourScore = () => {
     }
   };
 
-  const fetchname = async () => {
-    const name = await axios.get("/showscore", {
-      params: {
-        email: email,
-      },
-    });
-    console.log(name);
-    setName(name.data);
-  };
+  
 
   return (
     <div className="yourScore" style={{ display: "flex" }}>
@@ -191,6 +183,12 @@ const ExamList = ({}) => {
   const formapping = scorecard.filter((v) => v.level == category[next - 1]);
   console.log("formapping", formapping);
 
+  const proceed_fun=()=>{
+    
+    if (Name.name != "") navigate(`innerLevel/${Name.name}`);
+    else alert("something went wrong");
+  }
+
   return (
     <>
       <h1
@@ -284,8 +282,7 @@ const ExamList = ({}) => {
           className="btn user_proceedBTN"
           style={{ alignItems: "center", marginLeft: "8vh", maxWidth: "200vh" }}
           onClick={() => {
-            if (Name.name != "") navigate(`innerLevel/${Name.name}`);
-            else alert("something went wrong");
+            proceed_fun()
           }}
         >
           proceed
@@ -310,6 +307,8 @@ const WriteExam = ({ setHeadervisibility }) => {
   const [questionTime, setQuestionTime] = useState(0);
 
   useEffect(() => {
+    const stream=localStorage.getItem("stream")
+    console.log(stream,"this is stream");
     if (window.outerWidth < 600) setHeadervisibility(false);
     return () => setHeadervisibility(true);
   }, []);
@@ -362,9 +361,11 @@ const WriteExam = ({ setHeadervisibility }) => {
 
   const fetchQuestion = async () => {
     const res = await axios.get(`/shownnew`, { params: { type: catID } });
-    const { data } = res;
+    let { data } = res;
+    data=[...data[0],...data[1]]
     // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
     //console.log(data);
+
     setQuestions(
       data.map((q, i) => ({
         id: q.id,
@@ -372,6 +373,8 @@ const WriteExam = ({ setHeadervisibility }) => {
         user_ans: -1,
         time: q.time,
         options: eval(q.ans),
+        image: q.image,
+        describtion: q.describtion,
       }))
     );
     //settimeout //use data q.time
@@ -416,7 +419,7 @@ const WriteExam = ({ setHeadervisibility }) => {
       type_id: catID,
       email: localStorage.getItem("email"),
       ans: questions.map((a) => eval(a.user_ans)),
-      id: questions.map((a) => eval(a.id)), //[{}]
+      id: questions.map((a) => (a.id)), //[{}]
     });
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
@@ -436,6 +439,7 @@ const WriteExam = ({ setHeadervisibility }) => {
   };
   // console.log("question", questions);
   // console.log("currentQuestion", currentQuestion);
+
 
   return (
     <>
@@ -564,6 +568,10 @@ const Innercontainer = (mark) => {
               type="button"
               className="btn"
               onClick={() => {
+                const level_array1=JSON.parse(localStorage.getItem("levelarr"))
+                level_array1.shift()
+                console.log(level_array1,"This is new");
+                localStorage.setItem("levelarr",JSON.stringify(level_array1))
                 navigate(`/User/innerLevel/${"name"}/${mark.level}`);
               }}
             >
@@ -583,6 +591,10 @@ const Innercontainer = (mark) => {
             type="button"
             className="btn"
             onClick={() => {
+              const level_array1=JSON.parse(localStorage.getItem("levelarr"))
+                level_array1.shift()
+                console.log(level_array1,"This is new");
+                localStorage.setItem("levelarr",JSON.stringify(level_array1))
               navigate(`/user/innerLevel/${mark.name||"name"}/${mark.level}`);
             
             //user/innerLevel/vmm/23

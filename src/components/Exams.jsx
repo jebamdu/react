@@ -146,6 +146,7 @@ const  Exams = () => {
       </h1>
       
       <div className="maincontainer">
+       
         {showpopup && (
           <Popup
             data={popData}
@@ -154,6 +155,9 @@ const  Exams = () => {
             hide={show}
           />
         )}
+         {
+         catID&& <button onClick={()=>(navigate(`/admin/createExam/${catID}/newtype`))}>add new type</button>
+        }
         {inner_catid? (
           <button className="btn primary btn-text" onClick={addelement}>
             Add more

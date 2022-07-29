@@ -21,19 +21,19 @@ const Viewscore=(props)=>{
         lev_id.current=id
         
         const usermark=await axios.get("/usermark",{params:{"id":id,"email":email}})
-        setshowtable(usermark.data);
+        setshowtable(eval(usermark.data));
         if(usermark.data){
             setscreening(true)
         }
        
     }
-    const showchart=async()=>{
-        console.log(lev_id,"id is");
-        const chartmark=await axios.get("/showchart",{params:{"id":lev_id.current,"email_id":email}})
-        console.log(chartmark);
+    // const showchart=async()=>{
+    //     console.log(lev_id,"id is");
+    //     const chartmark=await axios.get("/showchart",{params:{"id":lev_id.current,"email_id":email}})
+    //     console.log(chartmark);
         
-        setpop(email)
-    }
+    //     setpop(email)
+    // }
   
 
 

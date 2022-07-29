@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CSVReader from "react-csv-reader";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../instance/axios";
@@ -120,6 +120,11 @@ function importCSV(e) {
 }
 
 const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
+  const call_qus = (val) => {
+    return val.qus;
+  };
+  let myval = call_qus(qus);
+
   // console.log(qus);
 
   const updateValue = (val, field) => {
@@ -146,38 +151,64 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
         })
     );
   };
+
   return (
     <div className="question">
       <label className="Questionno">Question {num}</label>
-      <div style={{position:"relative"}}>
-      {user ? (
-        <>
-        <div className="" style={{width:"100%",height:"100%",position:"absolute"}}></div>
-        <div
-          className="qus_text"
-          // style={{ pointerEvents: "none" }}
-          // type="text"
-          // value={qus.qus}
-          // disabled={user}
-          // onChange={(e) => updateValue(e.target.value, "qus")}
-        >
-          {qus.qus}
+      {qus.image && (
+        <div className="img">
+          <img className="QusImage" src={qus.image} alt="Loading..." />
+          <h3>{qus.describtion}</h3>
         </div>
-        </>
-      ) : (
-        <>
-          {/* <div className="hide123" style={{opacity: 1,width:"5rem",height:"5rem",background:"black"}}>
-          </div> */}
-          <textarea
-            className="qus_text"
-            type="text"
-            value={qus.qus}
-            disabled={user}
-            onChange={(e) => updateValue(e.target.value, "qus")}
-          ></textarea>
-        </>
       )}
+      <div style={{ position: "relative" }}>
+        {user ? (
+          <>
+            <div
+              className=""
+              style={{ width: "100%", height: "100%", position: "absolute" }}
+            ></div>
+            {/* <textarea
+              className="qus_text"
+              // type="text"
+              // value={qus.qus}
+              // disabled={user}
+              // onChange={(e) => updateValue(e.target.value, "qus")}
+            >{qus.qus}</textarea> */}
+            <div
+              className="qus_text"
+              // style={{ pointerEvents: "none" }}
+              // type="text"
+              // value={qus.qus}
+              // disabled={user}
+              // dangerouslySetInnerHTML={}
+              dangerouslySetInnerHTML={{
+                __html: qus.qus.replace(/(?:\n\r|\n|\r)/g, "<br/>"),
+              }}
+              // onChange={(e) => updateValue(e.target.value, "qus")}
+            >
+            
+            </div>
+            <br />
+          </>
+        ) : (
+          <>
+            {/* <div className="hide123" style={{opacity: 1,width:"5rem",height:"5rem",background:"black"}}>
+          </div> */}
+
+            <textarea
+              className="qus_text"
+              type="text"
+              // value={qus.qus}
+              disabled={user}
+              onChange={(e) => updateValue(e.target.value, "qus")}
+            >
+              {qus.qus}
+            </textarea>
+          </>
+        )}
       </div>
+      
       {Array.apply(null, Array(4)).map((q, i) => (
         <div key={i} className="qus_option">
           <input

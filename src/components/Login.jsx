@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "../instance/axios";
 import Header from "./Header";
 import { flushSync } from "react-dom";
+import minjapg from "../assets/mobileapp.jpg";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,12 +18,18 @@ const Login = () => {
     email: "",
     dt_no: "",
     stream: "",
-    college: "",
+    state: "",
     batch_id: "",
   });
   const stream = ["Engineering", "Non-Engineering"];
   const [batches, setbatches] = useState([]);
   const [state, setstate] = useState(true);
+  const [collegestate, setcollegestate] = useState([]);
+  const [Dtopen, setDtopen] = useState(false);
+  const [openmail, setopenmail] = useState(false);
+  const [name, setname] = useState("");  
+  
+  
 
   useEffect(() => {
     const d = localStorage.getItem("logedin");
@@ -32,15 +41,33 @@ const Login = () => {
         navigate("/user");
         break;
     }
+    if(state){
+      setname("Admin")
+    }
+    else{
+      setname("User")
+    }
+  
   }, []);
   const [credential, setCredential] = useState({ userName: "", password: "" });
   const updateCrediential = (e, field) => {
     e.preventDefault();
     setCredential((pre) => ({ ...pre, [field]: e.target.value }));
+
+    
+  };
+  const batchnames = async (e) => {
+    console.log(e,"This is values state");
+    const values = await axios.get("/showbatches",{params:{"id":e}});
+    setbatches(values.data);
+    console.log(values);
   };
   const updatevalue = (e, field) => {
     e.preventDefault();
     setvalues((p) => ({ ...p, [field]: e.target.value }));
+    if(field=="state"){
+      batchnames(e.target.value);
+    }
   };
 
   const action123 = async (e) => {
@@ -49,17 +76,21 @@ const Login = () => {
       name: values.name,
       email: values.email,
       dt_no: values.dt_no,
-      college: values.college,
+      state: values.state,
       enroll_no: values.enroll_no,
       stream: values.stream,
       batch_id: values.batch_id,
       accesscode: values.accesscode,
-    });
+    }
+    
+    );
 
     console.log(val, "data values");
     if (val.data.status == "having" || val.data.status == "inserted") {
       localStorage.setItem("logedin", "user");
       localStorage.setItem("email", values.email);
+      localStorage.setItem("stream",values.stream)
+    
       return navigate("/user");
     } else {
       alert("wrong access code ");
@@ -85,6 +116,7 @@ const Login = () => {
     // else {
     //     alert("Username or Password is increct")
     //}
+    
 
     const { data } = await axios.post("/login", credential);
     if (data.status === "success") {
@@ -98,24 +130,61 @@ const Login = () => {
     }
     console.log(data);
   };
-  const batchnames = async () => {
-    const values = await axios.get("/showbatches");
-    setbatches(values.data);
-    console.log(values);
-  };
-  useEffect(() => {
-    batchnames();
-  }, []);
+  
 
+  const callstate=async ()=>{
+    console.log("this is called")
+    const val= await axios.get("/callstate")
+    console.log(val);
+    setcollegestate(val.data)
+
+  }
+  const checkmail=()=>{
+    const validateEmail=()=> 
+    {
+        var re = /\S+@\S+\.\S+/;
+        return re.test(values.email);
+    }
+    if(validateEmail('anystring@anystring.anystring')){}else{
+
+      setopenmail(true)
+    }
+
+  }
+ 
+    
+
+ 
+  
+useEffect(() => {
+  callstate()
+}, []);
+
+const Dtfun=()=>{
+ const val= values.dt_no
+ const secondpart=val.slice(2, );
+ var reg = new RegExp('^[0-9]*$');
+ if(val.startsWith('DT')&& secondpart.length==11&&reg.test(secondpart)){
+  
+ }else{
+  
+  setDtopen(true)
+  
+ }
+}
   return (
-    <div className="wrap-fullScreen">
+    <div className="rwap-fullScreen">
+
+      
       <Header login />
+      
 
       {state ? (
         <div className="newform" style={{height:"80%"}}>
           <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}} >
-            <button style={{}} className="btn" onClick={() => setstate(true)}>User</button>
-            <button style={{}} className="btn" onClick={() => setstate(false)}>Admin</button>
+          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >User</button>}
+            
+            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >User</button>}
           </div>
           <div className="login" style={{height:"100%"}}>
             <form
@@ -145,18 +214,23 @@ const Login = () => {
                     type="text"
                     onChange={(e) => updatevalue(e, "email")}
                     value={values["email"]}
+                    onClick={()=>(setopenmail(false))}
                     required
                     placeholder="email"
+                    onBlur={()=>(checkmail())}
                   />
 
-                  <select onChange={(e) => updatevalue(e, "batch_id")}>
-                    <option hiddenvalue="">Please batch</option>
-                    {batches.map((e) => (
+                  {openmail&&<span style={{color:"red"}}>Please check your mail id</span>}
+                  <select onChange={(e) => updatevalue(e, "state")}>
+                    <option hiddenvalue="">Select state</option>
+                    {collegestate.map((e) => (
                       <option value={e.id} key={e.id}>
-                        {e.name}
+                        {e.state}
                       </option>
                     ))}
                   </select>
+
+                  
                 </div>
                 <div className="loginFormcontainer">
                   <input
@@ -164,8 +238,12 @@ const Login = () => {
                     onChange={(e) => updatevalue(e, "dt_no")}
                     value={values["dt_no"]}
                     required
+                    onClick={()=>(setDtopen(false))}
+  
                     placeholder="DT number"
+                    onBlur={()=>{Dtfun()}}
                   />
+                  {Dtopen&&<span style={{color:"red"}}>"Please check you DT number"</span>}
 
                   <select onChange={(e) => updatevalue(e, "stream")}>
                     <option hiddenvalue="">Stream</option>
@@ -183,27 +261,31 @@ const Login = () => {
                     required
                     placeholder="Enrollment number"
                   />
+                  <select onChange={(e) => updatevalue(e, "batch_id")}>
+                    <option hiddenvalue="">Please batch</option>
+                    {batches.map((e) => (
+                      <option value={e.id} key={e.id}>
+                        {e.name}
+                      </option>
+                    ))}
+                  </select>
 
-                  <input
-                    type="text"
-                    onChange={(e) => updatevalue(e, "college")}
-                    value={values["college"]}
-                    required
-                    placeholder="College Name"
-                  />
+                  
                 </div>
               </div>
-              <button className="btn" style={{width:"100%"}} type="submit">
+              <button className="btn" style={{width:"100%"}} disabled={((Dtopen )|| ( openmail))} type="submit">
                 Submit
               </button>
             </form>
-          </div>
+          </div>                                     
         </div>
       ) : (
         <>
+          <div className="bag">
           <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}}>
-            <button className="btn" onClick={() => setstate(true)}>User</button>
-            <button className="btn" onClick={() => setstate(false)}>Admin</button>
+          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >Admin</button>}
+            
+            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >Admin</button>}
           </div>
           <form className="login" onSubmit={login}>
             <input
@@ -230,6 +312,7 @@ const Login = () => {
               Sign in
             </button>
           </form>
+          </div>
         </>
       )}
     </div>

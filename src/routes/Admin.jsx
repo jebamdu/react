@@ -14,6 +14,8 @@ import Report from "./Report";
 import axios from "../instance/axios";
 import Notification from "./Notification";
 import Validate from "./Validate";
+import Addnewsection from "./Addnewsection";
+import Viewnewsection from "./viewnewsection";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -56,6 +58,7 @@ const Admin = () => {
             <Route path="exams/:levelID/:catID" element={<Exams />} />{" "}
             {/*list of questions */}
             <Route path="exams/:levelID/:catID/:inner_catid" element={<Exams />} />{" "}
+            
             <Route path="createExam" element={<Create_Exam />} />{" "}
             {/*to create new exams(level) */}
             <Route path="notification" element={<Notification values={notify}/>} />
@@ -77,6 +80,9 @@ const Admin = () => {
                 // </div>
               }
             />{" "}
+            <Route path="/createExam/:catID/newtype" element={<Addnewsection/>}/>
+            <Route path="/createExam/:catID/newtype/view" element={<Viewnewsection/>}/>
+
             {/* to create questions*/}
             <Route path="trainerCreation/*" element={<Trainer />} />
             {/* <Route path="trainerCreation/:Updateshow" element={<Trainer />} /> */}

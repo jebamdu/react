@@ -126,7 +126,7 @@ a {
 }
 .user-header {
   justify-content: space-between;
-  height: 19%;
+  /* height: 19%; */
 }
 /* .app::has(.scoreboard) {
   height: 100vh;
@@ -149,6 +149,22 @@ a {
   outline: none;
   border: none;
   background-color: rgba(165, 42, 42, 0.295);
+}
+.btnright{
+  background-color: transparent;
+  border: none;
+  color: red;
+  float:right;
+  margin-bottom: 15px;
+  padding:8px 25px 8px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  order: 3;
+  margin-top: -20rem 
+  
+}
+.btnright :hover{
+  box-shadow: 0 0 5px rgb(213, 22, 22);
 }
 
 @media screen and (min-width: 700px) {

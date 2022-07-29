@@ -15,26 +15,49 @@ const Showinnerlevel = () => {
   const [Slevel, setSlevel] = useState([]);
   const [opentab, setopentab] = useState(false);
   const [openbtn, setopenbtn] = useState();
-  
+  const [openpractice, setopenpractice] = useState(true);
+  const [stream, setstream] = useState("");
+  const [level_fun, setlevel_fun] = useState(0);
+
   const [call, setcall] = useState({
     // [Level[0].id]: true,
     // [Level[1].id]: true,
   });
   console.log(opentab);
 
-
-  const callinneroff=async()=>{
-    const val= await axios.get("/callinneroff",{params:{"email":email,"level":levels}})
+  const callinneroff = async (streamname) => {
+    console.log("Function is calling");
+    const val = await axios.get("/callinneroff", {
+      params: { email: email, level: levels, stream: streamname },
+    });
     console.log(val);
-    setopenbtn(val.data.id)
-  }
-  if(levels>0){
-    // useEffect(() => {
-    callinneroff()
-      
-    // }, [levels]);
-  }
-  
+    if (val.data == "allow") {
+      console.log("function is working");
+      setopenpractice(false);
+      setopenbtn(true);
+    } else {
+      console.log("This part is working");
+      console.log(val.data.id);
+      setopenbtn(val.data.id);
+      console.log(openbtn);
+    }
+  };
+
+  // useEffect(() => {
+
+  // }, [levels]);
+
+  useEffect(() => {
+    const streamname = localStorage.getItem("stream");
+    console.log(streamname, "This is streaming");
+    setstream(streamname);
+    if (levels > 0) {
+      callinneroff(streamname);
+    }
+
+    setopenpractice(true);
+  }, [levels]);
+
   const calloffbtn = async () => {
     const val = await axios.post("/calloffbtn", { email: email });
     console.log(val, "this is calloff function");
@@ -46,7 +69,10 @@ const Showinnerlevel = () => {
     // else{
     //   console.log(Level," now This is working");
     // }
-   
+    const streamname = localStorage.getItem("stream");
+    if (streamname == "Engineering") {
+      return setcall({ 20: true, 23: false });
+    }
 
     if (Array.isArray(val.data) && val.data.length > 0) {
       setcall({ 20: true, 23: false }); //[1,2,...]
@@ -78,6 +104,13 @@ const Showinnerlevel = () => {
       });
       console.log("lelvvel", level);
       setSlevel(level.data);
+      const level_array=localStorage.getItem("levelarr")
+      if(!level_array){
+        localStorage.setItem("levelarr",JSON.stringify(level.data))
+      }
+      const level_array1=JSON.parse(localStorage.getItem("levelarr"))
+      console.log(level_array1[0]['id'],"LEvel functin call is working");
+      setlevel_fun(level_array1[0]['id'])
     } else {
       const level = await axios.get("/shown", {
         params: {
@@ -85,7 +118,7 @@ const Showinnerlevel = () => {
           type: null,
         },
       });
-      console.log("from level 72",level.data);
+      console.log("from level 72", level.data);
       setLevel(level.data);
       callname();
     }
@@ -104,7 +137,16 @@ const Showinnerlevel = () => {
   };
   const passingid = (id) => {
     navigate(`/user/innerLevel/${name}/${id}`);
-    
+  };
+  const disfun = (i) => {
+    console.log(i, "this is i");
+    if (openpractice == false) {
+      return false;
+    } else {
+      console.log("calling by else part");
+      console.log(openbtn);
+      return i.id != openbtn;
+    }
   };
 
   return (
@@ -160,11 +202,20 @@ const Showinnerlevel = () => {
         </>
       ) : (
         <>
+          <button
+            className="btnright"
+            onClick={() =>{ navigate(`/user/innerlevel/${Name}`)
+            localStorage.removeItem("levelarr")}}
+          >
+            Back
+          </button>
+
           <div className="levels">
             {Slevel.map((i, l) => (
               <button
                 className="btn"
-                disabled={i.id!=openbtn}
+                disabled={i.id!=level_fun}
+                openbtn={openbtn}
                 //to block all put true
                 // other wise put i.id!==50 ||  51  || 52
                 onClick={() => {
