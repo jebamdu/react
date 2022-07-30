@@ -6,6 +6,7 @@ const Header = ({ user, login }) => {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("logedin");
+    localStorage.removeItem("levelarr");
     navigate("/");
   };
   return (

@@ -21,19 +21,13 @@ const Admin = () => {
   const navigate = useNavigate();
   const [notify, setnotify] = useState(null);
 
-  const notification_fun = async () => {
-    const notification = await axios.get("/ended_batch");
-    console.log(notification, "notification");
-    if (notification.data != "none") {
-      setnotify(notification.data);
-    }
-  };
+ 
   
   useEffect(() => {
     //to check the user is loged in as admin
     const d = localStorage.getItem("logedin");
     if (d !== "admin") navigate("/");
-    notification_fun();
+  
   }, []);
 
   return (

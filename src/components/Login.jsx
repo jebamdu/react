@@ -221,7 +221,8 @@ const Dtfun=()=>{
                   />
 
                   {openmail&&<span style={{color:"red"}}>Please check your mail id</span>}
-                  <select onChange={(e) => updatevalue(e, "state")}>
+                  
+                  <select required onChange={(e) => updatevalue(e, "state")}>
                     <option hiddenvalue="">Select state</option>
                     {collegestate.map((e) => (
                       <option value={e.id} key={e.id}>
@@ -245,7 +246,9 @@ const Dtfun=()=>{
                   />
                   {Dtopen&&<span style={{color:"red"}}>"Please check you DT number"</span>}
 
-                  <select onChange={(e) => updatevalue(e, "stream")}>
+                  <select
+                    required
+                   onChange={(e) => updatevalue(e, "stream")}>
                     <option hiddenvalue="">Stream</option>
                     {stream.map((e, l) => (
                       <option value={e} key={l}>
@@ -261,7 +264,7 @@ const Dtfun=()=>{
                     required
                     placeholder="Enrollment number"
                   />
-                  <select onChange={(e) => updatevalue(e, "batch_id")}>
+                  <select required onChange={(e) => updatevalue(e, "batch_id")}>
                     <option hiddenvalue="">Please batch</option>
                     {batches.map((e) => (
                       <option value={e.id} key={e.id}>
