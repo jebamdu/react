@@ -120,35 +120,28 @@ function importCSV(e) {
 }
 
 const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
-  const call_qus = (val) => {
-    return val.qus;
-  };
-  let myval = call_qus(qus);
 
-  // console.log(qus);
+  qus.qus = qus.qus.replace(/(?:\n\r|\n|\r)/g, "<br/>");
+  let urlmatch = qus.qus.match(/(https?):\/\/(www\.)?[a-z0-9\.:].*?(?=\s)/ig);
 
   const updateValue = (val, field) => {
     console.log(val, field);
-    return setQuestions(
-      (
-        p //[{},{}]
-      ) =>
-        p.map((q) => {
-          if (q.id === qus.id) {
-            if (user) {
-              q.user_ans = val;
-              return q;
-            }
-            //only for admin
-            if (typeof field === "number") {
-              q.options[field] = val;
-              return q;
-            }
-            q[field] = val;
-            return q;
-          }
+    return setQuestions(p => p.map((q) => {
+      if (q.id === qus.id) {
+        if (user) {
+          q.user_ans = val;
           return q;
-        })
+        }
+        //only for admin
+        if (typeof field === "number") {
+          q.options[field] = val;
+          return q;
+        }
+        q[field] = val;
+        return q;
+      }
+      return q;
+    })
     );
   };
 
@@ -183,11 +176,11 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
               // disabled={user}
               // dangerouslySetInnerHTML={}
               dangerouslySetInnerHTML={{
-                __html: qus.qus.replace(/(?:\n\r|\n|\r)/g, "<br/>"),
+                __html: urlmatch ? urlmatch.reduce((preval, curval) => preval.replace(curval, `<a  target="_blank" href=${curval}>${curval}</a>`), qus.qus) : qus.qus,
               }}
-              // onChange={(e) => updateValue(e.target.value, "qus")}
+            // onChange={(e) => updateValue(e.target.value, "qus")}
             >
-            
+
             </div>
             <br />
           </>
@@ -208,7 +201,7 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
           </>
         )}
       </div>
-      
+
       {Array.apply(null, Array(4)).map((q, i) => (
         <div key={i} className="qus_option">
           <input

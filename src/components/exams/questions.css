@@ -30,6 +30,11 @@ margin-bottom: 3%;
     font-size: 2rem;
     max-width: 90vw;
 }
+/* to convert anchor tag be accessible  */
+.qus_text>a {
+    z-index: 10;
+    position: relative;
+}
 
 .qus_option {
     font-size: 2rem;
