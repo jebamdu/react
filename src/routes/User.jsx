@@ -336,6 +336,12 @@ const WriteExam = ({ setHeadervisibility }) => {
     if (QTime.current.length > currentQuestionRef.current + 1) {
       currentQuestionRef.current += 1;
       setCurrentQuestion((p) => p + 1);
+       const c_qus=JSON.parse(localStorage.getItem("c_qus"))
+      localStorage.setItem("c_qus",JSON.stringify(c_qus+1))
+      console.log(c_qus+1,"This is c_qus");
+      const c_ref=JSON.parse(localStorage.getItem("c_ref"))
+      localStorage.setItem("c_ref",JSON.stringify(c_ref))
+
 
       //assign the time for the current question
       setQuestionTime(QTime.current[currentQuestionRef.current].time);
@@ -361,11 +367,18 @@ const WriteExam = ({ setHeadervisibility }) => {
 
   const fetchQuestion = async () => {
     const res = await axios.get(`/shownnew`, { params: { type: catID } });
-    let { data } = res;
-    data=[...data[0],...data[1]]
-    // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
-    //console.log(data);
-
+   
+    const qus_sets= JSON.parse(localStorage.getItem("questionset"))
+    if(!qus_sets){
+      localStorage.setItem("questionset",JSON.stringify(res))
+      localStorage.setItem("c_qus",0)
+      localStorage.setItem("c_ref",0)
+      
+      let { data }=res;
+    
+    
+      data=[...data[0],...data[1]]
+      
     setQuestions(
       data.map((q, i) => ({
         id: q.id,
@@ -377,10 +390,6 @@ const WriteExam = ({ setHeadervisibility }) => {
         describtion: q.describtion,
       }))
     );
-    //settimeout //use data q.time
-
-    //for timer module
-    //getting the time from the source
     QTime.current = data.map((q, i) => ({
       time: q.time, //1, //i === 1 || i === 0 ? 10 :
     }));
@@ -402,6 +411,52 @@ const WriteExam = ({ setHeadervisibility }) => {
       setQuestionTime((p) => p - 1);
     }, 1000);
     console.log(timeIntervalset);
+    }
+    else{
+      const qus_sets2= eval(JSON.parse(localStorage.getItem("questionset")))
+      console.log(qus_sets2);
+      
+      
+      const c_qus=JSON.parse(localStorage.getItem("c_qus"))
+      const c_ref=JSON.parse(localStorage.getItem("c_ref"))
+      setCurrentQuestion(c_qus)
+      console.log(currentQuestion);
+     
+      
+      
+      //data=[...data[0],...data[1]]
+      setQuestions(qus_sets2)
+      QTime.current = qus_sets2.map((q, i) => ({
+        time: q.time, //1, //i === 1 || i === 0 ? 10 :
+      }));
+  
+      // set the time out for the first question
+      timeOUTset.current = setTimeout(
+        mytime,
+        QTime.current[currentQuestion].time * 1000
+      );
+  
+      // set first questions total time
+      setQuestionTime(QTime.current[currentQuestion].time);
+  
+      // clean up the timer interval for user display for first question
+      clearInterval(timeIntervalset.current);
+  
+      // first question timer setting
+      timeIntervalset.current = setInterval(() => {
+        setQuestionTime((p) => p - 1);
+      }, 1000);
+      console.log(timeIntervalset);
+    }
+   
+    // console.log(data, data.map(q => ({ id: q.id, qus: q.ques, options: eval(q.ans) })));
+    //console.log(data);
+    
+    //settimeout //use data q.time
+
+    //for timer module
+    //getting the time from the source
+   
 
     //
   };
@@ -421,6 +476,13 @@ const WriteExam = ({ setHeadervisibility }) => {
       ans: questions.map((a) => eval(a.user_ans)),
       id: questions.map((a) => (a.id)), //[{}]
     });
+    console.log(data);
+    if(data){
+      localStorage.removeItem("questionset")
+      localStorage.removeItem("c_qus")
+      localStorage.removeItem("c_ref")
+
+    }
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
   };
@@ -431,6 +493,9 @@ topRef.current.scrollIntoView({block:"center",behaviour:"smooth"})
  }
   const nextQuestion = () => {
    scrolltop()
+   const c_qus=JSON.parse(localStorage.getItem("c_qus"))
+ 
+   localStorage.setItem("questionset",JSON.stringify(questions))
 
     console.log(questions);
     if (questions[currentQuestion].user_ans < 0)

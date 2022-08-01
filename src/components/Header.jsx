@@ -7,6 +7,9 @@ const Header = ({ user, login }) => {
   const logout = () => {
     localStorage.removeItem("logedin");
     localStorage.removeItem("levelarr");
+    localStorage.removeItem("questionset")
+    localStorage.removeItem("c_qus")
+
     navigate("/");
   };
   return (

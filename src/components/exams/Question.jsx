@@ -152,6 +152,7 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
       {qus.image && (
         <div className="img">
           <img className="QusImage" src={qus.image} alt="Loading..." />
+          <div style={{ position: "relative" }}>
           <h3
             dangerouslySetInnerHTML={{
               __html: qus.describtion.replace(/\n/g, "</br>"),
@@ -159,6 +160,7 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
           >
             {}
           </h3>
+          </div>
         </div>
       )}
       <div style={{ position: "relative" }}>
