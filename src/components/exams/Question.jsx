@@ -120,39 +120,45 @@ function importCSV(e) {
 }
 
 const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
-
   qus.qus = qus.qus.replace(/(?:\n\r|\n|\r)/g, "<br/>");
-  let urlmatch = qus.qus.match(/(https?):\/\/(www\.)?[a-z0-9\.:].*?(?=\s)/ig);
+  let urlmatch = qus.qus.match(/(https?):\/\/(www\.)?[a-z0-9\.:].*?(?=\s)/gi);
 
   const updateValue = (val, field) => {
     console.log(val, field);
-    return setQuestions(p => p.map((q) => {
-      if (q.id === qus.id) {
-        if (user) {
-          q.user_ans = val;
+    return setQuestions((p) =>
+      p.map((q) => {
+        if (q.id === qus.id) {
+          if (user) {
+            q.user_ans = val;
+            return q;
+          }
+          //only for admin
+          if (typeof field === "number") {
+            q.options[field] = val;
+            return q;
+          }
+          q[field] = val;
           return q;
         }
-        //only for admin
-        if (typeof field === "number") {
-          q.options[field] = val;
-          return q;
-        }
-        q[field] = val;
         return q;
-      }
-      return q;
-    })
+      })
     );
   };
- 
+
   return (
     <div className="question">
       <label className="Questionno">Question {num}</label>
-      
+
       {qus.image && (
         <div className="img">
           <img className="QusImage" src={qus.image} alt="Loading..." />
-          <h3 dangerouslySetInnerHTML={{__html: qus.describtion.replace(/\n/g, '</br>') }}>{}</h3>
+          <h3
+            dangerouslySetInnerHTML={{
+              __html: qus.describtion.replace(/\n/g, "</br>"),
+            }}
+          >
+            {}
+          </h3>
         </div>
       )}
       <div style={{ position: "relative" }}>
@@ -178,13 +184,19 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
               // disabled={user}
               // dangerouslySetInnerHTML={}
               dangerouslySetInnerHTML={{
-                __html: urlmatch ? urlmatch.reduce((preval, curval) => preval.replace(curval, `<a  target="_blank" href=${curval}>${curval}</a>`), qus.qus) : qus.qus,
+                __html: urlmatch
+                  ? urlmatch.reduce(
+                      (preval, curval) =>
+                        preval.replace(
+                          curval,
+                          `<a  target="_blank" href=${curval}>${curval}</a>`
+                        ),
+                      qus.qus
+                    )
+                  : qus.qus,
               }}
-            // onChange={(e) => updateValue(e.target.value, "qus")}
-            >
-
-            </div>
-          
+              // onChange={(e) => updateValue(e.target.value, "qus")}
+            ></div>
           </>
         ) : (
           <>
@@ -212,12 +224,27 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
             required
             onChange={(e) => updateValue(i, "ans")}
           />
-          <input
-            type="text"
-            disabled={user}
-            value={qus.options[i]}
-            onChange={(e) => updateValue(e.target.value, i)}
-          />
+          {/* {user ? ( */}
+            <div
+              style={{
+                border: "2px solid rgba(118, 118, 118, 0.3)",
+                paddingLeft: "0.5rem",
+                backgroundColor: "rgba(239, 239, 239, 0.3)",
+                color: "rgb(84, 84, 84)",
+              }}
+              className="bigScreenOption"
+            >
+              {qus.options[i]}
+            </div>
+          {/* ) : ( */}
+            <input
+              type="text"
+              disabled={user}
+              className="smallScreenOption"
+              value={qus.options[i]}
+              onChange={(e) => updateValue(e.target.value, i)}
+            />
+          {/* )} */}
         </div>
       ))}
     </div>

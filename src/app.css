@@ -25,9 +25,21 @@
   width: 40rem;
 }
 
+.bigScreenOption {
+  display: block;
+}
+.smallScreenOption {
+  display: none;
+}
 @media screen and (max-width: 600px) {
   .loginSubmit {
     margin-left: 0px !important;
+  }
+  .bigScreenOption {
+    display: none;
+  }
+  .smallScreenOption {
+    display: block;
   }
   .login {
     margin-left: 0px !important;
