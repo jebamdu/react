@@ -276,7 +276,7 @@ const Dtfun=()=>{
                   
                 </div>
               </div>
-              <button className="btn" style={{width:"100%"}} disabled={((Dtopen )|| ( openmail))} type="submit">
+              <button className="btn loginSubmit" style={{width:"100%"}} disabled={((Dtopen )|| ( openmail))} type="submit">
                 Submit
               </button>
             </form>

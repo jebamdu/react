@@ -96,8 +96,8 @@
   font-size: 30px;
 }
 .rwap-fullScreen{
-  background-image: url"(../assets/mobileapp.jpg)";
-  height: 1080 px;
+  background-image: url(../assets/mobileapp.jpg);
+  /* height: 1080px; */
   width: 100%;
 }
 .btnstate{
