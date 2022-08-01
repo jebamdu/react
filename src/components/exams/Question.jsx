@@ -144,10 +144,11 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
     })
     );
   };
-
+ 
   return (
     <div className="question">
       <label className="Questionno">Question {num}</label>
+      
       {qus.image && (
         <div className="img">
           <img className="QusImage" src={qus.image} alt="Loading..." />
@@ -168,6 +169,7 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
               // disabled={user}
               // onChange={(e) => updateValue(e.target.value, "qus")}
             >{qus.qus}</textarea> */}
+            <br />
             <div
               className="qus_text"
               // style={{ pointerEvents: "none" }}
@@ -182,13 +184,13 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
             >
 
             </div>
-            <br />
+          
           </>
         ) : (
           <>
             {/* <div className="hide123" style={{opacity: 1,width:"5rem",height:"5rem",background:"black"}}>
           </div> */}
-
+            <br />
             <textarea
               className="qus_text"
               type="text"

@@ -12,7 +12,8 @@ const Viewscore=(props)=>{
     const email=localStorage.getItem("email")
     const lev_id=useRef(null)
    
-    const level=props.data
+    const templevel=props.data
+    const level=templevel.slice(0,2);
     const tab=props.tab
    
     console.log(level)

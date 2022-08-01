@@ -424,8 +424,12 @@ const WriteExam = ({ setHeadervisibility }) => {
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
   };
-
+ const scrolltop=()=>{
+  window.scrollTo({top:0,behavior:"smooth"})
+ }
   const nextQuestion = () => {
+   scrolltop()
+
     console.log(questions);
     if (questions[currentQuestion].user_ans < 0)
       return alert("Please select the answer");
@@ -440,7 +444,7 @@ const WriteExam = ({ setHeadervisibility }) => {
   // console.log("question", questions);
   // console.log("currentQuestion", currentQuestion);
 
-
+  
   return (
     <>
       {catID ? (

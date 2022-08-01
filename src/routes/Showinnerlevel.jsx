@@ -20,7 +20,7 @@ const Showinnerlevel = () => {
   const [level_fun, setlevel_fun] = useState(0);
 
   const [call, setcall] = useState({
-    // [Level[0].id]: true,
+    //[Level[0].id]: true,
     // [Level[1].id]: true,
   });
   console.log(opentab);
@@ -71,6 +71,9 @@ const Showinnerlevel = () => {
     // }
     const streamname = localStorage.getItem("stream");
     if (streamname == "Engineering") {
+      if(!Array.isArray(val.data)){        
+        return setcall({ 20: true, 23: true });}
+
       return setcall({ 20: true, 23: false });
     }
 
@@ -81,6 +84,7 @@ const Showinnerlevel = () => {
       setcall({ 20: false, 23: true });
     } else if (!Array.isArray(val.data)) {
       setcall({ 20: true, 23: true });
+      console.log("This need to work");
       // setcall("both"); //{}
     } else {
       alert("Something went wrong");
