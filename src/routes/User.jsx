@@ -424,8 +424,10 @@ const WriteExam = ({ setHeadervisibility }) => {
     // alert(`You got ${data}/${questions.length}`);
     navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
   };
+  const topRef=useRef(null)
  const scrolltop=()=>{
-  window.scrollTo({top:0,behavior:"smooth"})
+  // window.scrollTo({top:0,behavior:"smooth"})
+topRef.current.scrollIntoView({block:"center",behaviour:"smooth"})
  }
   const nextQuestion = () => {
    scrolltop()
@@ -449,7 +451,7 @@ const WriteExam = ({ setHeadervisibility }) => {
     <>
       {catID ? (
         <>
-          <h1 style={{ marginLeft: "1rem", marginTop: "1rem" }}>Questions</h1>
+          <h1 ref={r=>topRef.current=r} style={{ marginLeft: "1rem", marginTop: "1rem" }}>Questions</h1>
 
           
           <form onSubmit={submit} className="answer_form">
