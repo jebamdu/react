@@ -153,6 +153,10 @@ const QuestionTemplate = ({ num = "", qus = {}, setQuestions, user }) => {
         <div className="img">
           <img className="QusImage" src={qus.image} alt="Loading..." />
           <div style={{ position: "relative" }}>
+          <div
+              className=""
+              style={{ width: "100%", height: "100%", position: "absolute" }}
+            ></div>
           <h3
             dangerouslySetInnerHTML={{
               __html: qus.describtion.replace(/\n/g, "</br>"),

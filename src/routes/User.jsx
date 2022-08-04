@@ -76,6 +76,7 @@ const YourScore = () => {
   }, []);
 
   const Marksstatement = () => {
+
     if (mark > 0) {
       const value = (mark / totalMark) * 100;
       setpercent(value);
@@ -370,9 +371,7 @@ const WriteExam = ({ setHeadervisibility }) => {
    
     const qus_sets= JSON.parse(localStorage.getItem("questionset"))
     if(!qus_sets){
-      localStorage.setItem("questionset",JSON.stringify(res))
-      localStorage.setItem("c_qus",0)
-      localStorage.setItem("c_ref",0)
+      
       
       let { data }=res;
     
@@ -389,7 +388,19 @@ const WriteExam = ({ setHeadervisibility }) => {
         image: q.image,
         describtion: q.describtion,
       }))
+      
     );
+    localStorage.setItem("questionset",JSON.stringify(data.map((q, i) => ({
+      id: q.id,
+      qus: q.ques,
+      user_ans: -1,
+      time: q.time,
+      options: eval(q.ans),
+      image: q.image,
+      describtion: q.describtion,
+    }))))
+      localStorage.setItem("c_qus",0)
+      localStorage.setItem("c_ref",0)
     QTime.current = data.map((q, i) => ({
       time: q.time, //1, //i === 1 || i === 0 ? 10 :
     }));
@@ -467,24 +478,35 @@ const WriteExam = ({ setHeadervisibility }) => {
 
   const submit = async (e) => {
     e?.preventDefault();
+    
+    const times=localStorage.getItem("times")
+    
+    
     clearTimeout(timeOUTset.current);
     clearInterval(timeIntervalset.current);
     console.log(questions);
-    const { data } = await axios.post("/studreport", {
-      type_id: catID,
-      email: localStorage.getItem("email"),
-      ans: questions.map((a) => eval(a.user_ans)),
-      id: questions.map((a) => (a.id)), //[{}]
-    });
-    console.log(data);
-    if(data){
-      localStorage.removeItem("questionset")
-      localStorage.removeItem("c_qus")
-      localStorage.removeItem("c_ref")
 
+
+    if(!times){
+      localStorage.setItem("times",0)
+      const { data } = await axios.post("/studreport", {
+        type_id: catID,
+        email: localStorage.getItem("email"),
+        ans: questions.map((a) => eval(a.user_ans)),
+        id: questions.map((a) => (a.id)), //[{}]
+      });
+      console.log(data);
+      if(data){
+        localStorage.removeItem("questionset")
+        localStorage.removeItem("c_qus")
+        localStorage.removeItem("c_ref")
+  
+      }
+      // alert(`You got ${data}/${questions.length}`);
+      navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
+      
     }
-    // alert(`You got ${data}/${questions.length}`);
-    navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
+   
   };
   const topRef=useRef(null)
  const scrolltop=()=>{
@@ -643,6 +665,7 @@ const Innercontainer = (mark) => {
                 level_array1.shift()
                 console.log(level_array1,"This is new");
                 localStorage.setItem("levelarr",JSON.stringify(level_array1))
+                localStorage.removeItem("times")
                 navigate(`/User/innerLevel/${"name"}/${mark.level}`);
               }}
             >
