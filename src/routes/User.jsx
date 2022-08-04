@@ -689,6 +689,7 @@ const Innercontainer = (mark) => {
                 level_array1.shift()
                 console.log(level_array1,"This is new");
                 localStorage.setItem("levelarr",JSON.stringify(level_array1))
+                localStorage.removeItem("times")
               navigate(`/user/innerLevel/${mark.name||"name"}/${mark.level}`);
             
             //user/innerLevel/vmm/23
