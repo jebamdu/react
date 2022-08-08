@@ -209,7 +209,8 @@ const Showinnerlevel = () => {
           <button
             className="btnright"
             onClick={() =>{ navigate(`/user/innerlevel/${Name}`)
-            localStorage.removeItem("levelarr")}}
+            localStorage.removeItem("levelarr")
+            localStorage.removeItem("times")}}
           >
             Back
           </button>

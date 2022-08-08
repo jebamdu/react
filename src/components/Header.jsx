@@ -16,7 +16,7 @@ const Header = ({ user, login }) => {
     <div className={user?"header user-header":"user-header  header admin-header"}>
       <div className="left">
         <h1>
-          Mock Test Tool
+          Survey Tool
           {/* <span>program</span> */}
         </h1>
       </div>

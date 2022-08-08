@@ -188,7 +188,7 @@ const  Exams = () => {
                         <div
                           className="fs-20"
                           style={
-                            i === d.c_ans - 1
+                            i === d.Correctans - 1
                               ? { backgroundColor: "#e342428c" }
                               : {}
                           }

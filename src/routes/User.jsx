@@ -676,7 +676,7 @@ const Innercontainer = (mark) => {
       ) : (
         <>
           {" "}
-          <h1>Oops !!!</h1>
+          
           <h1>
             {" "}
             You got only {mark.mark} out of {mark.total}
