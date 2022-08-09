@@ -174,10 +174,20 @@ const Report = () => {
                 //genarate CSV String
 
                 const d = [];
-                for (let a in showbatch[0]) {
-                  d.push(a);
-                  csv += `${a},`;
+                if(setshow_exact_mark){
+                  for (let a in extractdata[0]) {
+                    d.push(a);
+                    csv += `${a},`;
+                  }
                 }
+                else{
+                  for (let a in showbatch[0]) {
+                    d.push(a);
+                    csv += `${a},`;
+                  }
+
+                }
+              
                 csv += "\n";
                 showbatch.forEach((v, i) => {
                   d.forEach((h) => (csv += `${v[h]},`));
