@@ -1,10 +1,28 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams,useLocation } from "react-router-dom";
+
 
 const Instruction = () => {
   const navigate = useNavigate();
+  const location=useLocation()
   const { level,type } = useParams();
   console.log(level,"lev is")
   console.log(type,"cat id is")
+
+
+  useEffect(() => {
+   const lockpath=localStorage.getItem("lockpath") 
+   if(lockpath){
+    console.log(location.pathname);
+    localStorage.setItem("lockpath",location.pathname)
+   }
+   else{
+    localStorage.setItem("lockpath",location.pathname)
+   }
+   
+  }, []);
+
+
   return (
     <div className="instruction">
       <h1>Instructions</h1>

@@ -96,6 +96,11 @@ const Showinnerlevel = () => {
     setname(sol.data);
     calloffbtn();
   };
+  
+  setTimeout(function () {
+    var el = document.getElementById('alwaysFetch');
+    el.value = el.value ? window.location.reload() : true;
+}, 0);
 
   const show = async () => {
     if (levels) {
@@ -106,6 +111,7 @@ const Showinnerlevel = () => {
           type: null,
         },
       });
+     
       console.log("lelvvel", level);
       setSlevel(level.data);
       const level_array=localStorage.getItem("levelarr")

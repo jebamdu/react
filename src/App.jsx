@@ -3,10 +3,37 @@ import "./app.css";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import User from "./routes/User";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { useLocation,useNavigate } from 'react-router-dom'
+
 
 function App() {
+ 
+  const location=useLocation()
+  const navigate=useNavigate()
+  
+
+function headerview(){
+
+  const lockpath= localStorage.getItem("lockpath")
+if(lockpath===location.pathname){
+console.log(lockpath);
+const mylock=lockpath.split("/instruction")
+console.log(mylock);
+const newlock=mylock[0]+mylock[1]
+console.log(newlock);
+navigate(newlock)
+
+///user/instruction/23/75[6:18]
+}
+
+
+}
+
+useEffect(() => {
+  headerview()
+});
   // const [aval, setAval] = useState({""});
   // const [data, setData] = useState([]);
   // const fetch = () => {
@@ -16,9 +43,7 @@ function App() {
   //     { id: 3, name: "moo" },
   //   ]);
   // };
-  // useEffect(() => {
-  //   fetch();
-  // }, []);
+  
   // const subForm = (eve) => {
   //   eve.preventDefault();
   // };

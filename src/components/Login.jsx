@@ -67,6 +67,7 @@ const Login = () => {
     setvalues((p) => ({ ...p, [field]: e.target.value }));
     if(field=="state"){
       batchnames(e.target.value);
+      
     }
   };
 

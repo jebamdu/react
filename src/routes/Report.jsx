@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from "react";
+import { CSVDownload } from "react-csv";
 import Table from "../components/Table";
 import axios from "../instance/axios";
 import PopChart from "./PopChart";
@@ -12,7 +13,9 @@ const Report = () => {
   const [idarray, setidarray] = useState([]);
   const [c_lev, setc_lev] = useState();
   const [extractdata, setextractdata] = useState([]);
-  const extractDataRef = useRef([]);
+  const [download, setDownload] = useState(null);
+  const [csvfile, setcsvfile] = useState(null);
+
   const [categoryname, setcategoryname] = useState([]);
   // const [data, setdata] = useState(0);
 
@@ -67,15 +70,15 @@ const Report = () => {
   }
   const extract_stud_detail_mark = async () => {
     console.log(c_lev, "current level");
-    const extract_stud_detail = await axios.post("/extract_stud_detail", {
+    const extract_stud_detail = await axios.post("/extract_stud_detail_csv", {
       id: c_lev,
       cat_id: idarray,
       email: showbatch.map((i) => i["email"]),
     });
     console.log(extract_stud_detail.data);
-    setextractdata(extract_stud_detail.data[0][0]);
-    extractDataRef.current = extract_stud_detail.data[0];
-    setcategoryname(extract_stud_detail.data[1]);
+    setextractdata(
+      extract_stud_detail.data[0].filter((v) => Object.entries(v).length)
+    );
   };
 
   const exact_mar_fun = () => {
@@ -117,36 +120,24 @@ const Report = () => {
           // </form>
         }
       </div>
-      <div className="wrapper" >
+      <div className="wrapper">
         <div className="mainContainer">
           <div className="content">
+            {show_exact_mark && (
+              <button
+                className="btn primary"
+                style={{
+                  width: "max-content",
+                  position: "absolute",
+                  right: "47%",
+                  top: "1%",
+                }}
+                onClick={() => setshow_exact_mark(false)}
+              >
+                back
+              </button>
+            )}
 
-          {show_exact_mark&& <button
-              className="btn primary"
-              style={{
-                width: "max-content",
-                position: "absolute",
-                right: "47%",
-                top: "1%",
-              }}
-              onClick={() => (setshow_exact_mark(false))}
-            >
-              back
-            </button> }
-          {show_exact_mark &&
-            <select
-              className="listbox_stdrep"
-              style={{ right: "550px" }}
-              onChange={(e) =>
-                setextractdata(extractDataRef.current[e.target.value])
-              }
-            >
-              {categoryname.map((e, i) => (
-                <option value={i} key={i}>
-                  {e}
-                </option>
-              ))}
-            </select>}
             <button
               className="btn primary"
               style={{
@@ -159,6 +150,10 @@ const Report = () => {
             >
               View more
             </button>
+
+            {download&&<CSVDownload headers={download} data={extractdata} target="_blank" />}
+            {csvfile&&<CSVDownload headers={csvfile} data={showbatch} target="_blank" />}
+           
             <button
               className="btn primary"
               style={{
@@ -169,51 +164,26 @@ const Report = () => {
               }}
               onClick={() => {
                 console.log("from export");
-                let csv = "";
+                
 
                 //genarate CSV String
-
-                const d = [];
-                if(setshow_exact_mark){
+                if (show_exact_mark) {
+                  let d = []; //["name","email_id","Basic","attempt(B)","Intermediate","attempt(I)"]
                   for (let a in extractdata[0]) {
                     d.push(a);
-                    csv += `${a},`;
                   }
-                }
-                else{
+                  const headers = d.map((d) => ({ label: d, key: d }));
+
+                  setDownload(headers);
+                } else {
+                  let d = []; //["name","email_id","Basic","attempt(B)","Intermediate","attempt(I)"]
                   for (let a in showbatch[0]) {
                     d.push(a);
-                    csv += `${a},`;
                   }
-
-                }
-              
-                csv += "\n";
-                showbatch.forEach((v, i) => {
-                  d.forEach((h) => (csv += `${v[h]},`));
-                  csv += "\n";
-                });
-
-                downloadCSV(
-                  csv,
-                  `report ${Batch.find((d) => d.id == batch_id).name}`
-                );
-
-                function downloadCSV(csv, filename) {
-                  var csvFile;
-                  var downloadLink;
-
-                  //define the file type to text/csv
-                  csvFile = new Blob([csv], { type: "text/csv" });
-                  downloadLink = document.createElement("a");
-                  downloadLink.download = filename;
-                  downloadLink.href = window.URL.createObjectURL(csvFile);
-                  downloadLink.style.display = "none";
-
-                  document.body.appendChild(downloadLink);
-                  downloadLink.click();
-                }
-              }}
+                  const head = d.map((d) => ({ label: d, key: d }));
+                  setcsvfile(head)
+                  
+                }}}
             >
               Export
             </button>

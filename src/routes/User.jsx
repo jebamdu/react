@@ -5,6 +5,7 @@ import {
   Navigate,
   Route,
   Routes,
+  useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
@@ -314,6 +315,7 @@ const WriteExam = ({ setHeadervisibility }) => {
     return () => setHeadervisibility(true);
   }, []);
 
+  
   console.log("levelId isss", levelID);
   console.log("catId isss", catID);
 
