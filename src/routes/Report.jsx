@@ -15,6 +15,7 @@ const Report = () => {
   const [extractdata, setextractdata] = useState([]);
   const [download, setDownload] = useState(null);
   const [csvfile, setcsvfile] = useState(null);
+  const [State, setState] = useState([]);
 
   const [categoryname, setcategoryname] = useState([]);
   // const [data, setdata] = useState(0);
@@ -28,15 +29,22 @@ const Report = () => {
     setlevel(values.data);
   };
 
-  const batch = async () => {
+  
+  const showstateroute=async()=>{
+    const val = await axios.get("/showstate");
+    console.log(val.data);
+    callcatagory();
+    return setState(val.data);
+  }
+  const batch = async (id) => {
     const val = await axios.get("/batches");
     console.log(val.data);
     callcatagory();
     return setBatch(val.data);
-  };
+  }
   // console.log("now", val.id);
   useEffect(() => {
-    batch();
+    batch()
   }, []);
 
   const fetchitem = async (val) => {
@@ -68,19 +76,26 @@ const Report = () => {
       return num;
     }
   }
-  const extract_stud_detail_mark = async () => {
+  const extract_stud_detail_mark = async (id) => {
     console.log(c_lev, "current level");
-    const extract_stud_detail = await axios.post("/extract_stud_detail_csv", {
-      id: c_lev,
+    const jsonobj={id: c_lev,
       cat_id: idarray,
-      email: showbatch.map((i) => i["email"]),
-    });
-    console.log(extract_stud_detail.data);
-    setextractdata(
-      extract_stud_detail.data[0].filter((v) => Object.entries(v).length)
-    );
+      email: showbatch.map((i) => i["email"])}
+    const extract_stud_detail = fetch("http://13.234.49.189/extract_stud_detail_csv", {
+      method: 'POST',body: JSON.stringify(jsonobj)
+      
+    }).then(response=>{return response.json()}).then(data=>{setextractdata(
+      data[0].filter((v) => Object.entries(v).length)
+    )})
+    console.log(extract_stud_detail)
+    // setextractdata(
+    //   extract_stud_detail.data[0].filter((v) => Object.entries(v).length)
+    // );
   };
-
+  const showbatchroute=async(id)=>{
+    
+    // batch(id)
+  }
   const exact_mar_fun = () => {
     setshow_exact_mark(true);
     console.log(idarray, "id array ");
@@ -98,14 +113,38 @@ const Report = () => {
         <h3>Reports</h3>
         {
           // <form onSubmit={fetchitem}>
+          // <select
+          //   // value={val.id}
+          //   className="inputText w-90"
+          //   onChange={(e) =>showbatchroute(e.target.value)}
+          //   // onChange={(e) => fetchitem(e.target.value)}
+          //   // onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
+          // >
+          //   <option hidden value={""}>
+          //     Select State
+          //   </option>
+
+          //   {State.map((e) => (
+          //     <option key={e.id} value={e.id}>
+          //       {e.state}
+          //     </option>
+          //   ))}
+          //   {/* <div className="tablecontainer"></div> */}
+          // </select>
+          // // <br />
+          // // <button type="submit">Submit</button>
+          // // </form>
+        }
+        {Batch&&
+          
           <select
-            // value={val.id}
+           
             className="inputText w-90"
             onChange={(e) => fetchitem(e.target.value)}
-            // onChange={(e) => setval((p) => ({ ...p, id: e.target.value }))}
+           
           >
             <option hidden value={""}>
-              Please select
+              select
             </option>
 
             {Batch.map((e) => (
@@ -113,11 +152,9 @@ const Report = () => {
                 {e.name}
               </option>
             ))}
-            {/* <div className="tablecontainer"></div> */}
+            
           </select>
-          // <br />
-          // <button type="submit">Submit</button>
-          // </form>
+          
         }
       </div>
       <div className="wrapper">

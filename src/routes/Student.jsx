@@ -50,10 +50,13 @@ const Student = () => {
           {/* Addbtn */}
           {/* <button className="addBtn btn btn-text" onClick={() => navigate("../Addbatch")}> Add batches</button> */}
           <div className="content">
-            {stud.map((d) => (
+            {stud.map((d,i) => (
               <Link to={String(d.id)}>
                 <div className="btn primary flex-row jc-sb">
-                  
+                <div className="flex-column">
+                    <div className=" fs-20 card-title">{i+1}</div>
+                    
+                  </div>
                   <div className="flex-column">
                     <div className=" fs-20 card-title">Name</div>
                     <div className="fs-20">{d.name}</div>

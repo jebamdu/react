@@ -9,6 +9,7 @@ const Header = ({ user, login }) => {
     localStorage.removeItem("levelarr");
     localStorage.removeItem("questionset")
     localStorage.removeItem("c_qus")
+    localStorage.removeItem("times")
 
     navigate("/");
   };

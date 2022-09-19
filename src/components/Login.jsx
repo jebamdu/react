@@ -75,7 +75,7 @@ const Login = () => {
     e.preventDefault();
     const val = await axios.post("/login", {
       name: values.name,
-      email: values.email,
+      email: values.email.toLowerCase,
       dt_no: values.dt_no,
       state: values.state,
       enroll_no: values.enroll_no,
@@ -89,7 +89,7 @@ const Login = () => {
     console.log(val, "data values");
     if (val.data.status == "having" || val.data.status == "inserted") {
       localStorage.setItem("logedin", "user");
-      localStorage.setItem("email", values.email);
+      localStorage.setItem("email", values.email.toLocaleLowerCase);
       localStorage.setItem("stream",values.stream)
     
       return navigate("/user");

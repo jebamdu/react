@@ -473,11 +473,34 @@ const WriteExam = ({ setHeadervisibility }) => {
 
     //
   };
+
+  const callupdateroute=async(data)=>{
+    const insertdatacount=localStorage.getItem("insertdatacount")
+    if(!insertdatacount){
+      localStorage.setItem("insertdatacount",0)
+    }
+    const insertdatacont=localStorage.getItem("insertdatacount")  //In insertdatacount ___U have changed
+    const val=await axios.post("/reupdatedata",{"data":data})
+        if(val.data===false&&insertdatacont!==2){
+          insertdatacount+=1;
+          localStorage.setItem("insertdatacount",insertdatacount)
+
+          callupdateroute(data)
+
+
+        }
+        else{
+          localStorage.deleteItem("insertdatacount")
+
+        }
+  }
   useEffect(() => {
     if (!catID) fetch();
     else fetchQuestion();
   }, [levelID, catID]);
-
+  const deltimes=()=>{
+    localStorage.removeItem("times")
+  }
   const submit = async (e) => {
     e?.preventDefault();
     
@@ -487,25 +510,30 @@ const WriteExam = ({ setHeadervisibility }) => {
     clearTimeout(timeOUTset.current);
     clearInterval(timeIntervalset.current);
     console.log(questions);
-
+    
 
     if(!times){
       localStorage.setItem("times",0)
+      const myTimeout = setTimeout(deltimes, 20000)
       const { data } = await axios.post("/studreport", {
         type_id: catID,
         email: localStorage.getItem("email"),
         ans: questions.map((a) => eval(a.user_ans)),
         id: questions.map((a) => (a.id)), //[{}]
       });
-      console.log(data);
-      if(data){
+      console.log(data[0]);
+      if(data[0]['mark']){
         localStorage.removeItem("questionset")
         localStorage.removeItem("c_qus")
         localStorage.removeItem("c_ref")
   
       }
+      if(data[1].result===false){
+        console.log("log from false statement");
+        callupdateroute({"email": localStorage.getItem("email"),"mark":data[0]['mark'],"type_id":data[4]['type'],"markarr":data[3]['markarr']})
+      }
       // alert(`You got ${data}/${questions.length}`);
-      navigate(`/User/yourScore/${data}/${questions.length}/${levelID}`);
+      navigate(`/User/yourScore/${data[0]['mark']}/${questions.length}/${levelID}`);
       
     }
    
