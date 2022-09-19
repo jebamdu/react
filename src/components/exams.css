@@ -36,3 +36,36 @@
     margin-bottom: 3%;
     margin-top: 2%;
 }
+.newtype{
+    float: right !important;
+    max-width: 15vw;
+}
+.list{
+    float: right !important;
+    list-style: none;
+    
+    
+}
+ .lis{
+    display: inline !important;
+    float: right;
+    font-size: larger;
+    font-weight: bolder;
+    padding: 10px;
+    border: 2px solid black;
+    color: red;
+}
+
+.submitbtn{
+    align-items: center !important;
+    max-width: 15vw;
+    
+
+}
+.input_duration{
+    margin-left: 30vw;
+    height: 3vh;
+}
+.qus_text{
+    margin-left: 20px;
+}

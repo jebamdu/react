@@ -156,7 +156,7 @@ const  Exams = () => {
           />
         )}
          {
-         catID&& <button onClick={()=>(navigate(`/admin/createExam/${catID}/newtype`))}>add new type</button>
+         catID&& <button class="btn newtype"onClick={()=>(navigate(`/admin/createExam/${catID}/newtype`))}>add new type</button>
         }
         {inner_catid? (
           <button className="btn primary btn-text" onClick={addelement}>

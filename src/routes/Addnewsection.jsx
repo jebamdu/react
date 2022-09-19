@@ -75,11 +75,15 @@ const Addnewsection = () => {
   return (
     <>
       <h1>ADD NEW SECTION</h1>
-      <h3 onClick={()=>(navigate(`view`))}>View questions</h3>
-      <h3 onClick={()=>(navigate(`/admin/exams`))}>back</h3>
+      <ul class="list">
+      <li class="lis"onClick={()=>(navigate(`view`))}>View questions</li>
+      <li class="lis"onClick={()=>(navigate(`/admin/exams`))}>back</li>
+      </ul>
+     
 
       <input type="file" accept="image/*" ref={(r) => (imgRef.current = r)} />
-      <button
+      <br />
+      <button className="btn"
         onClick={() =>
           setQuestions((P) => [
             ...P,
@@ -97,6 +101,7 @@ const Addnewsection = () => {
       >
         add more
       </button>
+      <br />
       {questions.map((qus, i) => (
         // <div key={i}>
         <Innerinput
@@ -109,8 +114,8 @@ const Addnewsection = () => {
         />
         // </div>
       ))}
-
-      <button onClick={submitfun}>submit</button>
+      <br />
+      <button className="btn submitbtn" onClick={submitfun}>submit</button>
     </>
   );
 };
@@ -132,13 +137,18 @@ const Innerinput = ({ updateValue, index }) => {
           placeholder="description"
           onChange={(e) => updateValue(e.target.value, "descreption")}
         ></textarea>
+        <br />
+        <br />
 
         <textarea
           className="qus_text"
           type="text"
+          placeholder="questions"
           onChange={(e) => updateValue(e.target.value, "question")}
         ></textarea>
+        <br />
         <input
+        class="input_duration"
           type="text"
           placeholder="duration"
           name="correctAn"
@@ -146,6 +156,7 @@ const Innerinput = ({ updateValue, index }) => {
           // value={valuess["crtans"] === i}
           onChange={(e) => updateValue(e.target.value, "time")}
         />
+        <br />
 
         {Array.apply(null, Array(4)).map((q, i) => (
           <div key={i} className="qus_option">
