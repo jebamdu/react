@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NavHead from "../NavHead";
 import addBtn from "../../assets/addBtn.svg";
-import axios from "../../instance/axios";
+import axios from "../../instance/admin";
 
 const ShowLevels = ({}) => {
   const [levelList, setLevelList] = useState([]);
@@ -35,7 +35,7 @@ const ShowLevels = ({}) => {
   };
 
   const insert = async () => {
-    const val = await axios.post("/insert", {
+    const val = await axios.post("https://13.234.49.189/insert", {
       time: popupData, //send as name
       name: null,
     });

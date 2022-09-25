@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import axios from "../instance/axios";
+import axios from "../instance/admin";
 
 const Import = () => {
 

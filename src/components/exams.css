@@ -69,3 +69,25 @@
 .qus_text{
     margin-left: 20px;
 }
+.deletefunction{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: azure;
+    
+    
+    
+}
+.deletefuncenter{
+    display: flex;
+    flex-direction: column;
+    height: 30vh;
+    justify-content: center;
+    align-items: center;
+    width: 50vw;
+    background-color: antiquewhite;
+    
+}

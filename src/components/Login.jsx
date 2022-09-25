@@ -75,7 +75,7 @@ const Login = () => {
     e.preventDefault();
     const val = await axios.post("/login", {
       name: values.name,
-      email: values.email.toLowerCase,
+      email: values.email.toLocaleLowerCase(),
       dt_no: values.dt_no,
       state: values.state,
       enroll_no: values.enroll_no,
@@ -89,7 +89,7 @@ const Login = () => {
     console.log(val, "data values");
     if (val.data.status == "having" || val.data.status == "inserted") {
       localStorage.setItem("logedin", "user");
-      localStorage.setItem("email", values.email.toLocaleLowerCase);
+      localStorage.setItem("email", values.email.toLocaleLowerCase());
       localStorage.setItem("stream",values.stream)
     
       return navigate("/user");
@@ -122,7 +122,7 @@ const Login = () => {
     const { data } = await axios.post("/login", credential);
     if (data.status === "success") {
       localStorage.setItem("logedin", "user");
-      localStorage.setItem("email", credential.userName);
+      localStorage.setItem("email", credential.userName.toLocaleLowerCase());
       navigate("/User");
       //   window.location.href = "/shown";
     } else {

@@ -1,5 +1,5 @@
 import { Component, useEffect, useState } from "react";
-import axios from "../instance/axios";
+import axios from "../instance/admin";
 import { useParams,useNavigate } from "react-router";
 import { useRef } from "react";
 

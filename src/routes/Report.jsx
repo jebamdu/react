@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { CSVDownload } from "react-csv";
 import Table from "../components/Table";
-import axios from "../instance/axios";
+import axios from "../instance/admin";
 import PopChart from "./PopChart";
 
 const Report = () => {
@@ -57,7 +57,7 @@ const Report = () => {
     currentLevel.current = id;
     setc_lev(id);
     if (batch_id) {
-      const values = await axios.get("/stdtable", {
+      const values = await axios.get("https://40wdfjlbtf.execute-api.ap-south-1.amazonaws.com/stdtable", {
         params: { levelid: id, batchid: batch_id },
       });
       console.log(values);
@@ -81,16 +81,11 @@ const Report = () => {
     const jsonobj={id: c_lev,
       cat_id: idarray,
       email: showbatch.map((i) => i["email"])}
-    const extract_stud_detail = fetch("http://13.234.49.189/extract_stud_detail_csv", {
-      method: 'POST',body: JSON.stringify(jsonobj)
-      
-    }).then(response=>{return response.json()}).then(data=>{setextractdata(
-      data[0].filter((v) => Object.entries(v).length)
-    )})
+    const extract_stud_detail =  await axios.post("/extract_stud_detail_csv",jsonobj )
     console.log(extract_stud_detail)
-    // setextractdata(
-    //   extract_stud_detail.data[0].filter((v) => Object.entries(v).length)
-    // );
+    setextractdata(
+      extract_stud_detail.data[0].filter((v) => Object.entries(v).length)
+    );
   };
   const showbatchroute=async(id)=>{
     

@@ -2,7 +2,7 @@ import "react-calendar/dist/Calendar.css";
 import React, { useState } from "react";
 
 import { useEffect } from "react";
-import axios from "../instance/axios";
+import axios from "../instance/admin";
 
 
 const Validate = () => {

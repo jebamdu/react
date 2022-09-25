@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../instance/axios";
+import axios from "../../instance/admin";
 
 const CreateExam = ({ context = "exam" }) => {
     const [data, setData] = useState("");
@@ -9,9 +9,26 @@ const CreateExam = ({ context = "exam" }) => {
     const submit = async e => {
         e.preventDefault();
         if (data) {
-            const d = await insertData('/insert', context === 'exam' ? { time: data, name: 'null' } : { time: 'null', name: data, id: examid })
+            const d = await insertData('https://13.234.49.189/insert', context === 'exam' ? { time: data, name: 'null' } : { time: 'null', name: data, id: examid })
             console.log(d);
             navigate(String(d))
+  
+            // if(context === 'exam'){
+            //     const jsonobj={time:data, name: null}
+            //     const d =await fetch('https://13.234.49.189/insert',{method: 'POST',body: JSON.stringify(jsonobj)}).then(response => response.json()).then(data =>data)
+            //     console.log(d);
+            //     navigate(String(d))
+
+            // }
+            // else{
+            //     const jsonobj={time:null,name:data,id:examid}
+                
+            //     const d = await fetch('https://13.234.49.189/insert',{method: 'POST',body: JSON.stringify(jsonobj)}).then(response => response.json()).then(data =>data)
+            //     console.log(d);
+            //     navigate(String(d))
+            // }
+                
+
         }
     }
     return (

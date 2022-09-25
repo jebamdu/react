@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import axios from "../instance/axios";
+import axios from "../instance/admin";
 import { Axios } from "axios";
 import Import from "./Import";
 
@@ -24,7 +24,7 @@ const Student = () => {
   }, []);
 
   const showstud = async (id) => {
-    const val = await axios.get("/showstds", { params: { id: id } });
+    const val = await axios.get("https://40wdfjlbtf.execute-api.ap-south-1.amazonaws.com/showstds", { params: { id: id } });
     console.log(val);
     setstud(val.data);
   };

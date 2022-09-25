@@ -1,10 +1,12 @@
 import "./exams.css";
 import Table from "./Table";
 import Question from "./exams/Question";
-import axios from "../instance/axios";
+
+import axios from "../instance/admin";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import addBtn from "../assets/addBtn.svg";
+import { useRef } from "react";
 
 
 
@@ -14,9 +16,11 @@ const  Exams = () => {
   const { levelID,catID,inner_catid } = useParams();
   console.log(levelID, catID,"values");
   const [name, setname] = useState([]);
+  
+  const [deletefunctioncall, setdeletefunctioncall] = useState(false);
   const functionname1 =localStorage.getItem("functionname")
   const functionname2=JSON.parse(functionname1)
-
+  const delid=useRef(0)
   console.log(functionname1,"this is functionnnaeme");
 
   const newfunction=()=>{
@@ -27,14 +31,14 @@ const  Exams = () => {
   const fetch = async () => {
 
     if(inner_catid){
-      const { data } = await axios.get("/showncall", {
+      const  data  = await axios.get("/showncall", {
         params: {
           
           type: inner_catid,
         },
       });
-      console.log(data);
-    setExams(data);
+      console.log(data.data);
+    setExams(data.data);
     }
     else{
       const { data } = await axios.get("/shown", {
@@ -51,7 +55,7 @@ const  Exams = () => {
    
    
     
-  };
+  }
 
 
   
@@ -73,13 +77,22 @@ const  Exams = () => {
   const [popData, setpopData] = useState("");
 
   const inserting = async () => {
-    const val = await axios.post("/insert", {
+    // const jsonobj={ name: popData,
+    //     id: levelID,
+    //     time: "null",
+    //     catid:catID}
+    //     console.log(jsonobj);
+    // const val=await fetch("https://13.234.49.189/insert", {
+    //   method: 'POST',body: JSON.stringify(jsonobj)
+      
+    // }).then(response=>{return response.text()}).then()
+    const val = await axios.post("https://13.234.49.189/insert", {
       name: popData,
       id: levelID,
       time: null,
       catid:catID
     });
-    console.log(val.data);
+    console.log(val);
     if(val){
       
     alert("inserted sucessfully")
@@ -121,10 +134,47 @@ const  Exams = () => {
 
   }
   console.log(name);  
-  
+  const deleteroute=(id)=>{
+    console.log(id);
+    delid.current=id;
+    setdeletefunctioncall(true)
+    console.log(deletefunctioncall);
+    
+  }
+  const deletecall=async()=>{
+    const val=await axios.post("/delinnercontainer",{"id":delid.current})
+    console.log(val);
+    if (val.data){
+      alert("deleted sucessfully")
+      setdeletefunctioncall(false)
+      navigate(`/admin/exams/${levelID}/${catID}`)
+      delid.current=0
+    }
+    else{
+      alert("Something went problem")
+      setdeletefunctioncall(false) 
+      navigate(`/admin/exams/${levelID}/${catID}`)
+      delid.current=0
+    }
+  }
+    
+  console.log(deletefunctioncall);
 
   return (
     <>
+    {  deletefunctioncall&&<div className="deletefunction">
+
+      <div className="deletefuncenter">
+        <h1>Do you want to delete</h1>
+        <br />
+        <div><button  className="btn primary btn-text" onClick={()=>(deletecall(delid))}>yes</button>
+        <button  className="btn primary btn-text" onClick={()=>{setdeletefunctioncall(false); delid.current=0}}>No</button></div>
+        
+      </div>
+
+    </div> }
+   
+
       <h1 className="heading">
 
         {" "}
@@ -213,8 +263,22 @@ const  Exams = () => {
                 <div >
                 <Link key={i} to={String(l.id)}>
                   <button className="btn primary" style={{width:"300px"}} >{l.name}</button>
+                  
                     
                 </Link>
+                <svg
+      width="50"
+      height="35"
+      onClick={()=>{deleteroute(l.id)}}
+      viewBox="0 0 77 71"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M19.25 20.7084H16.0417V59.1667C16.0417 60.7359 16.7177 62.2409 17.9211 63.3505C19.1244 64.4601 20.7565 65.0834 22.4583 65.0834H54.5417C56.2435 65.0834 57.8756 64.4601 59.0789 63.3505C60.2823 62.2409 60.9583 60.7359 60.9583 59.1667V20.7084H19.25ZM32.0833 56.2084H25.6667V29.5834H32.0833V56.2084ZM51.3333 56.2084H44.9167V29.5834H51.3333V56.2084ZM53.3161 11.8334L48.125 5.91675H28.875L23.6839 11.8334H9.625V17.7501H67.375V11.8334H53.3161Z"
+        fill="black"
+      />
+    </svg>
                
                 </div>
                 </>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CSVReader from "react-csv-reader";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../instance/axios";
+import axios from "../../instance/admin";
 import "./questions.css";
 
 const Question = () => {
@@ -23,11 +23,19 @@ const Question = () => {
         questions[i].option3,
         questions[i].option4,
       ]);
-      qus.push(questions[i].qus);
-      time.push(questions[i].time);
-      correctans.push(questions[i].ans);
+      
+      console.log(questions[i].qus.length);
+      console.log(questions[i].time.length);
+      console.log(questions[i].ans.length)
+      
+      if(questions[i].qus.length>0){qus.push(questions[i].qus)}else{alert('Excel file format is wrong') ;return navigate("/admin/exams")};
+      
+      if(questions[i].time.length>0){time.push(questions[i].time)}else{alert('Excel file format is wrong');return navigate("/admin/exams")};
+      
+      if(questions[i].ans.length>0){correctans.push(questions[i].ans)}else{alert('Excel file format is wrong');return navigate("/admin/exams")};
     }
     console.log("answer", ans);
+    
     console.log("this is", catid);
     console.log("question", qus);
     console.log("correct ans", correctans);

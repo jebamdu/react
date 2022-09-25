@@ -521,9 +521,11 @@ const WriteExam = ({ setHeadervisibility }) => {
         ans: questions.map((a) => eval(a.user_ans)),
         id: questions.map((a) => (a.id)), //[{}]
       });
-      console.log(data[0]);
-      if(data[0]['mark']){
-        localStorage.removeItem("questionset")
+      console.log(data[0],data[1]);
+      console.log(data[0].mark>=0);
+      if(data[0].mark>=0){
+        console.log("This is dele local storage");
+        localStorage.removeItem('questionset')
         localStorage.removeItem("c_qus")
         localStorage.removeItem("c_ref")
   
@@ -693,9 +695,13 @@ const Innercontainer = (mark) => {
               onClick={() => {
                 const level_array1=JSON.parse(localStorage.getItem("levelarr"))
                 level_array1.shift()
+                console.log("log swithon");
                 console.log(level_array1,"This is new");
                 localStorage.setItem("levelarr",JSON.stringify(level_array1))
                 localStorage.removeItem("times")
+                localStorage.removeItem("questionset")
+                localStorage.removeItem("c_qus")
+                localStorage.removeItem("c_ref")
                 navigate(`/User/innerLevel/${"name"}/${mark.level}`);
               }}
             >
