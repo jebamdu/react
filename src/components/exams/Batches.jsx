@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CSVReader from "react-csv-reader";
-
-
 import axios from "../../instance/axios";
 import Table from "../Table";
+import { Deletelevel, Updatelevel } from "../Exams";
 
 const Batch = () => {
   const [show, setshow] = useState([]);
@@ -28,8 +27,11 @@ const Batch = () => {
           <button className="addBtn btn btn-text" onClick={() => navigate("../Addbatch")}> Add batches</button>
           <div className="content">
             {show.map(d =>
+            <>
+             
               <Link to={String(d.id)}>
-                <div className="btn primary flex-row jc-sb">
+              <div className="btn primary flex-row jc-sb">
+               
                   <div className="flex-column">
                     <div className=" fs-20 card-title">Name</div>
                     <div className="fs-20">{d.name}</div>
@@ -42,8 +44,18 @@ const Batch = () => {
                     <div className=" fs-20 card-title">End</div>
                     <div className="fs-20">{d.end_at}</div>
                   </div>
-                </div>
-              </Link>)}
+                 
+                  </div> 
+               
+              </Link>
+              
+              <Deletelevel name={d.name} id={d.id} batches={"batches"}/>
+              
+              
+              </>)
+              
+              
+              }
           </div>
         </div>
       </div>

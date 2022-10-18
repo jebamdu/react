@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Table from "../components/Table";
 import axios from "../instance/axios";
+import CsvDownload from "react-json-to-csv";
+import csvDownload from "json-to-csv-export";
+
+import * as XLSX from "xlsx";
+
 import "./notification.css";
 
 const Notification = ({ values }) => {
@@ -12,6 +17,7 @@ const Notification = ({ values }) => {
   const [table, settable] = useState(null);
   const [exporttable, setexporttable] = useState([]);
   const [improvement, setimprovement] = useState();
+  const [exportdata, setexportdata] = useState([]); //[[{qus:"vhvh",ans:"jkjk"}],[],[]]  xlsx=>json =>CSV
   const [pop, setpop] = useState(true);
   const [b_name, setb_name] = useState();
   const tablecall = () => {
@@ -35,21 +41,51 @@ const Notification = ({ values }) => {
       alert("You have no Trainee in this batches");
     }
   };
-  useEffect(() => {
-    callexport();
-  }, [id]);
 
-  useEffect(() => {
-    tablecall();
-  }, []);
+  const filledarray = [];
 
-  const openfun=()=>{
-    setpop(false) 
-    
-  }
+  const settingarray = (values) => {
+    const newarray = [];
+    newarray.push(values);
+    filledarray.push(newarray);
+  };
+  const readUploadFile = (e) => {
+    e.preventDefault();
+    if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "array",cellText:false });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet);
+        console.log(worksheet);
+        console.log(json);
+
+        json.forEach(settingarray);
+        setexportdata(filledarray);
+        console.log(filledarray, "array");
+      };
+
+      reader.readAsArrayBuffer(e.target.files[0]);
+    }
+  };
+  const downloadfun = (values, index) => {};
+
+  const dataToConvert = {
+    data: exportdata[0],
+    filename: 1,
+    delimiter: ",",
+    headers: Object.keys(exportdata),
+  };
+  const buttoncall = (values, index) => {};
+
+  const openfun = () => {
+    setpop(false);
+  };
   return (
     <>
-      <div className="navHead">
+      {/* <div className="navHead">
         <h3>Performance growth</h3>
         </div>
     <div className="notification">
@@ -178,7 +214,28 @@ const Notification = ({ values }) => {
         </div>
       )}
     </div>
+ */}
 
+      <label class="form-label" for="customFile">
+        Default file input example
+      </label>
+      <input
+        type="file"
+        class="form-control"
+        id="customFile"
+        onChange={readUploadFile}
+      />
+
+      {exportdata != [] &&
+        exportdata.map((i, l) => (
+          <div className="container">
+            <>
+              <CsvDownload data={exportdata[l]} />
+              <p>{l}</p>
+              <br />
+            </>
+          </div>
+        ))}
     </>
   );
 };

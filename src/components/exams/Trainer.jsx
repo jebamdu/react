@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useParams, Link } from "react-router-dom";
 import axios from "../../instance/axios";
+import { Deletelevel } from "../Exams";
 import Trainspop from "../popups/trainer";
 import Table from "../Table";
 import Batch, { Addbatch, Batchupdate } from "./Batches";
@@ -68,9 +69,11 @@ const Showtrainer = () => {
               Add trainer
             </button>
             <div className="content">
-              {show.map(l => <Link to={String(l.id)}>
+              {show.map(l => <><Link to={String(l.id)}>
                 <div className="btn primary">{l.name}</div>
-              </Link>)}
+              </Link>
+              <Deletelevel name={l.name} id={l.id} deltrainer={"trainer"}/>
+              </>)}
               {/* <Link >
             </Link> */}
             </div>
@@ -121,6 +124,7 @@ CreateTrainer = ({ dValue }) => {
     });
     const end = val.data.status;
     if (end) {
+      console.log("jiiiii");
       navigate("/admin/trainerCreation");
     } else {
       alert("Something went wrong");
@@ -196,6 +200,7 @@ function importCSV(e) {
 
 
 const UpdateTrainer = () => {
+  const navigate=useNavigate()
   const val = useParams();
   const ID = val["ID"];
   //val=val['ID']
@@ -204,17 +209,30 @@ const UpdateTrainer = () => {
   const [Value, setValue] = useState([]);
   const [name, setname] = useState({name:"",id:""});
   console.log(Value);
+
   const fetch = async () => {
     const res = await axios.get("/fetch_U_name", { params: { id: ID } });
     console.log(res);
     setValue(res.data);
     
   };
+  
   useEffect(() => {
     fetch();
   },[ID]);
-  const update_trainer=()=>{
-    console.log("jhbjhb");
+
+  const update_trainer=async()=>{
+    
+    const val=await axios.post("/updatetrainer",{id:ID,name:name.name})  
+    if(val){
+      console.log(val);
+      alert("updated sucessfully");
+      navigate("/admin/trainerCreation")
+    }
+    else{
+      alert("Something went problem")
+      navigate("/admin/trainerCreation")
+    }
   
   }
 
@@ -222,12 +240,13 @@ const UpdateTrainer = () => {
   return (
   <div className="container" style={{height:"100%",width:"100%"}}>
     <div className="innercontainer" style={{height:"250px",width:"120vh" , backgroundColor:"white",textAlign:"center",marginTop:"150px",marginLeft:"150px"}}>
-      <form onSubmit={update_trainer} style={{margin:"10vh"}}>
+      <div style={{margin:"10vh"}}>
         <label style={{fontSize:"20px"}}>Name: </label>
-      <input style={{fontSize:"20px"}}type="text" value={Value.name} onChange={(e)=>(setValue((p)=>({...p,name: e.target.value} )))}/>
+      <input style={{fontSize:"20px"}}type="text" defaultValue ={Value.name} onChange={(e) =>
+                setname((p) => ({ ...p, name: e.target.value }))}/>
       <br /><br />
-      <button type="submit" className="btn" style={{width:"50vh"}}>submit</button>
-      </form>
+      <button onClick={()=>(update_trainer())} className="btn" style={{width:"50vh"}}>submit</button>
+      </div>
     </div>
     </div>
   )

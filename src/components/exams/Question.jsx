@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CSVReader from "react-csv-reader";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../instance/admin";
+import axios from "../../instance/axios";
 import "./questions.css";
 
 const Question = () => {

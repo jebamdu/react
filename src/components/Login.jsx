@@ -183,9 +183,9 @@ const Dtfun=()=>{
       {state ? (
         <div className="newform" style={{height:"80%"}}>
           <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}} >
-          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >User</button>}
+          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >Goto Admin</button>}
             
-            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >User</button>}
+            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >Goto Admin</button>}
           </div>
           <div className="login" style={{height:"100%"}}>
             <form
@@ -287,9 +287,9 @@ const Dtfun=()=>{
         <>
           <div className="bag">
           <div className="logindiv" style={{display:"flex", flexDirection:"row",width:"98vw"}}>
-          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >Admin</button>}
+          {!state&& <button style={{}} className="btnstate" onClick={() => setstate(true) } >Goto User</button>}
             
-            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >Admin</button>}
+            {state&& <button style={{}} className="btnstate" onClick={() => setstate(false) } >Goto User</button>}
           </div>
           <form className="login" onSubmit={login}>
             <input

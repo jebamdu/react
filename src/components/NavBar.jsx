@@ -20,7 +20,7 @@ const NavBar = ({notification}) => {
                 {/* </li> */}
                 <li><Link to='students'>Students</Link>
                     <ul className="sub-menu">
-                        <li><Link to='importStudent'>Import</Link></li>
+                        {/* <li><Link to='importStudent'>Import</Link></li> */}
                     </ul>
                 </li>
                 <li><Link to='report'>Reports</Link></li>

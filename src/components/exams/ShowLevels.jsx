@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NavHead from "../NavHead";
 import addBtn from "../../assets/addBtn.svg";
-import axios from "../../instance/admin";
+import axios from "../../instance/axios";
 
 const ShowLevels = ({}) => {
   const [levelList, setLevelList] = useState([]);

@@ -2,11 +2,14 @@ import "./exams.css";
 import Table from "./Table";
 import Question from "./exams/Question";
 
-import axios from "../instance/admin";
+
+import axios from "../instance/axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import addBtn from "../assets/addBtn.svg";
 import { useRef } from "react";
+import { Innerinput } from "../routes/Addnewsection";
+
 
 
 
@@ -15,11 +18,15 @@ const  Exams = () => {
   const navigate = useNavigate();
   const { levelID,catID,inner_catid } = useParams();
   console.log(levelID, catID,"values");
+
+  
   const [name, setname] = useState([]);
   
   const [deletefunctioncall, setdeletefunctioncall] = useState(false);
   const functionname1 =localStorage.getItem("functionname")
   const functionname2=JSON.parse(functionname1)
+  const [Openupdate, setOpenupdate] = useState(false);
+  const update=useRef(0)
   const delid=useRef(0)
   console.log(functionname1,"this is functionnnaeme");
 
@@ -60,6 +67,7 @@ const  Exams = () => {
 
   
   useEffect(() => {
+    update.current=0;
     if (inner_catid) addQus();
     fetch();
   }, [levelID, catID,inner_catid]);
@@ -86,7 +94,7 @@ const  Exams = () => {
     //   method: 'POST',body: JSON.stringify(jsonobj)
       
     // }).then(response=>{return response.text()}).then()
-    const val = await axios.post("https://13.234.49.189/insert", {
+    const val = await axios.post("/insert", {
       name: popData,
       id: levelID,
       time: null,
@@ -220,18 +228,23 @@ const  Exams = () => {
             alt="add button"
           />
         )}
-        <div className="exams">
-          {inner_catid? (
+        <div className="exams ">
+          
+          {Openupdate&&<div className="innercomponent" style={{position:"absolute",backgroundColor:"white"}}><Innerinput  updateValue={exams} value={update} /> </div>           
+          }
+          {!Openupdate&&inner_catid? (
             // <Table data={exams} />
-            <div className="content">
+            <div className="content " >
               {exams.map(
                 (d, i) => (
                   // <Link to={String(d.id)}>
-                  <div key={i} className="btn primary flex-row jc-sb">
+                  <>
+                  <div key={i} className="btn primary flex-row jc-sb" onClick={()=>(setOpenupdate(true),update.current=i)}>
                     <div className="flex-column">
                       <div className=" fs-20 card-title">Question</div>
-                      <div className="fs-20">{d.ques}</div>
+                      <div className="fs-20" dangerouslySetInnerHTML={{ __html: d.ques.replace(/â€™/g, "'")}}></div>
                     </div>
+                    
                     {eval(d.ans)?.map((option, i) => (
                       <div className="flex-column" key={i}>
                         <div className=" fs-20 card-title">Option {i + 1}</div>
@@ -251,7 +264,12 @@ const  Exams = () => {
                       <div className=" fs-20 card-title">Time</div>
                       <div className="fs-20">{d.time}</div>
                     </div>
+                    
                   </div>
+                  
+                  <Deletelevel name={d.ques} id={d.id} inner_catid={"innercat"}/>  
+                  </>
+                  
                 )
                 // </Link>
               )}
@@ -279,6 +297,8 @@ const  Exams = () => {
         fill="black"
       />
     </svg>
+    <Updatelevel name={l.name} id={l.id} innercat={"innercategory"}/>
+    
                
                 </div>
                 </>
@@ -311,7 +331,7 @@ const  Exams = () => {
 };
 
 
-const Deletelevel=(id)=>{
+export const Deletelevel=(id)=>{
   const [showpopup, setshowpopup] = useState(false);
   const navigate=useNavigate()
   const delfun = () => {
@@ -319,7 +339,58 @@ const Deletelevel=(id)=>{
     console.log(id, "from delete level");
   };
   const yesfun=async()=>{
-    const val= await axios.post("/dellevel",{"id":id.id})
+    
+    if(id.deltrainer){
+      const val=await axios.post("/deltrainer",{"id":id.id})
+      if(val.data){
+        alert("deleted Sucessfully")
+        
+        setshowpopup(false)
+        window.location.reload()
+  
+      }
+      else{
+        alert("something went wrong")
+        window.location.reload()
+      }
+    }
+    else if(id.batches){
+      const val=await axios.post("/deletebathesid",{"id":id.id})
+      if(val.data){
+        alert("deleted Sucessfully")
+        
+        setshowpopup(false)
+        window.location.reload()
+  
+      }
+      else{
+        alert("something went wrong")
+        window.location.reload()
+      }
+    }
+    else if(id.delques){
+      const val=await axios.post("/deleteques2",{"id":id.id})
+      if(val.data){
+        alert("deleted Sucessfully")
+        navigate("/admin/exams/")
+        setshowpopup(false)
+  
+      }
+      console.log("yes button is worked");
+    }
+    else if(id.inner_catid){
+      const val=await axios.post("/deleteinnercat",{"id":id.id})
+      if(val.data){
+        alert("deleted Sucessfully")
+        navigate("/admin/exams/")
+        setshowpopup(false)
+  
+      }
+      console.log("yes button is worked");
+
+    }
+    else{
+      const val= await axios.post("/dellevel",{"id":id.id})
     if(val.data){
       alert("deleted Sucessfully")
       navigate("/admin/exams/")
@@ -327,6 +398,8 @@ const Deletelevel=(id)=>{
 
     }
     console.log("yes button is worked");
+    }
+    
   }
   const nofun=()=>{
     setshowpopup(false)
@@ -336,12 +409,21 @@ const Deletelevel=(id)=>{
   return(<span>{
     
     showpopup?(
-      <div className="formcontainer">
-        <div className="forminnercontainer" style={{alignItems:"center"}}>
+      <div className="formcontainer" style={{alignItems:"center"}}>
+        <div className="forminnercontainer" style={{alignItems:"center",backgroundColor:"whitesmoke", display:"flex",alignItems:"center",flexDirection:"column",justifyContent:"center",color:"black"}}>
 
           "Do You want to delete"
-          <button onClick={yesfun}>Yes</button>
-          <button onClick={nofun}>No</button>
+
+          <div>
+            <br />
+            <h1 style={{color:"red"}}>{id.name}</h1>
+          </div>
+          <br />
+          <div>
+          <button className="btn btn-primary" onClick={yesfun}>Yes</button>
+          <button className="btn btn-primary" onClick={nofun}>No</button>
+          </div>
+          
 
 
         </div>
@@ -371,17 +453,25 @@ const Deletelevel=(id)=>{
 }
 
 
-const Updatelevel = (id) => {
+export const Updatelevel = (id) => {
   const [showinnercomponent, setshowinnercomponent] = useState(false);
+  const innercat=useRef(false)
   const navigate= useNavigate()
   const [name, setname] = useState({ name: "" });
   const update = () => {
     console.log("update", id.name, id.id);
     setshowinnercomponent(true);
+    setname({ name: id.name });
   };
   useEffect(() => {
    
     setname({ name: id.name });
+    if(id.innercat){
+      setname({ "name": id.name });
+      console.log(id.name);
+      innercat.current=true
+      console.log("This is working");
+    }
   }, []);
   const updatecred = (e, field) => {
     e.preventDefault();
@@ -390,19 +480,42 @@ const Updatelevel = (id) => {
   const updateroue = async (e) => {
     e.preventDefault();
     console.log(name,id,"this is id and name");
-    const sol = await axios.post("/updatelevname", {"name":name.name,"id":id.id});
-    console.log(sol)
-    if(sol.data){
-      console.log("updated sucessfully");
-      setshowinnercomponent(false)
-      navigate(`../exams/${id.id}`)
-      
+    if(id.innercat){
+      console.log("This is noww working")
+      const sol = await axios.post("/updatecategory", {"name":name.name,"id":id.id});
+     
+      console.log(id)
 
+      if(sol.data){
+        console.log("updated sucessfully");
+        setshowinnercomponent(false)
+        navigate(`../exams/${id.id}`)
+        
+  
+      }
+      else{
+        alert("Not updated")
+        setshowinnercomponent(false)
+      }
+      
     }
     else{
-      alert("Not updated")
-      setshowinnercomponent(false)
+      const sol = await axios.post("/updatelevname", {"name":name.name,"id":id.id});
+      console.log(sol)
+      if(sol.data){
+        console.log("updated sucessfully");
+        setshowinnercomponent(false)
+        navigate(`../exams/${id.id}`)
+        
+  
+      }
+      else{
+        alert("Not updated")
+        setshowinnercomponent(false)
+      }
     }
+    
+   
   }
   return (
     <>
