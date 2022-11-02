@@ -68,7 +68,7 @@ const  Exams = () => {
   
   useEffect(() => {
     update.current=0;
-    if (inner_catid) addQus();
+    // if (inner_catid) addQus();
     fetch();
   }, [levelID, catID,inner_catid]);
 
